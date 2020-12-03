@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    [Migration("20201202185821_RemoveUserPhone")]
-    partial class RemoveUserPhone
+    [Migration("20201203063322_InitializeDb")]
+    partial class InitializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,10 +105,6 @@ namespace CapstoneBE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -136,7 +132,7 @@ namespace CapstoneBE.Migrations
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDel")
                         .HasColumnType("bit");
@@ -169,9 +165,6 @@ namespace CapstoneBE.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("CrackId");
-
-                    b.HasIndex("Image")
-                        .IsUnique();
 
                     b.HasIndex("LocationId");
 
@@ -324,14 +317,6 @@ namespace CapstoneBE.Migrations
 
                     b.HasKey("MaintenanceWorkerId");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("Phone")
-                        .IsUnique()
-                        .HasFilter("[Phone] IS NOT NULL");
-
                     b.ToTable("MaintenanceWorker");
                 });
 
@@ -406,21 +391,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "efbcedc2-2c53-4dd1-8981-41cb946cfdab",
+                            ConcurrencyStamp = "c6975ff9-33a4-487e-b9c6-1638aa9457a0",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "cccdca02-1e31-46b8-a35f-378980d16efb",
+                            ConcurrencyStamp = "37a31c75-ee20-4a9c-afb7-4099422d3276",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "b8240846-07e0-4a45-948e-418b2433e12d",
+                            ConcurrencyStamp = "78e1f881-b2bf-47a1-a3a4-1c11397a62bd",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });

@@ -28,7 +28,6 @@ namespace CapstoneBE.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EmpCode = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     FcmToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
@@ -303,7 +302,7 @@ namespace CapstoneBE.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     Severity = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDel = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -334,17 +333,17 @@ namespace CapstoneBE.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "487f96a3-ff2c-4f10-8dde-5364a0a49fe5", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "c6975ff9-33a4-487e-b9c6-1638aa9457a0", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "3c5e154e-3b0e-446f-86af-483d54fd7210", "972735c8-37d6-4420-832b-c24e72f4426f", "Manager", "MANAGER" });
+                values: new object[] { "3c5e154e-3b0e-446f-86af-483d54fd7210", "37a31c75-ee20-4a9c-afb7-4099422d3276", "Manager", "MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2c3e174e-3b0e-446f-86af-483d56fd7210", "d96ce6f7-8f2a-4916-ab78-e1cbbc547560", "Staff", "STAFF" });
+                values: new object[] { "2c3e174e-3b0e-446f-86af-483d56fd7210", "78e1f881-b2bf-47a1-a3a4-1c11397a62bd", "Staff", "STAFF" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -379,31 +378,11 @@ namespace CapstoneBE.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_Email",
-                table: "AspNetUsers",
-                column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_Phone",
-                table: "AspNetUsers",
-                column: "Phone",
-                unique: true,
-                filter: "[Phone] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Crack_Image",
-                table: "Crack",
-                column: "Image",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Crack_LocationId",
@@ -439,20 +418,6 @@ namespace CapstoneBE.Migrations
                 name: "IX_MaintenanceOrder_MaintenanceWorkerId",
                 table: "MaintenanceOrder",
                 column: "MaintenanceWorkerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MaintenanceWorker_Email",
-                table: "MaintenanceWorker",
-                column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MaintenanceWorker_Phone",
-                table: "MaintenanceWorker",
-                column: "Phone",
-                unique: true,
-                filter: "[Phone] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PushNotification_ReceiverId",
