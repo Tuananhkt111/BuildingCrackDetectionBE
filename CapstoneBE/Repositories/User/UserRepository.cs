@@ -48,7 +48,10 @@ namespace CapstoneBE.Repositories.User
             string token = await UserManager.GeneratePasswordResetTokenAsync(user);
             if (token == null)
                 throw new Exception("Reset password token is invalid");
-            return await UserManager.ResetPasswordAsync(user, token, newPassword);
+            IdentityResult result = await UserManager.ResetPasswordAsync(user, token, newPassword);
+            if (result.Succeeded)
+                user.IsNewUser = true;
+            return result;
         }
 
         public async Task UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)
@@ -104,7 +107,7 @@ namespace CapstoneBE.Repositories.User
             if (!removeOldResult.Succeeded)
                 return removeOldResult;
             IdentityResult addNewResult = await UserManager.AddToRoleAsync(user, roleName);
-            if (!addNewResult.Succeeded)
+            if (addNewResult.Succeeded)
                 user.Role = roleName;
             return addNewResult;
         }
@@ -114,7 +117,10 @@ namespace CapstoneBE.Repositories.User
             CapstoneBEUser user = await GetById(userId);
             if (user == null)
                 throw new ArgumentNullException(nameof(userId));
-            return await UserManager.ChangePasswordAsync(user, oldPass, newPass);
+            IdentityResult result = await UserManager.ChangePasswordAsync(user, oldPass, newPass);
+            if (result.Succeeded)
+                user.IsNewUser = false;
+            return result;
         }
     }
 }

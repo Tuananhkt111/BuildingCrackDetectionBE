@@ -25,6 +25,9 @@ namespace CapstoneBE.Models
         public bool IsDel { get; set; }
 
         [Required]
+        public bool IsNewUser { get; set; }
+
+        [Required]
         public DateTime Created { get; set; }
 
         [Required]

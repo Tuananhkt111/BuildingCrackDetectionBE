@@ -4,5 +4,6 @@
     {
         public string UserId { get; set; }
         public string JwtToken { get; set; }
+        public bool IsNewUser { get; set; }
     }
 }

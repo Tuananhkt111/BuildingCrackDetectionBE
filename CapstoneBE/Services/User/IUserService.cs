@@ -17,11 +17,11 @@ namespace CapstoneBE.Services.User
 
         Task<UserInfo> GetUserById(string userId);
 
-        Task<List<UserInfo>> GetUsers(Expression<Func<CapstoneBEUser, bool>> filter = null,
+        List<UserInfo> GetUsers(Expression<Func<CapstoneBEUser, bool>> filter = null,
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0);
 
-        Task<int> GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
+        int GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0);
 

@@ -2,6 +2,7 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.UnitOfWorks;
+using CapstoneBE.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -18,7 +19,7 @@ namespace CapstoneBE.Services.User
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -42,7 +43,8 @@ namespace CapstoneBE.Services.User
                 return new UserLoginResponse
                 {
                     UserId = user.Id,
-                    JwtToken = token
+                    JwtToken = token,
+                    IsNewUser = user.IsNewUser
                 };
             }
             else return null;
@@ -51,7 +53,9 @@ namespace CapstoneBE.Services.User
         public async Task<bool> ChangePassword(string oldPass, string newPass, string userId)
         {
             IdentityResult result = await _unitOfWork.UserRepository.ChangePassword(oldPass, newPass, userId);
-            return result.Succeeded;
+            if (result.Succeeded)
+                return await _unitOfWork.Save() != 0;
+            return false;
         }
 
         public async Task<bool> ChangeRole(string roleName, string userId)
@@ -134,15 +138,20 @@ namespace CapstoneBE.Services.User
 
         public string GenerateUserName(string name)
         {
-            string[] names = name.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] names = name.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             string result = names[^1];
             for (int i = 0; i < names.Length - 1; i++)
             {
                 result += names[i].ToUpper().Substring(0, 1);
             }
-            int count = _unitOfWork.UserRepository
-                .Get(u => u.UserName.Replace(result, "").All(char.IsDigit))
-                .Count();
+            List<string> temp = _unitOfWork.UserRepository
+                .Get().Select(u => u.UserName.Replace(result, "")).ToList();
+            int count = 0;
+            foreach (string item in temp)
+            {
+                if (item.Equals("") || int.TryParse(item, out _))
+                    count++;
+            }
             return count > 0 ? (result + count) : result;
         }
 
@@ -152,25 +161,27 @@ namespace CapstoneBE.Services.User
             return _mapper.Map<UserInfo>(user);
         }
 
-        public Task<List<UserInfo>> GetUsers(Expression<Func<CapstoneBEUser, bool>> filter = null,
+        public List<UserInfo> GetUsers(Expression<Func<CapstoneBEUser, bool>> filter = null,
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.UserRepository.Get().Select(u => _mapper.Map<UserInfo>(u)).ToList();
         }
 
-        public Task<int> GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
+        public int GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.UserRepository.Get().Select(u => _mapper.Map<UserInfo>(u)).Count();
         }
 
         public async Task<bool> ResetPassword(string userId)
         {
             string newPass = GenerateRandomPasword();
             IdentityResult result = await _unitOfWork.UserRepository.ResetPassword(userId, newPass);
-            return result.Succeeded;
+            if (result.Succeeded)
+                return await _unitOfWork.Save() != 0;
+            return false;
         }
 
         public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)

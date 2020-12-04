@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CapstoneBE.Utils.APIConstants;
 
@@ -61,7 +62,7 @@ namespace CapstoneBE.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserInfo>> GetUser(string id)
+        public async Task<ActionResult<UserInfo>> GetUserById(string id)
         {
             var user = await _userService.GetUserById(id);
             if (user == null)
@@ -240,6 +241,43 @@ namespace CapstoneBE.Controllers
                 return BadRequest("Role value is forbidden");
             bool result = await _userService.CreateUser(user, user.Password);
             return result ? Ok("Create user success") : BadRequest("Create user failed");
+        }
+
+        /// <summary>
+        /// Get list of users {Auth Roles: Administrator, Manager}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/users
+        /// </remarks>
+        /// <returns>List of users</returns>
+        /// <response code="200">Returns list of users</response>
+        /// <response code="404">If not found</response>
+        [HttpGet]
+        [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<UserInfo>> GetUsers()
+        {
+            List<UserInfo> userInfos = _userService.GetUsers();
+            if (userInfos != null)
+                return Ok(userInfos);
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Get number of users {Auth Roles: Administrator, Manager}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/users/count
+        /// </remarks>
+        /// <returns>Number of users</returns>
+        /// <response code="200">Returns list of users</response>
+        [HttpGet("count")]
+        [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<int> GetUsersCount()
+        {
+            return _userService.GetUsersCount();
         }
     }
 }
