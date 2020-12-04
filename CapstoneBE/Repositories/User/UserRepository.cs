@@ -44,7 +44,7 @@ namespace CapstoneBE.Repositories.User
         {
             CapstoneBEUser user = await GetById(userId);
             if (user == null)
-                throw new ArgumentNullException(userId);
+                throw new ArgumentNullException(nameof(userId));
             string token = await UserManager.GeneratePasswordResetTokenAsync(user);
             if (token == null)
                 throw new Exception("Reset password token is invalid");
@@ -82,6 +82,8 @@ namespace CapstoneBE.Repositories.User
 
         public async Task<IdentityResult> CreateUser(CapstoneBEUser newUser, string password)
         {
+            if (newUser == null)
+                throw new ArgumentNullException(nameof(newUser));
             IdentityResult createResult = await UserManager.CreateAsync(newUser, password);
             if (createResult.Succeeded)
             {
@@ -95,6 +97,8 @@ namespace CapstoneBE.Repositories.User
         public async Task<IdentityResult> UpdateRole(string roleName, string userId)
         {
             CapstoneBEUser user = await GetById(userId);
+            if (user == null)
+                throw new ArgumentNullException(nameof(userId));
             var roles = await UserManager.GetRolesAsync(user);
             IdentityResult removeOldResult = await UserManager.RemoveFromRolesAsync(user, roles);
             if (!removeOldResult.Succeeded)
@@ -108,6 +112,8 @@ namespace CapstoneBE.Repositories.User
         public async Task<IdentityResult> ChangePassword(string oldPass, string newPass, string userId)
         {
             CapstoneBEUser user = await GetById(userId);
+            if (user == null)
+                throw new ArgumentNullException(nameof(userId));
             return await UserManager.ChangePasswordAsync(user, oldPass, newPass);
         }
     }

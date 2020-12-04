@@ -9,7 +9,7 @@ namespace CapstoneBE.Repositories
     {
         Task<T> GetById(object id);
 
-        Task<T> GetFirst(Expression<Func<T, bool>> filter = null, string includeProperties = "");
+        Task<T> GetSingle(Expression<Func<T, bool>> filter = null, string includeProperties = "");
 
         IQueryable<T> Get(Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

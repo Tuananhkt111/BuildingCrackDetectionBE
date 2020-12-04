@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
 
-namespace CapstoneBE.UnitOfWork
+namespace CapstoneBE.UnitOfWorks
 {
     public interface IUnitOfWork
     {

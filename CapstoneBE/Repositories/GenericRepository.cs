@@ -46,7 +46,7 @@ namespace CapstoneBE.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual Task<T> GetFirst(Expression<Func<T, bool>> filter = null, string includeProperties = "")
+        public virtual Task<T> GetSingle(Expression<Func<T, bool>> filter = null, string includeProperties = "")
         {
             IQueryable<T> query = _dbSet;
             if (filter != null)
@@ -55,7 +55,7 @@ namespace CapstoneBE.Repositories
             {
                 query = query.Include(includeProperty);
             }
-            return query.FirstOrDefaultAsync();
+            return query.SingleOrDefaultAsync();
         }
 
         public virtual void Update(T obj)

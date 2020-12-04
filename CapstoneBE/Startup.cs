@@ -1,7 +1,10 @@
 using AutoMapper;
+using CapstoneBE.Helpers;
 using CapstoneBE.Installers;
+using CapstoneBE.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,8 +29,9 @@ namespace CapstoneBE
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<CapstoneBEUser> userManager)
         {
+            ApplicationDbInitializer.SeedUsers(userManager);
             // Swagger configuration
             app.UseSwagger();
             app.UseSwaggerUI(c =>

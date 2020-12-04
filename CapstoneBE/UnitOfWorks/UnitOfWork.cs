@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
-namespace CapstoneBE.UnitOfWork
+namespace CapstoneBE.UnitOfWorks
 {
     public class UnitOfWork : IUnitOfWork
     {

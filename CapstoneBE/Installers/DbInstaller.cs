@@ -25,7 +25,7 @@ namespace CapstoneBE.Installers
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 7;
-                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequiredUniqueChars = 1;
             });
         }
     }
