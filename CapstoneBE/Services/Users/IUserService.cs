@@ -29,7 +29,7 @@ namespace CapstoneBE.Services.Users
 
         Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId);
 
-        Task<bool> ResetPassword(string userId);
+        Task<string> ResetPassword(string userId);
 
         Task<bool> ChangePassword(string oldPass, string newPass, string userId);
 

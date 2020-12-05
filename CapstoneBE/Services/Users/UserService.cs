@@ -175,13 +175,14 @@ namespace CapstoneBE.Services.Users
             return _unitOfWork.UserRepository.Get(filter: u => !u.IsDel).Select(u => _mapper.Map<UserInfo>(u)).Count();
         }
 
-        public async Task<bool> ResetPassword(string userId)
+        public async Task<string> ResetPassword(string userId)
         {
             string newPass = GenerateRandomPasword();
-            IdentityResult result = await _unitOfWork.UserRepository.ResetPassword(userId, newPass);
-            if (result.Succeeded)
-                return await _unitOfWork.Save() != 0;
-            return false;
+            IdentityResult resetResult = await _unitOfWork.UserRepository.ResetPassword(userId, newPass);
+            if (resetResult.Succeeded)
+                if (_unitOfWork.Save().Result != 0)
+                    return newPass;
+            return null;
         }
 
         public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)

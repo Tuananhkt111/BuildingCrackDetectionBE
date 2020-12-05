@@ -1,4 +1,6 @@
-﻿using CapstoneBE.Models.Custom.Users;
+﻿using CapstoneBE.Models;
+using CapstoneBE.Models.Custom.Users;
+using CapstoneBE.Services.Emails;
 using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +19,12 @@ namespace CapstoneBE.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IEmailService emailService)
         {
             _userService = userService;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -185,8 +189,15 @@ namespace CapstoneBE.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> ResetPassword(string id)
         {
-            bool result = await _userService.ResetPassword(id);
-            return result ? Ok("Reset password success") : BadRequest("Reset password failed");
+            string newPass = await _userService.ResetPassword(id);
+            UserInfo user = await _userService.GetUserById(id);
+            if (newPass != null)
+            {
+                Email email = new Email(new string[] { user.Email }, "Reset your Capstone Account Password", "Dear " + user.Name + ",\nThis is your new password: " + newPass);
+                _emailService.SendEmail(email);
+                return Ok("Reset password success");
+            }
+            return BadRequest("Reset password failed");
         }
 
         /// <summary>
