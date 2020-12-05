@@ -193,7 +193,11 @@ namespace CapstoneBE.Controllers
             UserInfo user = await _userService.GetUserById(id);
             if (newPass != null)
             {
-                Email email = new Email(new string[] { user.Email }, "Reset your Capstone Account Password", "Dear " + user.Name + ",\nThis is your new password: " + newPass);
+                Email email = new Email(new string[] { user.Email },
+                    "Reset your Capstone Account Password",
+                    "Dear " + user.Name + ",\n\nYour account: " + user.UserName + "\nYour new password: " + newPass
+                    + "\n\nYou are receiving this email because you have requested to reset your login password."
+                    + "\n\nThank you,\nTau Hai Team");
                 await _emailService.SendEmailAsync(email);
                 return Ok("Reset password success");
             }
