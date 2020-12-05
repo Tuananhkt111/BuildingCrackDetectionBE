@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace CapstoneBE.Repositories.User
+namespace CapstoneBE.Repositories.Users
 {
     public class UserRepository : GenericRepository<CapstoneBEUser>, IUserRepository
     {

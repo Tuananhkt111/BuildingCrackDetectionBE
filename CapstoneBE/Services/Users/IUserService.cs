@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CapstoneBE.Services.User
+namespace CapstoneBE.Services.Users
 {
     public interface IUserService
     {

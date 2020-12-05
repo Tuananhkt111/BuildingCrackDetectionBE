@@ -1,4 +1,6 @@
-﻿namespace CapstoneBE.Models.Custom.Users
+﻿using System;
+
+namespace CapstoneBE.Models.Custom.Users
 {
     public class UserInfo
     {
@@ -10,5 +12,7 @@
         public string Address { get; set; }
         public string Role { get; set; }
         public bool IsNewUser { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

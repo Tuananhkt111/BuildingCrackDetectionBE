@@ -1,5 +1,5 @@
 ﻿using CapstoneBE.Models.Custom.Users;
-using CapstoneBE.Services.User;
+using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -101,8 +101,8 @@ namespace CapstoneBE.Controllers
         /// </remarks>
         /// <param name="id">User Id</param>
         /// <param name="userBasicInfo">A UserBasicInfo object</param>
-        /// <returns>Number of fields which are updated success</returns>
-        /// <response code="200">Returns number of fields which are updated success</response>
+        /// <returns>An integer</returns>
+        /// <response code="200">Returns 1</response>
         /// <response code="400">If bad request, returns message "Invalid request"</response>
         [HttpPost("{id}/basic/admin")]
         [Authorize(Roles = Roles.AdminRole)]
@@ -125,8 +125,8 @@ namespace CapstoneBE.Controllers
         /// </remarks>
         /// <param name="id">User Id</param>
         /// <param name="userBasicInfo">A UserBasicInfo object</param>
-        /// <returns>Number of fields which are updated success</returns>
-        /// <response code="200">Returns number of fields which are updated success</response>
+        /// <returns>An integer</returns>
+        /// <response code="200">Returns 1</response>
         /// <response code="400">
         /// <para>If bad request, returns message "Invalid request"</para>
         /// <para>If email or name exists in request, returns message "Forbidden for updating email or name"</para>

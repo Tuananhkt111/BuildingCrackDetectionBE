@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CapstoneBE.Services.User
+namespace CapstoneBE.Services.Users
 {
     public class UserService : IUserService
     {
@@ -157,7 +157,7 @@ namespace CapstoneBE.Services.User
 
         public async Task<UserInfo> GetUserById(string userId)
         {
-            CapstoneBEUser user = await _unitOfWork.UserRepository.GetSingle(filter: u => u.Id.Equals(userId));
+            CapstoneBEUser user = await _unitOfWork.UserRepository.GetById(userId);
             return _mapper.Map<UserInfo>(user);
         }
 
@@ -165,14 +165,14 @@ namespace CapstoneBE.Services.User
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0)
         {
-            return _unitOfWork.UserRepository.Get().Select(u => _mapper.Map<UserInfo>(u)).ToList();
+            return _unitOfWork.UserRepository.Get(filter: u => !u.IsDel).Select(u => _mapper.Map<UserInfo>(u)).ToList();
         }
 
         public int GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0)
         {
-            return _unitOfWork.UserRepository.Get().Select(u => _mapper.Map<UserInfo>(u)).Count();
+            return _unitOfWork.UserRepository.Get(filter: u => !u.IsDel).Select(u => _mapper.Map<UserInfo>(u)).Count();
         }
 
         public async Task<bool> ResetPassword(string userId)

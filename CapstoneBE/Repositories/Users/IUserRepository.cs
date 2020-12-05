@@ -4,7 +4,7 @@ using CapstoneBE.Models.Custom.Users;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
-namespace CapstoneBE.Repositories.User
+namespace CapstoneBE.Repositories.Users
 {
     public interface IUserRepository
     {
