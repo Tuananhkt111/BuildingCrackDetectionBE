@@ -3,6 +3,7 @@ using CapstoneBE.Models;
 using MailKit.Net.Smtp;
 using MimeKit;
 using System;
+using System.Threading.Tasks;
 
 namespace CapstoneBE.Services.Emails
 {
@@ -19,6 +20,12 @@ namespace CapstoneBE.Services.Emails
         {
             MimeMessage emailMessage = CreateEmailMessage(email);
             Send(emailMessage);
+        }
+
+        public async Task SendEmailAsync(Email email)
+        {
+            MimeMessage emailMessage = CreateEmailMessage(email);
+            await SendAsync(emailMessage);
         }
 
         private MimeMessage CreateEmailMessage(Email email)
@@ -48,6 +55,27 @@ namespace CapstoneBE.Services.Emails
             finally
             {
                 client.Disconnect(true);
+                client.Dispose();
+            }
+        }
+
+        private async Task SendAsync(MimeMessage emailMessage)
+        {
+            using SmtpClient client = new SmtpClient();
+            try
+            {
+                await client.ConnectAsync(_emailConfiguration.SmtpServer, _emailConfiguration.Port, true);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.AuthenticateAsync(_emailConfiguration.UserName, _emailConfiguration.Password);
+                await client.SendAsync(emailMessage);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Send email failed");
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
                 client.Dispose();
             }
         }

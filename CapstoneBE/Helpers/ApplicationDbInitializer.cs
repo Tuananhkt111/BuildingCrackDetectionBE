@@ -17,7 +17,7 @@ namespace CapstoneBE.Helpers
                 CapstoneBEUser user = new CapstoneBEUser
                 {
                     Address = "FPT HCM University",
-                    Email = "anhhtse130553@fpt.edu.vn",
+                    Email = "kenbiboykute@gmail.com",
                     UserName = "Admin",
                     IsDel = false,
                     Name = "Tuan Anh Hoang",

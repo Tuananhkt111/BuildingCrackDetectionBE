@@ -194,7 +194,7 @@ namespace CapstoneBE.Controllers
             if (newPass != null)
             {
                 Email email = new Email(new string[] { user.Email }, "Reset your Capstone Account Password", "Dear " + user.Name + ",\nThis is your new password: " + newPass);
-                _emailService.SendEmail(email);
+                await _emailService.SendEmailAsync(email);
                 return Ok("Reset password success");
             }
             return BadRequest("Reset password failed");

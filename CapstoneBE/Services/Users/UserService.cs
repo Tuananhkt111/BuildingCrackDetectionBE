@@ -2,7 +2,6 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.UnitOfWorks;
-using CapstoneBE.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
