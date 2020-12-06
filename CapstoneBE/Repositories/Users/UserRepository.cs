@@ -54,6 +54,19 @@ namespace CapstoneBE.Repositories.Users
             return result;
         }
 
+        public async Task<IdentityResult> ResetPassword(string userId, string newPassword, string token)
+        {
+            CapstoneBEUser user = await GetById(userId);
+            if (user == null)
+                throw new ArgumentNullException(nameof(userId));
+            if (token == null)
+                throw new Exception("Reset password token is invalid");
+            IdentityResult result = await UserManager.ResetPasswordAsync(user, token, newPassword);
+            if (result.Succeeded)
+                user.IsNewUser = true;
+            return result;
+        }
+
         public async Task UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)
         {
             CapstoneBEUser user = await GetById(userId);

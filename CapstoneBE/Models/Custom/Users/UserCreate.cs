@@ -9,6 +9,5 @@
         public string Address { get; set; }
         public bool IsDel { get { return false; } }
         public bool IsNewUser { get { return true; } }
-        public string Password { get; set; }
     }
 }

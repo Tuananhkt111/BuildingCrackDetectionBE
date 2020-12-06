@@ -189,15 +189,60 @@ namespace CapstoneBE.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> ResetPassword(string id)
         {
-            string newPass = await _userService.ResetPassword(id);
-            UserInfo user = await _userService.GetUserById(id);
-            if (newPass != null)
+            Email email = await _userService.ResetPassword(id);
+            if (email != null)
             {
-                Email email = new Email(new string[] { user.Email },
-                    "Reset your Capstone Account Password",
-                    "Dear " + user.Name + ",\n\nYour account: " + user.UserName + "\nYour new password: " + newPass
-                    + "\n\nYou are receiving this email because you have requested to reset your login password."
-                    + "\n\nThank you,\nTau Hai Team");
+                await _emailService.SendEmailAsync(email);
+                return Ok("Reset password success");
+            }
+            return BadRequest("Reset password failed");
+        }
+
+        /// <summary>
+        /// Forgot password of account confirm
+        /// </summary>
+        /// <remarks>
+        /// <para>Sample request: POST: api/v1/users/3/forgotpass-confirm</para>
+        /// </remarks>
+        /// <param name="userName">UserName</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">If success, returns message "Reset password URL has been sent to the email successfully!"</response>
+        /// <response code="400">If failed, returns message "Reset password URL has been sent to the email failed!"</response>
+        [HttpPost("forgotpass-confirm")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> ForgotPasswordConfirm(string userName)
+        {
+            Email email = await _userService.ForgotPassword(userName);
+            if (email != null)
+            {
+                await _emailService.SendEmailAsync(email);
+                return Ok("Reset password URL has been sent to the email successfully!");
+            }
+            return BadRequest("Reset password URL has been sent to the email failed!");
+        }
+
+        /// <summary>
+        /// Forgot password of account
+        /// </summary>
+        /// <remarks>
+        /// <para>Sample request: POST: api/v1/users/3/forgotpass</para>
+        /// </remarks>
+        /// <param name="id">User Id</param>
+        /// <param name="token">Reset password token</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">If success, returns message "Reset password success"</response>
+        /// <response code="400">If failed, returns message "Reset password failed"</response>
+        [HttpPost("{id}/forgotpass")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> ForgotPassword(string id, [FromBody] string token)
+        {
+            Email email = await _userService.ResetPassword(id, token);
+            if (email != null)
+            {
                 await _emailService.SendEmailAsync(email);
                 return Ok("Reset password success");
             }
@@ -254,8 +299,11 @@ namespace CapstoneBE.Controllers
                 return BadRequest("Invalid request");
             if (!user.Role.Equals(Roles.ManagerRole) && !user.Role.Equals(Roles.StaffRole))
                 return BadRequest("Role value is forbidden");
-            bool result = await _userService.CreateUser(user, user.Password);
-            return result ? Ok("Create user success") : BadRequest("Create user failed");
+            Email email = await _userService.CreateUser(user);
+            if (email == null)
+                return BadRequest("Create user failed");
+            await _emailService.SendEmailAsync(email);
+            return Ok("Create user success");
         }
 
         /// <summary>

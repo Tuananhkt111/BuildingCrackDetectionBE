@@ -29,7 +29,11 @@ namespace CapstoneBE.Services.Users
 
         Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId);
 
-        Task<string> ResetPassword(string userId);
+        Task<Email> ResetPassword(string userId);
+
+        Task<Email> ResetPassword(string userId, string token);
+
+        Task<Email> ForgotPassword(string userName);
 
         Task<bool> ChangePassword(string oldPass, string newPass, string userId);
 
@@ -37,7 +41,7 @@ namespace CapstoneBE.Services.Users
 
         string GenerateUserName(string name);
 
-        Task<bool> CreateUser(UserCreate newUser, string password);
+        Task<Email> CreateUser(UserCreate newUser);
 
         Task<bool> ChangeRole(string roleName, string userId);
     }

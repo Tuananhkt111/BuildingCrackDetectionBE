@@ -34,7 +34,7 @@ namespace CapstoneBE.Services.Emails
             emailMessage.From.Add(new MailboxAddress(_emailConfiguration.From));
             emailMessage.To.AddRange(email.To);
             emailMessage.Subject = email.Subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = email.Content };
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = email.Content };
             return emailMessage;
         }
 

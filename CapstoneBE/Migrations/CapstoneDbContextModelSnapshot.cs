@@ -387,21 +387,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "96940d0e-586c-4ab6-b8d2-957ee8e7d6e2",
+                            ConcurrencyStamp = "2d4c7c18-3d17-42e2-8491-a9c7422201ba",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "291376f3-d724-46ea-93b0-8b0f54f963ef",
+                            ConcurrencyStamp = "b2b23d80-4ee6-45f4-b237-86c17285da76",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "a7f0b0da-d202-42d6-94ee-0a05f2ee2433",
+                            ConcurrencyStamp = "73ccf175-8690-4970-8313-80ed592e16e8",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
