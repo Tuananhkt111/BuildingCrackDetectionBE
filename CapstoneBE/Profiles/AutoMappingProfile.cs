@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CapstoneBE.Models;
+using CapstoneBE.Models.Custom.LocationHistories;
 using CapstoneBE.Models.Custom.Locations;
 using CapstoneBE.Models.Custom.MaintenaceWorkers;
 using CapstoneBE.Models.Custom.Users;
@@ -22,6 +23,12 @@ namespace CapstoneBE.Profiles
             //Location entity mapper
             CreateMap<LocationBasicInfo, Location>();
             CreateMap<Location, LocationInfo>();
+            //LocationHistory entity mapper
+            CreateMap<LocationHistoryCreate, LocationHistory>();
+            CreateMap<LocationHistory, LocationHistoryInfo>()
+                .ForMember(dest =>
+                    dest.LocationName,
+                    opt => opt.MapFrom(src => src.Location.Name));
         }
     }
 }

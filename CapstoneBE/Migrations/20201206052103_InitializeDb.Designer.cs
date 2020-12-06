@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    [Migration("20201206050133_InitializeDb")]
+    [Migration("20201206052103_InitializeDb")]
     partial class InitializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -389,21 +389,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "2d4c7c18-3d17-42e2-8491-a9c7422201ba",
+                            ConcurrencyStamp = "07e1350c-afa0-4387-bbf2-756c0cee2116",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "b2b23d80-4ee6-45f4-b237-86c17285da76",
+                            ConcurrencyStamp = "e09cc364-7c94-484d-9172-ffdd16e6914b",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "73ccf175-8690-4970-8313-80ed592e16e8",
+                            ConcurrencyStamp = "3aa3d6c6-30d2-4a9d-b4e0-acf41a3c2135",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });

@@ -1,4 +1,5 @@
-﻿using CapstoneBE.Repositories.Locations;
+﻿using CapstoneBE.Repositories.LocationHistories;
+using CapstoneBE.Repositories.Locations;
 using CapstoneBE.Repositories.MaintenanceWorkers;
 using CapstoneBE.Repositories.Users;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -11,6 +12,7 @@ namespace CapstoneBE.UnitOfWorks
         UserRepository UserRepository { get; }
         MaintenanceWorkerRepository MaintenanceWorkerRepository { get; }
         LocationRepository LocationRepository { get; }
+        LocationHistoryRepository LocationHistoryRepository { get; }
 
         Task<int> Save();
 

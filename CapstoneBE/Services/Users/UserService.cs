@@ -3,7 +3,6 @@ using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;

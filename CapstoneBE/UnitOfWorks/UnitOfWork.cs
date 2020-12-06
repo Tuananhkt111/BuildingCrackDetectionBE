@@ -1,6 +1,7 @@
 ﻿using CapstoneBE.Data;
 using CapstoneBE.Helpers;
 using CapstoneBE.Models;
+using CapstoneBE.Repositories.LocationHistories;
 using CapstoneBE.Repositories.Locations;
 using CapstoneBE.Repositories.MaintenanceWorkers;
 using CapstoneBE.Repositories.Users;
@@ -20,6 +21,7 @@ namespace CapstoneBE.UnitOfWorks
         private UserRepository _userRepository;
         private MaintenanceWorkerRepository _maintenanceWorkerRepository;
         private LocationRepository _locationRepository;
+        private LocationHistoryRepository _locationHistoryRepository;
 
         public UnitOfWork(CapstoneDbContext capstoneDbContext, UserManager<CapstoneBEUser> userManager,
             SignInManager<CapstoneBEUser> signInManager, IOptions<AppSettings> appSettings)
@@ -57,6 +59,16 @@ namespace CapstoneBE.UnitOfWorks
                 if (_locationRepository == null)
                     _locationRepository = new LocationRepository(_capstoneDbContext);
                 return _locationRepository;
+            }
+        }
+
+        public LocationHistoryRepository LocationHistoryRepository
+        {
+            get
+            {
+                if (_locationHistoryRepository == null)
+                    _locationHistoryRepository = new LocationHistoryRepository(_capstoneDbContext);
+                return _locationHistoryRepository;
             }
         }
 
