@@ -331,17 +331,17 @@ namespace CapstoneBE.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "f6c344ea-7972-425b-aee9-c7677df15974", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "f225a46c-75a0-4c92-a64a-0b63d7b9cb06", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "3c5e154e-3b0e-446f-86af-483d54fd7210", "4c05d0a0-7330-4d90-a211-ef4b9fbccdc9", "Manager", "MANAGER" });
+                values: new object[] { "3c5e154e-3b0e-446f-86af-483d54fd7210", "728b3acd-91d0-49f5-abbd-c1584d279e47", "Manager", "MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2c3e174e-3b0e-446f-86af-483d56fd7210", "10cf83b3-4c3a-46a3-a168-56f3831cb48c", "Staff", "STAFF" });
+                values: new object[] { "2c3e174e-3b0e-446f-86af-483d56fd7210", "e4e63557-565b-4f62-9050-891f4470076e", "Staff", "STAFF" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
