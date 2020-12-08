@@ -1,6 +1,7 @@
 ﻿using CapstoneBE.Data;
 using CapstoneBE.Models;
-using CapstoneBE.Models.Custom.LocationHistories;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CapstoneBE.Repositories.LocationHistories
@@ -11,31 +12,38 @@ namespace CapstoneBE.Repositories.LocationHistories
         {
         }
 
-        public async Task Delete(int locationId, string userId)
+        public void Create(int[] locationIds, string userId)
         {
-            LocationHistory locationHistory = await GetById(locationId, userId);
-            _dbSet.Remove(locationHistory);
+            foreach (int locationId in locationIds)
+            {
+                LocationHistory locationHistory = new LocationHistory
+                {
+                    EmpId = userId,
+                    LocationId = locationId
+                };
+                Create(locationHistory);
+            }
         }
 
-        public async Task Delete(int locationHistoryId)
+        public void Delete(LocationHistory locationHistory)
         {
-            LocationHistory locationHistory = await GetById(locationHistoryId);
             _dbSet.Remove(locationHistory);
         }
 
         public async Task<LocationHistory> GetById(int locationId, string userId)
         {
-            return await GetSingle(filter: lh => lh.LocationId == locationId && lh.EmpId == userId);
+            return await GetSingle(filter: lh => lh.LocationId == locationId
+                && lh.EmpId == userId);
         }
 
-        public async Task Update(LocationHistoryUpdate locationHistoryUpdate, int locationHistoryId)
+        public void Update(int[] locationIds, string userId)
         {
-            LocationHistory locationHistory = await GetById(locationHistoryId);
-            if (locationHistory != null)
+            List<LocationHistory> locationHistories = Get(filter: lh => lh.EmpId.Equals(userId)).ToList();
+            foreach (LocationHistory locationHistory in locationHistories)
             {
-                locationHistory.StartDate = locationHistoryUpdate.StartDate;
-                locationHistory.EndDate = locationHistoryUpdate.EndDate;
+                Delete(locationHistory);
             }
+            Create(locationIds, userId);
         }
     }
 }

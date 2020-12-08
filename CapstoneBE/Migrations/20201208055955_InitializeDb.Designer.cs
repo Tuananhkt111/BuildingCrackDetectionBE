@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    [Migration("20201206052103_InitializeDb")]
+    [Migration("20201208055955_InitializeDb")]
     partial class InitializeDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,17 +216,11 @@ namespace CapstoneBE.Migrations
                     b.Property<string>("EmpId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("LocationHistoryId");
 
@@ -389,21 +383,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "07e1350c-afa0-4387-bbf2-756c0cee2116",
+                            ConcurrencyStamp = "f6c344ea-7972-425b-aee9-c7677df15974",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "e09cc364-7c94-484d-9172-ffdd16e6914b",
+                            ConcurrencyStamp = "4c05d0a0-7330-4d90-a211-ef4b9fbccdc9",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "3aa3d6c6-30d2-4a9d-b4e0-acf41a3c2135",
+                            ConcurrencyStamp = "10cf83b3-4c3a-46a3-a168-56f3831cb48c",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });

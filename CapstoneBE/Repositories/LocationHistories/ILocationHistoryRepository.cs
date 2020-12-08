@@ -1,17 +1,16 @@
 ﻿using CapstoneBE.Models;
-using CapstoneBE.Models.Custom.LocationHistories;
 using System.Threading.Tasks;
 
 namespace CapstoneBE.Repositories.LocationHistories
 {
     public interface ILocationHistoryRepository
     {
-        Task Delete(int locationId, string userId);
-
-        Task Delete(int locationHistoryId);
-
-        Task Update(LocationHistoryUpdate locationHistoryUpdate, int locationHistoryId);
+        void Delete(LocationHistory locationHistory);
 
         Task<LocationHistory> GetById(int locationId, string userId);
+
+        void Update(int[] locationIds, string userId);
+
+        void Create(int[] locationIds, string userId);
     }
 }

@@ -235,8 +235,6 @@ namespace CapstoneBE.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LocationId = table.Column<int>(type: "int", nullable: false),
                     EmpId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -333,17 +331,17 @@ namespace CapstoneBE.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "07e1350c-afa0-4387-bbf2-756c0cee2116", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "2c5e174e-3b0e-446f-86af-483d56fd7210", "f6c344ea-7972-425b-aee9-c7677df15974", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "3c5e154e-3b0e-446f-86af-483d54fd7210", "e09cc364-7c94-484d-9172-ffdd16e6914b", "Manager", "MANAGER" });
+                values: new object[] { "3c5e154e-3b0e-446f-86af-483d54fd7210", "4c05d0a0-7330-4d90-a211-ef4b9fbccdc9", "Manager", "MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "2c3e174e-3b0e-446f-86af-483d56fd7210", "3aa3d6c6-30d2-4a9d-b4e0-acf41a3c2135", "Staff", "STAFF" });
+                values: new object[] { "2c3e174e-3b0e-446f-86af-483d56fd7210", "10cf83b3-4c3a-46a3-a168-56f3831cb48c", "Staff", "STAFF" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -73,13 +73,18 @@ namespace CapstoneBE.Services.Users
             IdentityResult result = await _unitOfWork.UserRepository.CreateUser(user, password);
             if (result.Succeeded)
             {
-                Email email = new Email(new string[] { user.Email },
+                _unitOfWork.LocationHistoryRepository.Create(newUser.LocationIds, user.Id);
+                bool saveResult = await _unitOfWork.Save() != 0;
+                if (saveResult)
+                {
+                    Email email = new Email(new string[] { user.Email },
                         "Your Capstone Account has been created",
                         "Dear " + user.Name + ",<br/><br/>Administrator has created your Capstone account, welcome to Capstone."
                         + "<br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your password: <span style=\"color: blue;\">" + password
                         + "</span><br/><br/>Please do not share these information for our safety."
                         + "<br/><br/>Thank you,<br/>Tau Hai Team");
-                return email;
+                    return email;
+                }
             }
             return null;
         }
@@ -243,6 +248,7 @@ namespace CapstoneBE.Services.Users
         public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)
         {
             await _unitOfWork.UserRepository.UpdateBasicInfo(userBasicInfo, userId);
+            _unitOfWork.LocationHistoryRepository.Update(userBasicInfo.LocationIds, userId);
             return await _unitOfWork.Save();
         }
     }

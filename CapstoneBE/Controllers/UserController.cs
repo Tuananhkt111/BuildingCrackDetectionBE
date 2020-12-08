@@ -107,44 +107,36 @@ namespace CapstoneBE.Controllers
         /// <param name="userBasicInfo">A UserBasicInfo object</param>
         /// <returns>An integer</returns>
         /// <response code="200">Returns 1</response>
-        /// <response code="400">If bad request, returns message "Invalid request"</response>
-        [HttpPost("{id}/basic/admin")]
-        [Authorize(Roles = Roles.AdminRole)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<int>> UpdateBasicInfoByAdmin(string id, UserBasicInfo userBasicInfo)
-        {
-            if (userBasicInfo == null)
-                return BadRequest("Invalid request");
-            int result = await _userService.UpdateBasicInfo(userBasicInfo, id);
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Update a user in some basic information {Auth Roles: Manager, Staff}
-        /// </summary>
-        /// <remarks>
-        /// <para>Sample request: POST: api/v1/users/1/basic</para>
-        /// <para>Manager, staff roles: Can only update phone, address</para>
-        /// </remarks>
-        /// <param name="id">User Id</param>
-        /// <param name="userBasicInfo">A UserBasicInfo object</param>
-        /// <returns>An integer</returns>
-        /// <response code="200">Returns 1</response>
         /// <response code="400">
         /// <para>If bad request, returns message "Invalid request"</para>
-        /// <para>If email or name exists in request, returns message "Forbidden for updating email or name"</para>
+        /// <para>If user role is admin or not existed, returns message "Role value is forbidden"</para>
+        /// <para>If user role is manager, returns message "Manager belongs to some locations"</para>
+        /// <para>If user role is staff, returns message "Staff belongs only to one location"</para>
         /// </response>
-        [HttpPost("{id}/basic")]
-        [Authorize(Roles = Roles.ManagerRole + ", " + Roles.StaffRole)]
+        [HttpPost("{id}")]
+        [Authorize(Roles = Roles.AdminRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<int>> UpdateBasicInfo(string id, UserBasicInfo userBasicInfo)
         {
             if (userBasicInfo == null)
                 return BadRequest("Invalid request");
-            if (!String.IsNullOrEmpty(userBasicInfo.Name) || !String.IsNullOrEmpty(userBasicInfo.Email))
-                return BadRequest("Forbidden for updating email or name");
+            UserInfo user = await _userService.GetUserById(id);
+            int[] locationIds = userBasicInfo.LocationIds;
+            switch (user.Role)
+            {
+                case Roles.ManagerRole:
+                    if (locationIds == null || locationIds.Length <= 0)
+                        return BadRequest("Manager belongs to some locations");
+                    break;
+
+                case Roles.StaffRole:
+                    if (locationIds == null || locationIds.Length != 1)
+                        return BadRequest("Staff belongs only to one location");
+                    break;
+
+                default: return BadRequest("Role value is forbidden");
+            }
             int result = await _userService.UpdateBasicInfo(userBasicInfo, id);
             return Ok(result);
         }
@@ -287,7 +279,9 @@ namespace CapstoneBE.Controllers
         /// <response code="400">
         /// <para>If failed, returns message "Create user failed"</para>
         /// <para>If bad request, returns message "Invalid request"</para>
-        /// <para>If role value is forbidden, returns message "Role value is forbidden"</para>
+        /// <para>If user role is admin or not existed, returns message "Role value is forbidden"</para>
+        /// <para>If user role is manager, returns message "Manager belongs to some locations"</para>
+        /// <para>If user role is staff, returns message "Staff belongs only to one location"</para>
         /// </response>
         [HttpPost]
         [Authorize(Roles = Roles.AdminRole)]
@@ -297,8 +291,21 @@ namespace CapstoneBE.Controllers
         {
             if (user == null)
                 return BadRequest("Invalid request");
-            if (!user.Role.Equals(Roles.ManagerRole) && !user.Role.Equals(Roles.StaffRole))
-                return BadRequest("Role value is forbidden");
+            int[] locationIds = user.LocationIds;
+            switch (user.Role)
+            {
+                case Roles.ManagerRole:
+                    if (locationIds == null || locationIds.Length <= 0)
+                        return BadRequest("Manager belongs to some locations");
+                    break;
+
+                case Roles.StaffRole:
+                    if (locationIds == null || locationIds.Length != 1)
+                        return BadRequest("Staff belongs only to one location");
+                    break;
+
+                default: return BadRequest("Role value is forbidden");
+            }
             Email email = await _userService.CreateUser(user);
             if (email == null)
                 return BadRequest("Create user failed");

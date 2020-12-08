@@ -214,17 +214,11 @@ namespace CapstoneBE.Migrations
                     b.Property<string>("EmpId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("LocationHistoryId");
 
@@ -387,21 +381,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "b5f1c481-6684-40d7-844a-a817e910ced3",
+                            ConcurrencyStamp = "f6c344ea-7972-425b-aee9-c7677df15974",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "f0626b2b-b9f6-4f0c-89bc-47c220ff4bfa",
+                            ConcurrencyStamp = "4c05d0a0-7330-4d90-a211-ef4b9fbccdc9",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "07b7848e-7979-4ec7-8758-7918a7e0c0ed",
+                            ConcurrencyStamp = "10cf83b3-4c3a-46a3-a168-56f3831cb48c",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });

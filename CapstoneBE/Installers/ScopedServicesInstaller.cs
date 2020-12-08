@@ -1,5 +1,4 @@
 ﻿using CapstoneBE.Services.Emails;
-using CapstoneBE.Services.LocationHistories;
 using CapstoneBE.Services.Locations;
 using CapstoneBE.Services.MaintenanceWorkers;
 using CapstoneBE.Services.Users;
@@ -18,7 +17,6 @@ namespace CapstoneBE.Installers
             services.AddScoped<IMaintenanceWorkerService, MaintenanceWorkerService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<ILocationHistoryService, LocationHistoryService>();
         }
     }
 }

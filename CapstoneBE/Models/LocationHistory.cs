@@ -12,11 +12,6 @@ namespace CapstoneBE.Models
         [ForeignKey(nameof(Employee)), Column(Order = 0)]
         public string EmpId { get; set; }
 
-        [Required]
-        public DateTime StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
-
         public virtual CapstoneBEUser Employee { get; set; }
         public virtual Location Location { get; set; }
     }
