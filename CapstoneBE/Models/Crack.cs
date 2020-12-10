@@ -6,7 +6,7 @@ namespace CapstoneBE.Models
     public class Crack : BaseEntity
     {
         public int CrackId { get; set; }
-        public int MaintenanceOrderId { get; set; }
+        public int? MaintenanceOrderId { get; set; }
         public int LocationId { get; set; }
 
         [ForeignKey(nameof(Reporter)), Column(Order = 0)]
@@ -19,12 +19,11 @@ namespace CapstoneBE.Models
         [MaxLength(200)]
         public string Description { get; set; }
 
-        [Required]
         [MaxLength(10)]
         public string Severity { get; set; }
 
         [Required]
-        [MaxLength(20)]
+        [MaxLength(30)]
         public string Status { get; set; }
 
         [Required]
@@ -33,8 +32,5 @@ namespace CapstoneBE.Models
         public virtual CapstoneBEUser Reporter { get; set; }
         public virtual MaintenanceOrder MaintenanceOrder { get; set; }
         public virtual Location Location { get; set; }
-
-        [Required]
-        public bool IsDel { get; set; }
     }
 }

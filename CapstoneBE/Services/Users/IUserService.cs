@@ -13,7 +13,7 @@ namespace CapstoneBE.Services.Users
     {
         Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "");
 
-        string GenerateJWTToken(string userId, string roleName);
+        string GenerateJWTToken(string userId, string roleName, int[] locationIds);
 
         Task<UserInfo> GetUserById(string userId);
 

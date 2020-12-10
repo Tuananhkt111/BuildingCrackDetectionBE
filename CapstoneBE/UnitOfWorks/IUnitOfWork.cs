@@ -1,4 +1,5 @@
-﻿using CapstoneBE.Repositories.LocationHistories;
+﻿using CapstoneBE.Repositories.Cracks;
+using CapstoneBE.Repositories.LocationHistories;
 using CapstoneBE.Repositories.Locations;
 using CapstoneBE.Repositories.MaintenanceWorkers;
 using CapstoneBE.Repositories.Users;
@@ -13,6 +14,7 @@ namespace CapstoneBE.UnitOfWorks
         MaintenanceWorkerRepository MaintenanceWorkerRepository { get; }
         LocationRepository LocationRepository { get; }
         LocationHistoryRepository LocationHistoryRepository { get; }
+        CrackRepository CrackRepository { get; }
 
         Task<int> Save();
 

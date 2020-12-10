@@ -1,6 +1,7 @@
 ﻿using CapstoneBE.Data;
 using CapstoneBE.Helpers;
 using CapstoneBE.Models;
+using CapstoneBE.Repositories.Cracks;
 using CapstoneBE.Repositories.LocationHistories;
 using CapstoneBE.Repositories.Locations;
 using CapstoneBE.Repositories.MaintenanceWorkers;
@@ -22,6 +23,7 @@ namespace CapstoneBE.UnitOfWorks
         private MaintenanceWorkerRepository _maintenanceWorkerRepository;
         private LocationRepository _locationRepository;
         private LocationHistoryRepository _locationHistoryRepository;
+        private CrackRepository _crackRepository;
 
         public UnitOfWork(CapstoneDbContext capstoneDbContext, UserManager<CapstoneBEUser> userManager,
             SignInManager<CapstoneBEUser> signInManager, IOptions<AppSettings> appSettings)
@@ -69,6 +71,16 @@ namespace CapstoneBE.UnitOfWorks
                 if (_locationHistoryRepository == null)
                     _locationHistoryRepository = new LocationHistoryRepository(_capstoneDbContext);
                 return _locationHistoryRepository;
+            }
+        }
+
+        public CrackRepository CrackRepository
+        {
+            get
+            {
+                if (_crackRepository == null)
+                    _crackRepository = new CrackRepository(_capstoneDbContext);
+                return _crackRepository;
             }
         }
 

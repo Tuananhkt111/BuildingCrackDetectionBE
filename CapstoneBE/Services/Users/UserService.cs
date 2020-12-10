@@ -33,12 +33,14 @@ namespace CapstoneBE.Services.Users
             SignInResult signInResult = await _unitOfWork.UserRepository.SignInManager.PasswordSignInAsync(userName, password, false, false);
             if (!signInResult.Succeeded)
                 return null;
-            CapstoneBEUser user = await _unitOfWork.UserRepository.GetByUserName(userName);
+            CapstoneBEUser user = await _unitOfWork.UserRepository
+                .GetSingle(filter: u => u.UserName.Equals(userName), includeProperties: "LocationHistories");
+            int[] locationIds = user.LocationHistories.Select(lh => lh.LocationId).ToArray();
             string role = (await _unitOfWork.UserRepository.UserManager.GetRolesAsync(user)).FirstOrDefault();
             if (user != null && !user.IsDel && role != null)
             {
                 //authentication successful so generate jwt token
-                string token = GenerateJWTToken(user.Id, role);
+                string token = GenerateJWTToken(user.Id, role, locationIds);
                 return new UserLoginResponse
                 {
                     UserId = user.Id,
@@ -114,14 +116,16 @@ namespace CapstoneBE.Services.Users
             return email;
         }
 
-        public string GenerateJWTToken(string userId, string roleName)
+        public string GenerateJWTToken(string userId, string roleName, int[] locationIds)
         {
+            string locationIdsValue = string.Join(';', locationIds);
             // authentication successful so generate jwt token
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(ClaimTypes.Role, roleName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.UserData, locationIdsValue.ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_unitOfWork.UserRepository.AppSettings.Secret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

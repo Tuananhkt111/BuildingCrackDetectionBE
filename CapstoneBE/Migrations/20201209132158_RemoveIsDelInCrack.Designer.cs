@@ -4,14 +4,16 @@ using CapstoneBE.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    partial class CapstoneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201209132158_RemoveIsDelInCrack")]
+    partial class RemoveIsDelInCrack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,7 +138,7 @@ namespace CapstoneBE.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MaintenanceOrderId")
+                    b.Property<int>("MaintenanceOrderId")
                         .HasColumnType("int");
 
                     b.Property<string>("Position")
@@ -148,13 +150,14 @@ namespace CapstoneBE.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Severity")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("CrackId");
 
@@ -377,21 +380,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "62c282d4-3017-461d-a043-408cc83fbd83",
+                            ConcurrencyStamp = "018abf93-b65a-4f74-a4c3-986bae0d0034",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "24e44737-880e-42b5-828a-01f184937775",
+                            ConcurrencyStamp = "6e95e807-8512-4874-a673-c1b4dd2d23a8",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "91b8dac6-4738-439d-882d-32345004f134",
+                            ConcurrencyStamp = "97593fda-a7b0-4ddb-a25b-80fe3e609415",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -511,7 +514,9 @@ namespace CapstoneBE.Migrations
 
                     b.HasOne("CapstoneBE.Models.MaintenanceOrder", "MaintenanceOrder")
                         .WithMany("Cracks")
-                        .HasForeignKey("MaintenanceOrderId");
+                        .HasForeignKey("MaintenanceOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CapstoneBE.Models.CapstoneBEUser", "Reporter")
                         .WithMany("Cracks")

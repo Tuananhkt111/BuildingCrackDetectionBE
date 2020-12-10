@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CapstoneBE.Models;
+using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Models.Custom.Locations;
 using CapstoneBE.Models.Custom.MaintenaceWorkers;
 using CapstoneBE.Models.Custom.Users;
@@ -22,6 +23,10 @@ namespace CapstoneBE.Profiles
             //Location entity mapper
             CreateMap<LocationBasicInfo, Location>();
             CreateMap<Location, LocationInfo>();
+            //Crack entity mapper
+            CreateMap<CrackCreate, Crack>();
+            CreateMap<CrackBasicInfo, Crack>();
+            CreateMap<Crack, CrackInfo>();
         }
     }
 }
