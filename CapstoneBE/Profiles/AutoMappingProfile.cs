@@ -3,6 +3,7 @@ using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Models.Custom.Locations;
 using CapstoneBE.Models.Custom.MaintenaceWorkers;
+using CapstoneBE.Models.Custom.MaintenanceOrders;
 using CapstoneBE.Models.Custom.Users;
 
 namespace CapstoneBE.Profiles
@@ -27,6 +28,14 @@ namespace CapstoneBE.Profiles
             CreateMap<CrackCreate, Crack>();
             CreateMap<CrackBasicInfo, Crack>();
             CreateMap<Crack, CrackInfo>();
+            //MaintenanceOrder entity mapper
+            CreateMap<MaintenanceOrder, MaintenanceOrderInfo>()
+                .ForMember(dest =>
+                    dest.AssessorName,
+                    opt => opt.MapFrom(src => src.Assessor.Name))
+                .ForMember(dest =>
+                    dest.MaintenanceWorkerName,
+                    opt => opt.MapFrom(src => src.MaintenanceWorker.Name));
         }
     }
 }

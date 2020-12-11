@@ -1,7 +1,9 @@
 ﻿using CapstoneBE.Services.Cracks;
 using CapstoneBE.Services.Emails;
 using CapstoneBE.Services.Locations;
+using CapstoneBE.Services.MaintenanceOrders;
 using CapstoneBE.Services.MaintenanceWorkers;
+using CapstoneBE.Services.PushNotifications;
 using CapstoneBE.Services.Users;
 using CapstoneBE.UnitOfWorks;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,8 @@ namespace CapstoneBE.Installers
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICrackService, CrackService>();
+            services.AddScoped<IMaintenanceOrderService, MaintenanceOrderService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
     }
 }

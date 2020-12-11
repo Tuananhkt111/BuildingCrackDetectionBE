@@ -1,4 +1,6 @@
-﻿namespace CapstoneBE.Models.Custom.Cracks
+﻿using System;
+
+namespace CapstoneBE.Models.Custom.Cracks
 {
     public class CrackInfo
     {
@@ -11,5 +13,7 @@
         public string Severity { get; set; }
         public string Status { get; set; }
         public string Image { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

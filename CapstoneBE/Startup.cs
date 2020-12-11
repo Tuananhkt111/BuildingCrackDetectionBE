@@ -2,6 +2,8 @@ using AutoMapper;
 using CapstoneBE.Helpers;
 using CapstoneBE.Installers;
 using CapstoneBE.Models;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +18,10 @@ namespace CapstoneBE
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.GetApplicationDefault()
+            });
         }
 
         public IConfiguration Configuration { get; }

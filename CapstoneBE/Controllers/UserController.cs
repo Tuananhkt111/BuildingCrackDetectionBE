@@ -47,7 +47,7 @@ namespace CapstoneBE.Controllers
         {
             if (userLogin == null)
                 return BadRequest("Invalid request");
-            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password);
+            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken);
             if (jwtToken == null)
                 return NotFound("Sign-in Failed");
             return Ok(jwtToken);

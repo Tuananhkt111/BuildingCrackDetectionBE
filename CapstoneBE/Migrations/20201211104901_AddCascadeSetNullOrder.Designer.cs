@@ -4,14 +4,16 @@ using CapstoneBE.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    partial class CapstoneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201211104901_AddCascadeSetNullOrder")]
+    partial class AddCascadeSetNullOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,21 +379,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "15322311-1a6b-41ed-bb59-8736c427d962",
+                            ConcurrencyStamp = "70f79eb8-14cc-4c23-9f8c-73e72b95215b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "cc24167b-1226-499a-849d-0750c7413ab0",
+                            ConcurrencyStamp = "1fef1149-4f2c-4336-aee5-53c07c2398bd",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "e62d3b12-49db-4ca0-9f04-a684df85f8f6",
+                            ConcurrencyStamp = "79836427-6230-4f9b-8c2b-64fad8858785",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -511,7 +513,8 @@ namespace CapstoneBE.Migrations
 
                     b.HasOne("CapstoneBE.Models.MaintenanceOrder", "MaintenanceOrder")
                         .WithMany("Cracks")
-                        .HasForeignKey("MaintenanceOrderId");
+                        .HasForeignKey("MaintenanceOrderId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("CapstoneBE.Models.CapstoneBEUser", "Reporter")
                         .WithMany("Cracks")

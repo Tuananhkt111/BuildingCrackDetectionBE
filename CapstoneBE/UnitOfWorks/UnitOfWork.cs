@@ -4,7 +4,9 @@ using CapstoneBE.Models;
 using CapstoneBE.Repositories.Cracks;
 using CapstoneBE.Repositories.LocationHistories;
 using CapstoneBE.Repositories.Locations;
+using CapstoneBE.Repositories.MaintenanceOrders;
 using CapstoneBE.Repositories.MaintenanceWorkers;
+using CapstoneBE.Repositories.PushNotifications;
 using CapstoneBE.Repositories.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -24,6 +26,8 @@ namespace CapstoneBE.UnitOfWorks
         private LocationRepository _locationRepository;
         private LocationHistoryRepository _locationHistoryRepository;
         private CrackRepository _crackRepository;
+        private MaintenanceOrderRepository _maintenanceOrderRepository;
+        private NotificationRepository _notificationRepository;
 
         public UnitOfWork(CapstoneDbContext capstoneDbContext, UserManager<CapstoneBEUser> userManager,
             SignInManager<CapstoneBEUser> signInManager, IOptions<AppSettings> appSettings)
@@ -81,6 +85,26 @@ namespace CapstoneBE.UnitOfWorks
                 if (_crackRepository == null)
                     _crackRepository = new CrackRepository(_capstoneDbContext);
                 return _crackRepository;
+            }
+        }
+
+        public MaintenanceOrderRepository MaintenanceOrderRepository
+        {
+            get
+            {
+                if (_maintenanceOrderRepository == null)
+                    _maintenanceOrderRepository = new MaintenanceOrderRepository(_capstoneDbContext);
+                return _maintenanceOrderRepository;
+            }
+        }
+
+        public NotificationRepository NotificationRepository
+        {
+            get
+            {
+                if (_notificationRepository == null)
+                    _notificationRepository = new NotificationRepository(_capstoneDbContext);
+                return _notificationRepository;
             }
         }
 

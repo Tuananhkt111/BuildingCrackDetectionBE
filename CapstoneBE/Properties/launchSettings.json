@@ -20,6 +20,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger/index.html",
       "environmentVariables": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "Helpers\\building-cracks-detection-firebase-adminsdk-ykuwp-ce245e2596.json",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",

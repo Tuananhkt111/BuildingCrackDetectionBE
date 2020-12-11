@@ -119,7 +119,7 @@ namespace CapstoneBE.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MaintenanceWorkerInfo>> GetLocationById(int id)
+        public async Task<ActionResult<MaintenanceWorkerInfo>> GetMaintenanceWorkerById(int id)
         {
             MaintenanceWorkerInfo maintenanceWorker = await _maintenanceWorkerService.GetById(id);
             if (maintenanceWorker == null)

@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Services.Users
 {
@@ -39,6 +40,11 @@ namespace CapstoneBE.Services.Users
             string role = (await _unitOfWork.UserRepository.UserManager.GetRolesAsync(user)).FirstOrDefault();
             if (user != null && !user.IsDel && role != null)
             {
+                if (role.Equals(Roles.ManagerRole) || role.Equals(Roles.StaffRole))
+                {
+                    await _unitOfWork.UserRepository.UpdateFcmToken(registrationToken, user.Id);
+                    await _unitOfWork.Save();
+                }
                 //authentication successful so generate jwt token
                 string token = GenerateJWTToken(user.Id, role, locationIds);
                 return new UserLoginResponse

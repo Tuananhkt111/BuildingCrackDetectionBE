@@ -4,14 +4,16 @@ using CapstoneBE.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    partial class CapstoneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201211101355_removeIsInqueue")]
+    partial class removeIsInqueue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,7 +253,7 @@ namespace CapstoneBE.Migrations
                     b.Property<DateTime>("MaintenanceDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MaintenanceWorkerId")
+                    b.Property<int>("MaintenanceWorkerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -377,21 +379,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "15322311-1a6b-41ed-bb59-8736c427d962",
+                            ConcurrencyStamp = "078c74c6-7d14-4c3f-aac5-aab53d3c807a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "cc24167b-1226-499a-849d-0750c7413ab0",
+                            ConcurrencyStamp = "856724a6-ee04-49e7-a59c-030851a0c99f",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "e62d3b12-49db-4ca0-9f04-a684df85f8f6",
+                            ConcurrencyStamp = "f5746828-2d5d-4520-96f2-58429aa86b22",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -549,7 +551,9 @@ namespace CapstoneBE.Migrations
 
                     b.HasOne("CapstoneBE.Models.MaintenanceWorker", "MaintenanceWorker")
                         .WithMany("MaintenanceOrders")
-                        .HasForeignKey("MaintenanceWorkerId");
+                        .HasForeignKey("MaintenanceWorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Assessor");
 

@@ -5,10 +5,6 @@ namespace CapstoneBE.Repositories.MaintenanceOrders
 {
     public interface IMaintenanceOrderRepository
     {
-        Task Delete(int id);
-
-        void CreateRange(Crack[] cracks);
-
-        void DeleteRange(int[] ids);
+        Task<MaintenanceOrder> GetQueue(string userId);
     }
 }

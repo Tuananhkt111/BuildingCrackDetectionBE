@@ -13,7 +13,7 @@ namespace CapstoneBE.Models
         }
 
         public int MaintenanceOrderId { get; set; }
-        public int MaintenanceWorkerId { get; set; }
+        public int? MaintenanceWorkerId { get; set; }
 
         [ForeignKey(nameof(Assessor)), Column(Order = 0)]
         public string AssessorId { get; set; }
@@ -21,7 +21,6 @@ namespace CapstoneBE.Models
         [MaxLength(200)]
         public string Description { get; set; }
 
-        [Required]
         [Range(minimum: 0, maximum: 100)]
         public int AssessmentResult { get; set; }
 
@@ -29,7 +28,6 @@ namespace CapstoneBE.Models
         [MaxLength(30)]
         public string Status { get; set; }
 
-        [Required]
         public DateTime MaintenanceDate { get; set; }
 
         public virtual MaintenanceWorker MaintenanceWorker { get; set; }

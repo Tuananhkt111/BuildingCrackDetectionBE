@@ -83,11 +83,6 @@ namespace CapstoneBE.Repositories.Users
             }
         }
 
-        public Task UpdateFcmToken(string registrationToken, string userId)
-        {
-            throw new NotImplementedException();
-        }
-
         public override async Task<CapstoneBEUser> GetById(object id)
         {
             CapstoneBEUser user = await UserManager.FindByIdAsync((string)id);
@@ -134,6 +129,13 @@ namespace CapstoneBE.Repositories.Users
             if (result.Succeeded)
                 user.IsNewUser = false;
             return result;
+        }
+
+        public async Task UpdateFcmToken(string fcmToken, string userId)
+        {
+            CapstoneBEUser user = await GetById(userId);
+            if (user != null)
+                user.FcmToken = fcmToken;
         }
     }
 }
