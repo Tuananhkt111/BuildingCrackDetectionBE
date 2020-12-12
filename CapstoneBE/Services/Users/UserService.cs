@@ -199,6 +199,13 @@ namespace CapstoneBE.Services.Users
             return count > 0 ? (result + count) : result;
         }
 
+        public string GetManagerIdByLocationId(int locationId)
+        {
+            return _unitOfWork.LocationHistoryRepository.Get(filter: lh => lh.LocationId.Equals(locationId),
+                includeProperties: "Employee").Where(lh => lh.Employee.Role.Equals(Roles.ManagerRole))
+                .Select(lh => lh.EmpId).SingleOrDefault();
+        }
+
         public async Task<UserInfo> GetUserById(string userId)
         {
             CapstoneBEUser user = await _unitOfWork.UserRepository.GetById(userId);

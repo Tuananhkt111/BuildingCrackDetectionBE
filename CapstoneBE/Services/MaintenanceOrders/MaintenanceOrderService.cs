@@ -33,11 +33,11 @@ namespace CapstoneBE.Services.MaintenanceOrders
             return await UpdateQueue(crackId, maintenanceOrder);
         }
 
-        public async Task<bool> ConfirmOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo)
+        public async Task<int> ConfirmOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo)
         {
             MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(_userData.UserId);
             if (maintenanceOrder == null || maintenanceOrder.Cracks.Count <= 0)
-                return false;
+                return 0;
             if (maintenanceOrderBasicInfo != null)
             {
                 using var tran = _unitOfWork.GetTransaction();
@@ -45,7 +45,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 {
                     if (maintenanceOrderBasicInfo.MaintenanceWorkerId > 0)
                         maintenanceOrder.MaintenanceWorkerId = maintenanceOrderBasicInfo.MaintenanceWorkerId;
-                    else return false;
+                    else return 0;
                     maintenanceOrder.MaintenanceDate = maintenanceOrderBasicInfo.MaintenanceDate;
                     maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
                     maintenanceOrder.AssessorId = _userData.UserId;
@@ -56,24 +56,24 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     }
                     await _unitOfWork.Save();
                     tran.Commit();
-                    return true;
+                    return maintenanceOrder.MaintenanceOrderId;
                 }
                 catch (Exception)
                 {
                     tran.Rollback();
                 }
             }
-            return false;
+            return 0;
         }
 
-        public async Task<bool> EvaluateOrder(MaintenanceOrderAssessmentInfo maintenanceOrderAssessmentInfo, int orderId)
+        public async Task<int> EvaluateOrder(MaintenanceOrderAssessmentInfo maintenanceOrderAssessmentInfo, int orderId)
         {
             MaintenanceOrder maintenanceOrder = await _unitOfWork
                 .MaintenanceOrderRepository.GetSingle(filter: mo => mo.MaintenanceOrderId.Equals(orderId)
                 && mo.Status.Equals(MaintenanceOrderStatus.WaitingForMaintenance),
                 includeProperties: "Cracks");
             if (maintenanceOrder == null || maintenanceOrder.Cracks.Count <= 0)
-                return false;
+                return 0;
             if (maintenanceOrderAssessmentInfo != null)
             {
                 using var tran = _unitOfWork.GetTransaction();
@@ -81,7 +81,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 {
                     if (maintenanceOrderAssessmentInfo.AssessmentResult > 0)
                         maintenanceOrder.AssessmentResult = maintenanceOrderAssessmentInfo.AssessmentResult;
-                    else return false;
+                    else return 0;
                     if (!string.IsNullOrEmpty(maintenanceOrderAssessmentInfo.Description))
                         maintenanceOrder.Description = maintenanceOrderAssessmentInfo.Description;
                     maintenanceOrder.Status = maintenanceOrderAssessmentInfo.Status;
@@ -93,14 +93,14 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     }
                     await _unitOfWork.Save();
                     tran.Commit();
-                    return true;
+                    return maintenanceOrder.MaintenanceOrderId;
                 }
                 catch (Exception)
                 {
                     tran.Rollback();
                 }
             }
-            return false;
+            return 0;
         }
 
         public async Task<MaintenanceOrderInfo> GetById(int id)
@@ -142,25 +142,26 @@ namespace CapstoneBE.Services.MaintenanceOrders
             return await _unitOfWork.Save() == cracks.Length;
         }
 
-        public async Task<bool> UpdateOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo, int orderId)
+        public async Task<int> UpdateOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo, int orderId)
         {
             MaintenanceOrder maintenanceOrder = await _unitOfWork
                 .MaintenanceOrderRepository.GetSingle(filter: mo => mo.MaintenanceOrderId.Equals(orderId)
                 && mo.Status.Equals(MaintenanceOrderStatus.WaitingForMaintenance),
                 includeProperties: "Cracks");
             if (maintenanceOrder == null || maintenanceOrder.Cracks.Count <= 0)
-                return false;
+                return 0;
             if (maintenanceOrderBasicInfo != null)
             {
                 if (maintenanceOrderBasicInfo.MaintenanceWorkerId > 0)
                     maintenanceOrder.MaintenanceWorkerId = maintenanceOrderBasicInfo.MaintenanceWorkerId;
-                else return false;
+                else return 0;
                 maintenanceOrder.MaintenanceDate = maintenanceOrderBasicInfo.MaintenanceDate;
                 maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
                 maintenanceOrder.AssessorId = _userData.UserId;
-                return await _unitOfWork.Save() != 0;
+                bool result = await _unitOfWork.Save() != 0;
+                return result ? maintenanceOrder.MaintenanceOrderId : 0;
             }
-            return false;
+            return 0;
         }
 
         private async Task<bool> CreateQueue(int crackId)

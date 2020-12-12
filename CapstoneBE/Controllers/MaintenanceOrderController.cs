@@ -4,6 +4,8 @@ using CapstoneBE.Models.Custom.MaintenaceWorkers;
 using CapstoneBE.Models.Custom.MaintenanceOrders;
 using CapstoneBE.Services.MaintenanceOrders;
 using CapstoneBE.Services.MaintenanceWorkers;
+using CapstoneBE.Services.PushNotifications;
+using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TranslatorAPI.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Controllers
@@ -22,10 +25,16 @@ namespace CapstoneBE.Controllers
     public class MaintenanceOrderController : ControllerBase
     {
         private readonly IMaintenanceOrderService _maintenanceOrderService;
+        private readonly INotificationService _notificationService;
+        private readonly IUserService _userService;
+        private readonly IGetClaimsProvider _userData;
 
-        public MaintenanceOrderController(IMaintenanceOrderService maintenanceOrderService)
+        public MaintenanceOrderController(IMaintenanceOrderService maintenanceOrderService, INotificationService notificationService, IUserService userService, IGetClaimsProvider userData)
         {
             _maintenanceOrderService = maintenanceOrderService;
+            _notificationService = notificationService;
+            _userService = userService;
+            _userData = userData;
         }
 
         /// <summary>
@@ -99,8 +108,14 @@ namespace CapstoneBE.Controllers
         {
             if (maintenanceOrderBasicInfo == null)
                 return BadRequest("Invalid request");
-            bool result = await _maintenanceOrderService.ConfirmOrder(maintenanceOrderBasicInfo);
-            return result ? Ok("Confirm maintenance order success") : BadRequest("Confirm maintenance order failed");
+            int result = await _maintenanceOrderService.ConfirmOrder(maintenanceOrderBasicInfo);
+            if (result > 0)
+            {
+                string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
+                string[] receiverIds = { receiverId };
+                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffCreateOrder);
+            }
+            return result > 0 ? Ok("Confirm maintenance order success") : BadRequest("Confirm maintenance order failed");
         }
 
         /// <summary>
@@ -125,8 +140,14 @@ namespace CapstoneBE.Controllers
         {
             if (maintenanceOrderAssessmentInfo == null || id == 0)
                 return BadRequest("Invalid request");
-            bool result = await _maintenanceOrderService.EvaluateOrder(maintenanceOrderAssessmentInfo, id);
-            return result ? Ok("Evaluate maintenance order success") : BadRequest("Evaluate maintenance order failed");
+            int result = await _maintenanceOrderService.EvaluateOrder(maintenanceOrderAssessmentInfo, id);
+            if (result > 0)
+            {
+                string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
+                string[] receiverIds = { receiverId };
+                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffEvaluateOrder);
+            }
+            return result > 0 ? Ok("Evaluate maintenance order success") : BadRequest("Evaluate maintenance order failed");
         }
 
         /// <summary>
@@ -151,8 +172,14 @@ namespace CapstoneBE.Controllers
         {
             if (maintenanceOrderBasicInfo == null || id == 0)
                 return BadRequest("Invalid request");
-            bool result = await _maintenanceOrderService.UpdateOrder(maintenanceOrderBasicInfo, id);
-            return result ? Ok("Update maintenance order success") : BadRequest("Update maintenance order failed");
+            int result = await _maintenanceOrderService.UpdateOrder(maintenanceOrderBasicInfo, id);
+            if (result > 0)
+            {
+                string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
+                string[] receiverIds = { receiverId };
+                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffUpdateOrder);
+            }
+            return result > 0 ? Ok("Update maintenance order success") : BadRequest("Update maintenance order failed");
         }
 
         /// <summary>

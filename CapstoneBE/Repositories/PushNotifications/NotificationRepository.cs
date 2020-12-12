@@ -12,6 +12,11 @@ namespace CapstoneBE.Repositories.PushNotifications
         {
         }
 
+        public void CreateRange(List<PushNotification> pushNotifications)
+        {
+            _dbSet.AddRange(pushNotifications);
+        }
+
         public void DeleteRange(int[] ids)
         {
             List<PushNotification> pushNotifications = Get(filter: n => ids.Contains(n.PushNotificationId)).ToList();

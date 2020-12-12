@@ -30,5 +30,16 @@
             public const string ScheduledForMaintenace = "Scheduled for maintenace";
             public const string Fixed = "Fixed";
         }
+
+        public static class MessageType
+        {
+            public const string AdminUpdateInfo = "AdminUpdateInfo";
+            public const string AdminChangeRole = "AdminChangeRole";
+            public const string SystemFinishedDetection = "SystemFinishedDetection";
+            public const string ManagerRequestStaff = "ManagerRequestStaff";
+            public const string StaffCreateOrder = "StaffCreateOrder";
+            public const string StaffUpdateOrder = "StaffUpdateOrder";
+            public const string StaffEvaluateOrder = "StaffEvaluateOrder";
+        }
     }
 }

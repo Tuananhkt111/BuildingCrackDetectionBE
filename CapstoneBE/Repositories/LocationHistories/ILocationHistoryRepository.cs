@@ -9,6 +9,8 @@ namespace CapstoneBE.Repositories.LocationHistories
 
         Task<LocationHistory> GetById(int locationId, string userId);
 
+        Task<Location> GetLocationOfStaffById(string staffId);
+
         void Update(int[] locationIds, string userId);
 
         void Create(int[] locationIds, string userId);

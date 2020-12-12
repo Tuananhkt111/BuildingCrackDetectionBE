@@ -36,6 +36,13 @@ namespace CapstoneBE.Repositories.LocationHistories
                 && lh.EmpId == userId);
         }
 
+        public async Task<Location> GetLocationOfStaffById(string staffId)
+        {
+            LocationHistory locationHistory = await GetSingle(filter: lh => lh.EmpId == staffId,
+                includeProperties: "Location");
+            return locationHistory.Location;
+        }
+
         public void Update(int[] locationIds, string userId)
         {
             List<LocationHistory> locationHistories = Get(filter: lh => lh.EmpId.Equals(userId)).ToList();

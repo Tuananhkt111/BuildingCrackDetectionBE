@@ -22,7 +22,7 @@ namespace CapstoneBE.Models
         public string Body { get; set; }
 
         [Required]
-        public bool IsDel { get; set; }
+        public string MessageType { get; set; }
 
         public virtual CapstoneBEUser Sender { get; set; }
         public virtual CapstoneBEUser Receiver { get; set; }

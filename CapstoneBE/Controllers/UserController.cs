@@ -1,6 +1,7 @@
 ﻿using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.Services.Emails;
+using CapstoneBE.Services.PushNotifications;
 using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,11 +21,13 @@ namespace CapstoneBE.Controllers
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        private readonly INotificationService _notificationService;
 
-        public UserController(IUserService userService, IEmailService emailService)
+        public UserController(IUserService userService, IEmailService emailService, INotificationService notificationService)
         {
             _userService = userService;
             _emailService = emailService;
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -138,6 +141,11 @@ namespace CapstoneBE.Controllers
                 default: return BadRequest("Role value is forbidden");
             }
             int result = await _userService.UpdateBasicInfo(userBasicInfo, id);
+            if (result > 0 && (user.Role.Equals(Roles.ManagerRole) || user.Role.Equals(Roles.StaffRole)))
+            {
+                string[] receiverIds = { id };
+                _ = await _notificationService.SendNotifications(null, receiverIds, MessageType.AdminUpdateInfo);
+            }
             return Ok(result);
         }
 
@@ -250,7 +258,7 @@ namespace CapstoneBE.Controllers
         /// <param name="id">User Id</param>
         /// <param name="roleName">Role of user</param>
         /// <returns>Result message</returns>
-        /// <response code="200">If success, returns message "Change role success"</response>
+        /// <response code="200">If success, returns message "Change role success" and notification result</response>
         /// <response code="400">
         /// <para>If failed, returns message "Change role failed"</para>
         /// <para>If bad request, returns message "Invalid role name. Role name doesn't exist."</para>
@@ -264,7 +272,14 @@ namespace CapstoneBE.Controllers
             if (!roleName.Equals(Roles.AdminRole) && !roleName.Equals(Roles.ManagerRole) && !roleName.Equals(Roles.StaffRole))
                 return BadRequest("Invalid role name. Role name doesn't exist.");
             bool result = await _userService.ChangeRole(roleName, id);
-            return result ? Ok("Change role success") : BadRequest("Change role failed");
+            string notiMsg = "";
+            if (result)
+            {
+                string[] receiverIds = { id };
+                bool notiResult = await _notificationService.SendNotifications(null, receiverIds, MessageType.AdminChangeRole);
+                notiMsg = notiResult ? ". Send notification success." : ". Send notification failed.";
+            }
+            return result ? Ok("Change role success" + notiMsg) : BadRequest("Change role failed");
         }
 
         /// <summary>

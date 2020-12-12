@@ -41,6 +41,8 @@ namespace CapstoneBE.Services.Users
 
         string GenerateUserName(string name);
 
+        string GetManagerIdByLocationId(int locationId);
+
         Task<Email> CreateUser(UserCreate newUser);
 
         Task<bool> ChangeRole(string roleName, string userId);

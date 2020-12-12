@@ -13,11 +13,11 @@ namespace CapstoneBE.Services.MaintenanceOrders
 
         Task<List<CrackInfo>> GetQueue();
 
-        Task<bool> ConfirmOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo);
+        Task<int> ConfirmOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo);
 
-        Task<bool> UpdateOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo, int orderId);
+        Task<int> UpdateOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo, int orderId);
 
-        Task<bool> EvaluateOrder(MaintenanceOrderAssessmentInfo maintenanceOrderAssessmentInfo, int orderId);
+        Task<int> EvaluateOrder(MaintenanceOrderAssessmentInfo maintenanceOrderAssessmentInfo, int orderId);
 
         List<MaintenanceOrderInfo> GetMaintenanceOrders();
 

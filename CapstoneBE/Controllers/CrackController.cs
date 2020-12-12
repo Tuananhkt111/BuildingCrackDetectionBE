@@ -1,10 +1,12 @@
 ﻿using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Services.Cracks;
+using CapstoneBE.Services.PushNotifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TranslatorAPI.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Controllers
@@ -16,10 +18,14 @@ namespace CapstoneBE.Controllers
     public class CrackController : ControllerBase
     {
         private readonly ICrackService _crackService;
+        private readonly INotificationService _notificationService;
+        private readonly IGetClaimsProvider _userData;
 
-        public CrackController(ICrackService crackService)
+        public CrackController(ICrackService crackService, INotificationService notificationService, IGetClaimsProvider userData)
         {
             _crackService = crackService;
+            _notificationService = notificationService;
+            _userData = userData;
         }
 
         /// <summary>
@@ -93,6 +99,29 @@ namespace CapstoneBE.Controllers
                 return BadRequest("Invalid request");
             bool result = await _crackService.Update(crackBasicInfo, id);
             return result ? Ok("Update crack success") : BadRequest("Update crack failed");
+        }
+
+        /// <summary>
+        /// Reuest staff do periodical check-up {Auth Roles: Manager}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: POST: api/v1/cracks/checkup/2
+        /// </remarks>
+        /// <param name="id">Staff Id</param>
+        /// <returns>An integer</returns>
+        /// <response code="200">Returns message "Request success"</response>
+        /// <response code="400">
+        /// <para>If update failed, returns message "Request failed"</para>
+        /// </response>
+        [HttpPost("checkup/{id}")]
+        [Authorize(Roles = Roles.ManagerRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<int>> RequestCheckup(string id)
+        {
+            string[] receiverIds = { id };
+            bool result = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.ManagerRequestStaff);
+            return result ? Ok("Request success") : BadRequest("Request failed");
         }
 
         /// <summary>
