@@ -2,6 +2,7 @@
 using CapstoneBE.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Repositories.Cracks
 {
@@ -20,14 +21,17 @@ namespace CapstoneBE.Repositories.Cracks
         {
             Crack crack = await GetById(id);
             if (crack != null)
-                _dbSet.Remove(crack);
+                crack.Status = CrackStatus.DetectedFailed;
         }
 
         public void DeleteRange(int[] ids)
         {
             Crack[] cracks = Get(filter: c => ids.Contains(c.CrackId)).ToArray();
             if (cracks != null && cracks.Length > 0)
-                _dbSet.RemoveRange(cracks);
+                foreach (Crack crack in cracks)
+                {
+                    crack.Status = CrackStatus.DetectedFailed;
+                }
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TranslatorAPI.Utils;
+using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Services.Cracks
 {
@@ -57,23 +58,23 @@ namespace CapstoneBE.Services.Cracks
 
         public async Task<CrackInfo> GetById(int id)
         {
-            Crack crack = await _unitOfWork.CrackRepository.GetById(id);
+            Crack crack = await _unitOfWork.CrackRepository.GetSingle(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && c.CrackId.Equals(id));
             return _mapper.Map<CrackInfo>(crack);
         }
 
         public List<CrackInfo> GetCracks()
         {
-            return _unitOfWork.CrackRepository.Get().Select(c => _mapper.Map<CrackInfo>(c)).ToList();
+            return _unitOfWork.CrackRepository.Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)).Select(c => _mapper.Map<CrackInfo>(c)).ToList();
         }
 
         public int GetCracksCount()
         {
-            return _unitOfWork.CrackRepository.Get().Count();
+            return _unitOfWork.CrackRepository.Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)).Count();
         }
 
         public async Task<bool> Update(CrackBasicInfo crackBasicInfo, int id)
         {
-            Crack crack = await _unitOfWork.CrackRepository.GetById(id);
+            Crack crack = await _unitOfWork.CrackRepository.GetSingle(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && c.CrackId.Equals(id));
             if (crackBasicInfo != null && crack != null)
             {
                 if (!string.IsNullOrEmpty(crackBasicInfo.Description))

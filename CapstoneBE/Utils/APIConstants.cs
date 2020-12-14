@@ -25,6 +25,7 @@
 
         public static class CrackStatus
         {
+            public const string DetectedFailed = "DetectedFailed";
             public const string Unconfirmed = "Unconfirmed";
             public const string UnscheduledForMaintenace = "Unscheduled for maintenace";
             public const string ScheduledForMaintenace = "Scheduled for maintenace";
