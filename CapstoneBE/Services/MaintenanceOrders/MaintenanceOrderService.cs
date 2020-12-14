@@ -87,9 +87,12 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     maintenanceOrder.Status = maintenanceOrderAssessmentInfo.Status;
                     maintenanceOrder.AssessorId = _userData.UserId;
                     await _unitOfWork.Save();
-                    foreach (Crack crack in maintenanceOrder.Cracks)
+                    foreach (CrackAssessmentInfo crackAssessment in maintenanceOrderAssessmentInfo.CrackAssessments)
                     {
-                        crack.Status = CrackStatus.Fixed;
+                        Crack crack = await _unitOfWork.CrackRepository.GetById(crackAssessment.CrackId);
+                        crack.AssessmentResult = crackAssessment.AssessmentResult;
+                        crack.AssessmentDescription = crackAssessment.AssessmentDescription;
+                        crack.Status = crackAssessment.Status;
                     }
                     await _unitOfWork.Save();
                     tran.Commit();

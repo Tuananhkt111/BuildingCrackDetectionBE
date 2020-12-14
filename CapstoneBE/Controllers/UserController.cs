@@ -6,7 +6,6 @@ using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CapstoneBE.Utils.APIConstants;

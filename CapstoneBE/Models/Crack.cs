@@ -29,6 +29,8 @@ namespace CapstoneBE.Models
         [Required]
         public string Image { get; set; }
 
+        public int AssessmentResult { get; set; }
+        public string AssessmentDescription { get; set; }
         public virtual CapstoneBEUser Reporter { get; set; }
         public virtual MaintenanceOrder MaintenanceOrder { get; set; }
         public virtual Location Location { get; set; }
