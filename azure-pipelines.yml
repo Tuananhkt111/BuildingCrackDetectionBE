@@ -1,41 +1,35 @@
-pool:
-  name: Azure Pipelines
-#Your build pipeline references an undefined variable named ‘Parameters.RestoreBuildProjects’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references an undefined variable named ‘Parameters.RestoreBuildProjects’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references an undefined variable named ‘Parameters.UnitTestProjects’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
-#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+ trigger:
+ - master
 
-steps:
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '$(Parameters.RestoreBuildProjects)'
+ pool:
+   vmImage: 'ubuntu-latest'
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    projects: '$(Parameters.RestoreBuildProjects)'
-    arguments: '--configuration $(BuildConfiguration)'
+ variables:
+   buildConfiguration: 'Release'
 
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    projects: '$(Parameters.UnitTestProjects)'
-    arguments: '--configuration $(BuildConfiguration)'
+ steps:
+ - task: UseDotNet@2
+   inputs:
+     packageType: 'sdk'
+     version: '5.0.100'
+     includePreviewVersions: true
 
-- task: DotNetCoreCLI@2
-  displayName: Publish
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output "$(build.artifactstagingdirectory)"'
-    zipAfterPublish: True
+ - task: DotNetCoreCLI@2
+   displayName: Build
+   inputs:
+     command: build
+     projects: '**/*.csproj'
+     arguments: '--configuration $(buildConfiguration)' # Update this to match your need)'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+ - task: DotNetCoreCLI@2
+   inputs:
+     command: publish
+     publishWebProjects: True
+     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+     zipAfterPublish: True
+
+ # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+ - task: PublishBuildArtifacts@1
+   inputs:
+     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+     artifactName: 'myWebsiteName'
