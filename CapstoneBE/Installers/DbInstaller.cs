@@ -13,7 +13,7 @@ namespace CapstoneBE.Installers
         {
             services.AddDbContext<CapstoneDbContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("CapstoneLocalContext")));
+                    configuration.GetConnectionString("CapstoneAzureContext")));
             services.AddIdentity<CapstoneBEUser, IdentityRole>()
                 .AddEntityFrameworkStores<CapstoneDbContext>().AddDefaultTokenProviders();
             //Identity password settings
