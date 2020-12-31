@@ -2,6 +2,8 @@
 {
     public static class APIConstants
     {
+        public const string AppUrl = "https://bcdsys.herokuapp.com/";
+
         public static class Roles
         {
             public const string AdminRole = "Administrator";

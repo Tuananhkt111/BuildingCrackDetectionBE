@@ -58,18 +58,28 @@ namespace CapstoneBE.Services.Cracks
 
         public async Task<CrackInfo> GetById(int id)
         {
-            Crack crack = await _unitOfWork.CrackRepository.GetSingle(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && c.CrackId.Equals(id));
+            Crack crack = await _unitOfWork.CrackRepository
+                .GetSingle(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
+                    && c.CrackId.Equals(id)
+                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter");
             return _mapper.Map<CrackInfo>(crack);
         }
 
         public List<CrackInfo> GetCracks()
         {
-            return _unitOfWork.CrackRepository.Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)).Select(c => _mapper.Map<CrackInfo>(c)).ToList();
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
+                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .Select(c => _mapper.Map<CrackInfo>(c)).ToList();
         }
 
         public int GetCracksCount()
         {
-            return _unitOfWork.CrackRepository.Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)).Count();
+            return _unitOfWork.CrackRepository.Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
+                && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                || _userData.Role.Equals(Roles.AdminRole))).Count();
         }
 
         public async Task<bool> Update(CrackBasicInfo crackBasicInfo, int id)

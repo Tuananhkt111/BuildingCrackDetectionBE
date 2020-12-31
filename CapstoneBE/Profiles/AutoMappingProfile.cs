@@ -27,7 +27,13 @@ namespace CapstoneBE.Profiles
             //Crack entity mapper
             CreateMap<CrackCreate, Crack>();
             CreateMap<CrackBasicInfo, Crack>();
-            CreateMap<Crack, CrackInfo>();
+            CreateMap<Crack, CrackInfo>()
+                .ForMember(dest =>
+                    dest.LocationName,
+                    opt => opt.MapFrom(src => src.Location.Name))
+                .ForMember(dest =>
+                    dest.ReporterName,
+                    opt => opt.MapFrom(src => src.Reporter.Name));
             //MaintenanceOrder entity mapper
             CreateMap<MaintenanceOrder, MaintenanceOrderInfo>()
                 .ForMember(dest =>
