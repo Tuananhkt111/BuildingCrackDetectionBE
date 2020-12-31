@@ -22,14 +22,14 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
-        /// Delete notifications by <paramref name="ids"/> {Auth Roles: Administrator, Manager, Staff}
+        /// Mark as read notifications by <paramref name="ids"/> {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>
         /// Sample request: DELETE: api/v1/notifications
         /// </remarks>
         /// <param name="ids">Notification ids array</param>
         /// <returns>Message result</returns>
-        /// <response code="200">If success, returns message "Delete notifications success"</response>
+        /// <response code="200">If success, returns message "Mark as read notifications success"</response>
         /// <response code="404">If failed, returns message "Notifications doesn't exist"</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

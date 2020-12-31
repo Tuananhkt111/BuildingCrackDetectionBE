@@ -24,6 +24,9 @@ namespace CapstoneBE.Models
         [Required]
         public string MessageType { get; set; }
 
+        [Required]
+        public bool IsRead { get; set; }
+
         public virtual CapstoneBEUser Sender { get; set; }
         public virtual CapstoneBEUser Receiver { get; set; }
     }

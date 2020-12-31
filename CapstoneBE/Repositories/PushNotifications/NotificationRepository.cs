@@ -21,7 +21,12 @@ namespace CapstoneBE.Repositories.PushNotifications
         {
             List<PushNotification> pushNotifications = Get(filter: n => ids.Contains(n.PushNotificationId)).ToList();
             if (pushNotifications.Count > 0)
-                _dbSet.RemoveRange(pushNotifications);
+            {
+                foreach (PushNotification noti in pushNotifications)
+                {
+                    noti.IsRead = true;
+                }
+            }
         }
     }
 }

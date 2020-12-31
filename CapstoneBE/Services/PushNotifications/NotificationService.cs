@@ -139,7 +139,8 @@ namespace CapstoneBE.Services.PushNotifications
                         ReceiverId = receiverId,
                         Title = message.Notification.Title,
                         Body = message.Notification.Body,
-                        MessageType = messageType
+                        MessageType = messageType,
+                        IsRead = false
                     });
                 }
             }
