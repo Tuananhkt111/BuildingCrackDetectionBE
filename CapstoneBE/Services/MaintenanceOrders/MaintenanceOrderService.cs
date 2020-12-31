@@ -109,7 +109,9 @@ namespace CapstoneBE.Services.MaintenanceOrders
         public async Task<MaintenanceOrderInfo> GetById(int id)
         {
             MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository
-                .GetSingle(filter: mo => mo.MaintenanceOrderId.Equals(id),
+                .GetSingle(filter: mo => mo.MaintenanceOrderId.Equals(id)
+                    && ((_userData.LocationIds.Contains(mo.Cracks.First().LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)),
                 includeProperties: "Assessor,MaintenanceWorker,Cracks");
             return _mapper.Map<MaintenanceOrderInfo>(maintenanceOrder);
         }
@@ -117,13 +119,18 @@ namespace CapstoneBE.Services.MaintenanceOrders
         public List<MaintenanceOrderInfo> GetMaintenanceOrders()
         {
             return _unitOfWork.MaintenanceOrderRepository
-                .Get(includeProperties: "Assessor,MaintenanceWorker,Cracks")
+                .Get(filter: mo => (_userData.LocationIds.Contains(mo.Cracks.First().LocationId)
+                    && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole),
+                    includeProperties: "Assessor,MaintenanceWorker,Cracks")
                 .Select(mw => _mapper.Map<MaintenanceOrderInfo>(mw)).ToList();
         }
 
         public int GetMaintenanceOrdersCount()
         {
-            return _unitOfWork.MaintenanceOrderRepository.Get()
+            return _unitOfWork.MaintenanceOrderRepository.Get(filter: mo => (_userData.LocationIds.Contains(mo.Cracks.First().LocationId)
+                    && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole))
                 .Select(mw => _mapper.Map<MaintenanceOrderInfo>(mw)).Count();
         }
 
