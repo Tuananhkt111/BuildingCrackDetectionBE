@@ -25,12 +25,12 @@ namespace CapstoneBE.Services.MaintenanceOrders
             _mapper = mapper;
         }
 
-        public async Task<bool> AddToQueue(int crackId)
+        public async Task<bool> AddToQueue(int[] crackIds)
         {
             MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(_userData.UserId);
             if (maintenanceOrder == null)
-                return await CreateQueue(crackId);
-            return await UpdateQueue(crackId, maintenanceOrder);
+                return await CreateQueue(crackIds);
+            return await UpdateQueue(crackIds, maintenanceOrder);
         }
 
         public async Task<int> ConfirmOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo)
@@ -174,9 +174,9 @@ namespace CapstoneBE.Services.MaintenanceOrders
             return 0;
         }
 
-        private async Task<bool> CreateQueue(int crackId)
+        private async Task<bool> CreateQueue(int[] crackIds)
         {
-            HashSet<Crack> cracks = _unitOfWork.CrackRepository.Get(filter: c => crackId.Equals(c.CrackId) && c.Status.Equals(CrackStatus.UnscheduledForMaintenace)).ToHashSet();
+            HashSet<Crack> cracks = _unitOfWork.CrackRepository.Get(filter: c => crackIds.Contains(c.CrackId) && c.Status.Equals(CrackStatus.UnscheduledForMaintenace)).ToHashSet();
             if (cracks == null || cracks.Count <= 0)
                 return false;
             MaintenanceOrder maintenanceOrder = new MaintenanceOrder
@@ -189,12 +189,15 @@ namespace CapstoneBE.Services.MaintenanceOrders
             return await _unitOfWork.Save() != 0;
         }
 
-        private async Task<bool> UpdateQueue(int crackId, MaintenanceOrder maintenanceOrder)
+        private async Task<bool> UpdateQueue(int[] crackIds, MaintenanceOrder maintenanceOrder)
         {
-            Crack crack = await _unitOfWork.CrackRepository.GetSingle(filter: c => crackId.Equals(c.CrackId) && c.Status.Equals(CrackStatus.UnscheduledForMaintenace));
-            if (crack == null)
+            List<Crack> cracks = _unitOfWork.CrackRepository.Get(filter: c => crackIds.Contains(c.CrackId) && c.Status.Equals(CrackStatus.UnscheduledForMaintenace)).ToList();
+            if (cracks == null || cracks.Count == 0)
                 return false;
-            maintenanceOrder.Cracks.Add(crack);
+            foreach (var crack in cracks)
+            {
+                maintenanceOrder.Cracks.Add(crack);
+            }
             maintenanceOrder.AssessorId = _userData.UserId;
             return await _unitOfWork.Save() != 0;
         }

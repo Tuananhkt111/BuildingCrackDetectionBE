@@ -40,7 +40,7 @@ namespace CapstoneBE.Controllers
         /// <remarks>
         /// Sample request: POST: api/v1/maintenance-orders/queue
         /// </remarks>
-        /// <param name="crackId">Crack id</param>
+        /// <param name="crackIds">Crack ids</param>
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Add maintenance order queue success"</response>
         /// <response code="400">
@@ -51,11 +51,11 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> AddMaintenanceOrderQueue([FromBody] int crackId)
+        public async Task<ActionResult<string>> AddMaintenanceOrderQueue([FromBody] int[] crackIds)
         {
-            if (crackId == 0)
+            if (crackIds == null || crackIds.Length == 0)
                 return BadRequest("Invalid request");
-            bool result = await _maintenanceOrderService.AddToQueue(crackId);
+            bool result = await _maintenanceOrderService.AddToQueue(crackIds);
             return result ? Ok("Add maintenance order queue success") : BadRequest("Add maintenance order queue failed");
         }
 

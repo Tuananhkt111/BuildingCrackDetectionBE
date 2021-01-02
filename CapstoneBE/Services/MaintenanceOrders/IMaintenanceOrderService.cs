@@ -7,7 +7,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
 {
     public interface IMaintenanceOrderService
     {
-        Task<bool> AddToQueue(int crackId);
+        Task<bool> AddToQueue(int[] crackIds);
 
         Task<bool> RemoveFromQueue(int[] crackIds);
 
