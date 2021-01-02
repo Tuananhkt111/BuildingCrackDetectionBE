@@ -66,13 +66,21 @@ namespace CapstoneBE.Services.Cracks
             return _mapper.Map<CrackInfo>(crack);
         }
 
-        public List<CrackInfo> GetCracks()
+        public List<CrackInfo> GetCracks(string status)
         {
-            return _unitOfWork.CrackRepository
-                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
-                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
-                .Select(c => _mapper.Map<CrackInfo>(c)).ToList();
+            if (string.IsNullOrEmpty(status))
+                return _unitOfWork.CrackRepository
+                    .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
+                        && !c.Status.Equals(CrackStatus.Unconfirmed)
+                        && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                        || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                    .Select(c => _mapper.Map<CrackInfo>(c)).ToList();
+            else
+                return _unitOfWork.CrackRepository
+                    .Get(filter: c => c.Status.Equals(status)
+                        && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                        || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                    .Select(c => _mapper.Map<CrackInfo>(c)).ToList();
         }
 
         public int GetCracksCount()

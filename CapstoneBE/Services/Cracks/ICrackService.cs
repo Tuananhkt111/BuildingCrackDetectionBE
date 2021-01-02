@@ -18,7 +18,7 @@ namespace CapstoneBE.Services.Cracks
 
         Task<CrackInfo> GetById(int id);
 
-        List<CrackInfo> GetCracks();
+        List<CrackInfo> GetCracks(string status);
 
         int GetCracksCount();
     }

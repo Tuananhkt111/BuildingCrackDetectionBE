@@ -130,15 +130,16 @@ namespace CapstoneBE.Controllers
         /// <remarks>
         /// Sample request: GET: api/v1/cracks
         /// </remarks>
+        /// <param name="status">Crack status</param>
         /// <returns>List of cracks</returns>
         /// <response code="200">Returns list of cracks</response>
         /// <response code="404">If not found</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<CrackInfo>> GetCracks()
+        public ActionResult<IEnumerable<CrackInfo>> GetCracks(string status = "")
         {
-            List<CrackInfo> crackInfos = _crackService.GetCracks();
+            List<CrackInfo> crackInfos = _crackService.GetCracks(status);
             if (crackInfos != null)
                 return Ok(crackInfos);
             return NotFound();
