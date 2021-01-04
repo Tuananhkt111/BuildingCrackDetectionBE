@@ -34,11 +34,15 @@ namespace CapstoneBE.Profiles
                 .ForMember(dest =>
                     dest.ReporterName,
                     opt => opt.MapFrom(src => src.Reporter.Name));
+            CreateMap<Crack, CrackSubInfo>();
             //MaintenanceOrder entity mapper
             CreateMap<MaintenanceOrder, MaintenanceOrderInfo>()
                 .ForMember(dest =>
                     dest.AssessorName,
                     opt => opt.MapFrom(src => src.Assessor.Name))
+                .ForMember(dest =>
+                    dest.Cracks,
+                    opt => opt.MapFrom(src => src.Cracks))
                 .ForMember(dest =>
                     dest.MaintenanceWorkerName,
                     opt => opt.MapFrom(src => src.MaintenanceWorker.Name));

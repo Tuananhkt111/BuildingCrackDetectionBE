@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CapstoneBE.Models.Custom.Cracks;
+using System;
 using System.Collections.Generic;
 
 namespace CapstoneBE.Models.Custom.MaintenanceOrders
@@ -14,6 +15,6 @@ namespace CapstoneBE.Models.Custom.MaintenanceOrders
         public int AssessmentResult { get; set; }
         public string Status { get; set; }
         public DateTime MaintenanceDate { get; set; }
-        public ICollection<Crack> Cracks { get; set; }
+        public ICollection<CrackSubInfo> Cracks { get; set; }
     }
 }
