@@ -208,7 +208,8 @@ namespace CapstoneBE.Services.Users
 
         public async Task<UserInfo> GetUserById(string userId)
         {
-            CapstoneBEUser user = await _unitOfWork.UserRepository.GetById(userId);
+            CapstoneBEUser user = await _unitOfWork.UserRepository
+                .GetSingle(filter: u => u.Id.Equals(userId) && !u.IsDel, includeProperties: "LocationHistories");
             return _mapper.Map<UserInfo>(user);
         }
 
@@ -216,7 +217,9 @@ namespace CapstoneBE.Services.Users
             Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
             string includeProperties = "", int limit = 0, int offset = 0)
         {
-            return _unitOfWork.UserRepository.Get(filter: u => !u.IsDel).Select(u => _mapper.Map<UserInfo>(u)).ToList();
+            return _unitOfWork.UserRepository
+                .Get(filter: u => !u.IsDel, includeProperties: "LocationHistories")
+                .Select(u => _mapper.Map<UserInfo>(u)).ToList();
         }
 
         public int GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,

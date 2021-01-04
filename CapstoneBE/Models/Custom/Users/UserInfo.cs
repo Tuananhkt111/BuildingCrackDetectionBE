@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CapstoneBE.Models.Custom.Users
 {
@@ -14,5 +15,6 @@ namespace CapstoneBE.Models.Custom.Users
         public bool IsNewUser { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastModified { get; set; }
+        public ICollection<int> LocationIds { get; set; }
     }
 }
