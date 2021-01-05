@@ -35,7 +35,7 @@ namespace CapstoneBE.Repositories.Users
         public async Task<CapstoneBEUser> GetByUserName(string userName)
         {
             CapstoneBEUser user = await UserManager.FindByNameAsync(userName);
-            if (user.IsDel)
+            if (user == null || user.IsDel)
                 return null;
             return user;
         }
@@ -86,7 +86,7 @@ namespace CapstoneBE.Repositories.Users
         public override async Task<CapstoneBEUser> GetById(object id)
         {
             CapstoneBEUser user = await UserManager.FindByIdAsync((string)id);
-            if (user.IsDel)
+            if (user == null || user.IsDel)
                 return null;
             return user;
         }
