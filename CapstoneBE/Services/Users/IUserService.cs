@@ -31,9 +31,9 @@ namespace CapstoneBE.Services.Users
 
         Task<Email> ResetPassword(string userId);
 
-        Task<Email> ResetPassword(string userId, string token);
+        Task<Email> ResetPassword(string userName, string token);
 
-        Task<Email> ForgotPassword(string userName);
+        Task<Email> ForgotPassword(string userName, string rootPath);
 
         Task<bool> ChangePassword(string oldPass, string newPass, string userId);
 
@@ -44,7 +44,5 @@ namespace CapstoneBE.Services.Users
         string GetManagerIdByLocationId(int locationId);
 
         Task<Email> CreateUser(UserCreate newUser);
-
-        Task<bool> ChangeRole(string roleName, string userId);
     }
 }

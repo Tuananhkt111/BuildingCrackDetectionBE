@@ -213,7 +213,9 @@ namespace CapstoneBE.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> ForgotPasswordConfirm(string userName)
         {
-            Email email = await _userService.ForgotPassword(userName);
+            string rootPath = this.Request.Scheme + "://" + this.Request.Host.Value + this.Request.Path.Value;
+            rootPath = rootPath.Replace("forgotpass-confirm", "");
+            Email email = await _userService.ForgotPassword(userName, rootPath);
             if (email != null)
             {
                 await _emailService.SendEmailAsync(email);
@@ -233,11 +235,11 @@ namespace CapstoneBE.Controllers
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Reset password success"</response>
         /// <response code="400">If failed, returns message "Reset password failed"</response>
-        [HttpPost("{id}/forgotpass")]
+        [HttpGet("{id}/forgotpass")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> ForgotPassword(string id, [FromBody] string token)
+        public async Task<ActionResult<string>> ForgotPassword(string id, string token)
         {
             Email email = await _userService.ResetPassword(id, token);
             if (email != null)
@@ -246,39 +248,6 @@ namespace CapstoneBE.Controllers
                 return Ok("Reset password success");
             }
             return BadRequest("Reset password failed");
-        }
-
-        /// <summary>
-        /// Change role of user {Auth Roles: Administrator}
-        /// </summary>
-        /// <remarks>
-        /// Sample request: POST: api/v1/users/3/role
-        /// </remarks>
-        /// <param name="id">User Id</param>
-        /// <param name="roleName">Role of user</param>
-        /// <returns>Result message</returns>
-        /// <response code="200">If success, returns message "Change role success" and notification result</response>
-        /// <response code="400">
-        /// <para>If failed, returns message "Change role failed"</para>
-        /// <para>If bad request, returns message "Invalid role name. Role name doesn't exist."</para>
-        /// </response>
-        [HttpPost("{id}/role")]
-        [Authorize(Roles = Roles.AdminRole)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> ChangeRole(string id, [FromBody] string roleName)
-        {
-            if (!roleName.Equals(Roles.AdminRole) && !roleName.Equals(Roles.ManagerRole) && !roleName.Equals(Roles.StaffRole))
-                return BadRequest("Invalid role name. Role name doesn't exist.");
-            bool result = await _userService.ChangeRole(roleName, id);
-            string notiMsg = "";
-            if (result)
-            {
-                string[] receiverIds = { id };
-                bool notiResult = await _notificationService.SendNotifications(null, receiverIds, MessageType.AdminChangeRole);
-                notiMsg = notiResult ? ". Send notification success." : ". Send notification failed.";
-            }
-            return result ? Ok("Change role success" + notiMsg) : BadRequest("Change role failed");
         }
 
         /// <summary>

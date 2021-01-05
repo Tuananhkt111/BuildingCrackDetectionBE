@@ -54,11 +54,11 @@ namespace CapstoneBE.Repositories.Users
             return result;
         }
 
-        public async Task<IdentityResult> ResetPassword(string userId, string newPassword, string token)
+        public async Task<IdentityResult> ResetPassword(string userName, string newPassword, string token)
         {
-            CapstoneBEUser user = await GetById(userId);
+            CapstoneBEUser user = await GetByUserName(userName);
             if (user == null)
-                throw new ArgumentNullException(nameof(userId));
+                throw new ArgumentNullException(nameof(userName));
             if (token == null)
                 throw new Exception("Reset password token is invalid");
             IdentityResult result = await UserManager.ResetPasswordAsync(user, token, newPassword);
@@ -103,21 +103,6 @@ namespace CapstoneBE.Repositories.Users
                     return roleResult;
             }
             return createResult;
-        }
-
-        public async Task<IdentityResult> UpdateRole(string roleName, string userId)
-        {
-            CapstoneBEUser user = await GetById(userId);
-            if (user == null)
-                throw new ArgumentNullException(nameof(userId));
-            var roles = await UserManager.GetRolesAsync(user);
-            IdentityResult removeOldResult = await UserManager.RemoveFromRolesAsync(user, roles);
-            if (!removeOldResult.Succeeded)
-                return removeOldResult;
-            IdentityResult addNewResult = await UserManager.AddToRoleAsync(user, roleName);
-            if (addNewResult.Succeeded)
-                user.Role = roleName;
-            return addNewResult;
         }
 
         public async Task<IdentityResult> ChangePassword(string oldPass, string newPass, string userId)

@@ -39,7 +39,6 @@ namespace CapstoneBE.Services.PushNotifications
             switch (messageType)
             {
                 case MessageType.AdminUpdateInfo:
-                case MessageType.AdminChangeRole:
                 case MessageType.SystemFinishedDetection:
                 case MessageType.ManagerRequestStaff:
                     return new Message()
@@ -75,11 +74,6 @@ namespace CapstoneBE.Services.PushNotifications
                 {
                     Title = "Administrator has updated your profile",
                     Body = "Review your personal information in Profile tab."
-                },
-                MessageType.AdminChangeRole => new Notification
-                {
-                    Title = "Administrator has change your role",
-                    Body = "Logout and re-login to update your authorities."
                 },
                 MessageType.SystemFinishedDetection => new Notification
                 {

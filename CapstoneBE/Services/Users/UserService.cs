@@ -2,7 +2,9 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.UnitOfWorks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -65,14 +67,6 @@ namespace CapstoneBE.Services.Users
             return false;
         }
 
-        public async Task<bool> ChangeRole(string roleName, string userId)
-        {
-            IdentityResult result = await _unitOfWork.UserRepository.UpdateRole(roleName, userId);
-            if (result.Succeeded)
-                return await _unitOfWork.Save() != 0;
-            return false;
-        }
-
         public async Task<Email> CreateUser(UserCreate newUser)
         {
             CapstoneBEUser user = _mapper.Map<CapstoneBEUser>(newUser);
@@ -103,16 +97,15 @@ namespace CapstoneBE.Services.Users
             return await _unitOfWork.Save() != 0;
         }
 
-        public async Task<Email> ForgotPassword(string userName)
+        public async Task<Email> ForgotPassword(string userName, string rootPath)
         {
             CapstoneBEUser user = await _unitOfWork.UserRepository.GetByUserName(userName);
             if (user == null)
                 throw new ArgumentNullException(nameof(userName));
             string token = await _unitOfWork.UserRepository.UserManager.GeneratePasswordResetTokenAsync(user);
-            //byte[] encodedToken = Encoding.UTF8.GetBytes(token);
-            //string validToken = WebEncoders.Base64UrlEncode(encodedToken);
-            string appUrl = "https://localhost:5001/";
-            string url = $"{appUrl}ResetPassword?userId={userName}&token={token}";
+            byte[] encodedToken = Encoding.UTF8.GetBytes(token);
+            string validToken = WebEncoders.Base64UrlEncode(encodedToken);
+            string url = $"{rootPath}{userName}/forgotpass?token={validToken}";
             Email email = new Email(new string[] { user.Email },
                 "Reset your Capstone Account Password Confirm",
                 "Dear " + user.Name + ",<br/><br/>You are receiving this email because we received a password reset request for your account <span style=\"color: blue;\">"
@@ -247,14 +240,16 @@ namespace CapstoneBE.Services.Users
             return null;
         }
 
-        public async Task<Email> ResetPassword(string userId, string token)
+        public async Task<Email> ResetPassword(string userName, string token)
         {
+            byte[] tokenDecodedBytes = WebEncoders.Base64UrlDecode(token);
+            string tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
             string newPass = GenerateRandomPasword();
-            IdentityResult resetResult = await _unitOfWork.UserRepository.ResetPassword(userId, newPass, token);
+            IdentityResult resetResult = await _unitOfWork.UserRepository.ResetPassword(userName, newPass, tokenDecoded);
             if (resetResult.Succeeded)
                 if (_unitOfWork.Save().Result != 0)
                 {
-                    CapstoneBEUser user = await _unitOfWork.UserRepository.GetById(userId);
+                    CapstoneBEUser user = await _unitOfWork.UserRepository.GetByUserName(userName);
                     Email email = new Email(new string[] { user.Email },
                         "Reset your Capstone Account Password",
                         "Dear " + user.Name + ",<br/><br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your new password: <span style=\"color: blue;\">" + newPass

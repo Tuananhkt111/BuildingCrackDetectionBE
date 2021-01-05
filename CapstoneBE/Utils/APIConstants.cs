@@ -2,8 +2,6 @@
 {
     public static class APIConstants
     {
-        public const string AppUrl = "https://bcdsys.herokuapp.com/";
-
         public static class Roles
         {
             public const string AdminRole = "Administrator";
@@ -37,7 +35,6 @@
         public static class MessageType
         {
             public const string AdminUpdateInfo = "AdminUpdateInfo";
-            public const string AdminChangeRole = "AdminChangeRole";
             public const string SystemFinishedDetection = "SystemFinishedDetection";
             public const string ManagerRequestStaff = "ManagerRequestStaff";
             public const string StaffCreateOrder = "StaffCreateOrder";
