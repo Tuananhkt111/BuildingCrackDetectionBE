@@ -31,7 +31,7 @@ namespace CapstoneBE.Controllers
         /// <returns>Message result</returns>
         /// <response code="200">If success, returns message "Mark as read notifications success"</response>
         /// <response code="404">If failed, returns message "Notifications doesn't exist"</response>
-        [HttpDelete("{id}")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<string>> Delete([FromBody] int[] ids)
