@@ -20,6 +20,10 @@ namespace CapstoneBE.Services.Cracks
 
         List<CrackInfo> GetCracks(string status);
 
+        List<CrackInfo> GetCracksIgnore(string status);
+
+        List<CrackInfo> GetCracks();
+
         int GetCracksCount();
     }
 }

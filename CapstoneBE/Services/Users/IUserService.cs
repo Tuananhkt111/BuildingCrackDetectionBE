@@ -11,19 +11,15 @@ namespace CapstoneBE.Services.Users
 {
     public interface IUserService
     {
-        Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "");
+        Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "", bool isManager = false);
 
         string GenerateJWTToken(string userId, string roleName, int[] locationIds);
 
         Task<UserInfo> GetUserById(string userId);
 
-        List<UserInfo> GetUsers(Expression<Func<CapstoneBEUser, bool>> filter = null,
-            Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
-            string includeProperties = "", int limit = 0, int offset = 0);
+        List<UserInfo> GetUsers();
 
-        int GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
-            Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
-            string includeProperties = "", int limit = 0, int offset = 0);
+        int GetUsersCount();
 
         Task<bool> DeleteUser(string userId);
 

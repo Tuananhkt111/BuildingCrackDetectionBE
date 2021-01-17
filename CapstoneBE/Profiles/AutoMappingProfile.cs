@@ -50,6 +50,9 @@ namespace CapstoneBE.Profiles
                     dest.Cracks,
                     opt => opt.MapFrom(src => src.Cracks))
                 .ForMember(dest =>
+                    dest.LocationName,
+                    opt => opt.MapFrom(src => src.Location.Name))
+                .ForMember(dest =>
                     dest.MaintenanceWorkerName,
                     opt => opt.MapFrom(src => src.MaintenanceWorker.Name));
         }

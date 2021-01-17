@@ -27,8 +27,8 @@
         {
             public const string DetectedFailed = "DetectedFailed";
             public const string Unconfirmed = "Unconfirmed";
-            public const string UnscheduledForMaintenace = "Unscheduled for maintenace";
-            public const string ScheduledForMaintenace = "Scheduled for maintenace";
+            public const string UnscheduledForMaintenace = "Unscheduled for maintenance";
+            public const string ScheduledForMaintenace = "Scheduled for maintenance";
             public const string Fixed = "Fixed";
         }
 
@@ -36,7 +36,6 @@
         {
             public const string AdminUpdateInfo = "AdminUpdateInfo";
             public const string SystemFinishedDetection = "SystemFinishedDetection";
-            public const string ManagerRequestStaff = "ManagerRequestStaff";
             public const string StaffCreateOrder = "StaffCreateOrder";
             public const string StaffUpdateOrder = "StaffUpdateOrder";
             public const string StaffEvaluateOrder = "StaffEvaluateOrder";

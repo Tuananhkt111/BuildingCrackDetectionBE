@@ -68,19 +68,45 @@ namespace CapstoneBE.Services.Cracks
 
         public List<CrackInfo> GetCracks(string status)
         {
-            if (string.IsNullOrEmpty(status))
-                return _unitOfWork.CrackRepository
-                    .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
-                        && !c.Status.Equals(CrackStatus.Unconfirmed)
-                        && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                        || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
-                    .Select(c => _mapper.Map<CrackInfo>(c)).ToList();
-            else
-                return _unitOfWork.CrackRepository
-                    .Get(filter: c => c.Status.Equals(status)
-                        && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                        || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
-                    .Select(c => _mapper.Map<CrackInfo>(c)).ToList();
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => c.Status.Equals(status)
+                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .OrderByDescending(c => c.Created)
+                .ThenBy(c => c.Status)
+                .ThenBy(c => c.Severity)
+                .ThenBy(c => c.CrackId)
+                .Select(c => _mapper.Map<CrackInfo>(c))
+                .ToList();
+        }
+
+        public List<CrackInfo> GetCracks()
+        {
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
+                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .OrderByDescending(c => c.Created)
+                .ThenBy(c => c.Status)
+                .ThenBy(c => c.Severity)
+                .ThenBy(c => c.CrackId)
+                .Select(c => _mapper.Map<CrackInfo>(c))
+                .ToList();
+        }
+
+        public List<CrackInfo> GetCracksIgnore(string status)
+        {
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
+                    && !c.Status.Equals(status)
+                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .OrderByDescending(c => c.Created)
+                .ThenBy(c => c.Status)
+                .ThenBy(c => c.Severity)
+                .ThenBy(c => c.CrackId)
+                .Select(c => _mapper.Map<CrackInfo>(c))
+                .ToList();
         }
 
         public int GetCracksCount()

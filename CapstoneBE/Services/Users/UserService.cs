@@ -2,7 +2,6 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.UnitOfWorks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +13,7 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TranslatorAPI.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Services.Users
@@ -21,15 +21,17 @@ namespace CapstoneBE.Services.Users
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGetClaimsProvider _userData;
         private readonly IMapper _mapper;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, IGetClaimsProvider userData, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _userData = userData;
             _mapper = mapper;
         }
 
-        public async Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "")
+        public async Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "", bool isManager = false)
         {
             if (String.IsNullOrEmpty(password) || String.IsNullOrEmpty(userName))
                 return null;
@@ -42,6 +44,16 @@ namespace CapstoneBE.Services.Users
             string role = (await _unitOfWork.UserRepository.UserManager.GetRolesAsync(user)).FirstOrDefault();
             if (user != null && !user.IsDel && role != null)
             {
+                if (isManager)
+                {
+                    if (!role.Equals(Roles.AdminRole) && !role.Equals(Roles.ManagerRole))
+                        return null;
+                }
+                else
+                {
+                    if (!role.Equals(Roles.StaffRole))
+                        return null;
+                }
                 if (role.Equals(Roles.ManagerRole) || role.Equals(Roles.StaffRole))
                 {
                     await _unitOfWork.UserRepository.UpdateFcmToken(registrationToken, user.Id);
@@ -206,20 +218,26 @@ namespace CapstoneBE.Services.Users
             return _mapper.Map<UserInfo>(user);
         }
 
-        public List<UserInfo> GetUsers(Expression<Func<CapstoneBEUser, bool>> filter = null,
-            Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
-            string includeProperties = "", int limit = 0, int offset = 0)
+        public List<UserInfo> GetUsers()
         {
             return _unitOfWork.UserRepository
-                .Get(filter: u => !u.IsDel, includeProperties: "LocationHistories")
+                .Get(filter: u => !u.Role.Equals(Roles.AdminRole)
+                    && !u.IsDel && ((u.Role.Equals(Roles.StaffRole)
+                    && _userData.LocationIds.Contains(u.LocationHistories.First().LocationId)
+                    && _userData.Role.Equals(Roles.ManagerRole))
+                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "LocationHistories")
                 .Select(u => _mapper.Map<UserInfo>(u)).ToList();
         }
 
-        public int GetUsersCount(Expression<Func<CapstoneBEUser, bool>> filter = null,
-            Func<IQueryable<CapstoneBEUser>, IOrderedQueryable<CapstoneBEUser>> orderBy = null,
-            string includeProperties = "", int limit = 0, int offset = 0)
+        public int GetUsersCount()
         {
-            return _unitOfWork.UserRepository.Get(filter: u => !u.IsDel).Select(u => _mapper.Map<UserInfo>(u)).Count();
+            return _unitOfWork.UserRepository
+                .Get(filter: u => !u.Role.Equals(Roles.AdminRole)
+                    && !u.IsDel && ((u.Role.Equals(Roles.StaffRole)
+                    && _userData.LocationIds.Contains(u.LocationHistories.First().LocationId)
+                    && _userData.Role.Equals(Roles.ManagerRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Count();
         }
 
         public async Task<Email> ResetPassword(string userId)

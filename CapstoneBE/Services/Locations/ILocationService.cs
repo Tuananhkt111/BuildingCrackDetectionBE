@@ -16,6 +16,8 @@ namespace CapstoneBE.Services.Locations
 
         List<LocationInfo> GetLocations();
 
+        List<LocationInfo> GetAvailableLocations(string role, string empId = null);
+
         int GetLocationsCount();
     }
 }

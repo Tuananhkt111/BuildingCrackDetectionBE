@@ -46,17 +46,22 @@ namespace CapstoneBE.Controllers
         /// Get list of notifications {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>
-        /// Sample request: GET: api/v1/notifications
+        /// Sample request: GET: api/v1/notifications?isRead=true
         /// </remarks>
+        /// <param name="isRead">Status of notification</param>
         /// <returns>List of notifications</returns>
         /// <response code="200">Returns list of notifications</response>
         /// <response code="404">If not found</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<PushNotification>> GetNotifications()
+        public ActionResult<IEnumerable<PushNotification>> GetNotifications(bool? isRead = null)
         {
-            List<PushNotification> notifications = _notificationService.GetPushNotifications();
+            List<PushNotification> notifications;
+            if (isRead == null)
+                notifications = _notificationService.GetPushNotifications();
+            else
+                notifications = _notificationService.GetPushNotifications(isRead);
             if (notifications != null)
                 return Ok(notifications);
             return NotFound();

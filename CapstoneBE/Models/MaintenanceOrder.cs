@@ -14,6 +14,7 @@ namespace CapstoneBE.Models
 
         public int MaintenanceOrderId { get; set; }
         public int? MaintenanceWorkerId { get; set; }
+        public int LocationId { get; set; }
 
         [ForeignKey(nameof(Assessor)), Column(Order = 0)]
         public string AssessorId { get; set; }
@@ -31,6 +32,7 @@ namespace CapstoneBE.Models
         public DateTime MaintenanceDate { get; set; }
 
         public virtual MaintenanceWorker MaintenanceWorker { get; set; }
+        public virtual Location Location { get; set; }
         public virtual CapstoneBEUser Assessor { get; set; }
         public virtual ICollection<Crack> Cracks { get; set; }
     }

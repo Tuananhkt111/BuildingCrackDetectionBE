@@ -30,10 +30,10 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
-        /// Authenticate to system by userName and password
+        /// Authenticate to system by userName and password (Staff role)
         /// </summary>
         /// <remarks>
-        /// Sample request: POST: api/v1/users/authenticate
+        /// Sample request: POST: api/v1/users/authenticate/staff
         /// </remarks>
         /// <param name="userLogin">A UserLogin object</param>
         /// <returns>A UserLoginResponse object</returns>
@@ -41,7 +41,33 @@ namespace CapstoneBE.Controllers
         /// <response code="400">If bad request, returns message "Invalid request"</response>
         /// <response code="404">If sign-in failed, returns message "Sign-in Failed"</response>
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("authenticate/staff")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserLoginResponse>> AuthenticateStaff([FromBody] UserLogin userLogin)
+        {
+            if (userLogin == null)
+                return BadRequest("Invalid request");
+            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken, false);
+            if (jwtToken == null)
+                return NotFound("Sign-in Failed");
+            return Ok(jwtToken);
+        }
+
+        /// <summary>
+        /// Authenticate to system by userName and password (Administrator, Manager Role)
+        /// </summary>
+        /// <remarks>
+        /// Sample request: POST: api/v1/users/authenticate/manager
+        /// </remarks>
+        /// <param name="userLogin">A UserLogin object</param>
+        /// <returns>A UserLoginResponse object</returns>
+        /// <response code="200">Returns the UserLoginResponse object</response>
+        /// <response code="400">If bad request, returns message "Invalid request"</response>
+        /// <response code="404">If sign-in failed, returns message "Sign-in Failed"</response>
+        [AllowAnonymous]
+        [HttpPost("authenticate/manager")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,7 +75,7 @@ namespace CapstoneBE.Controllers
         {
             if (userLogin == null)
                 return BadRequest("Invalid request");
-            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken);
+            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken, true);
             if (jwtToken == null)
                 return NotFound("Sign-in Failed");
             return Ok(jwtToken);
@@ -143,7 +169,7 @@ namespace CapstoneBE.Controllers
             if (result > 0 && (user.Role.Equals(Roles.ManagerRole) || user.Role.Equals(Roles.StaffRole)))
             {
                 string[] receiverIds = { id };
-                _ = await _notificationService.SendNotifications(null, receiverIds, MessageType.AdminUpdateInfo);
+                _ = _notificationService.SendNotifications(null, receiverIds, MessageType.AdminUpdateInfo);
             }
             return Ok(result);
         }
@@ -191,7 +217,7 @@ namespace CapstoneBE.Controllers
             Email email = await _userService.ResetPassword(id);
             if (email != null)
             {
-                await _emailService.SendEmailAsync(email);
+                _ = _emailService.SendEmailAsync(email);
                 return Ok("Reset password success");
             }
             return BadRequest("Reset password failed");
@@ -218,7 +244,7 @@ namespace CapstoneBE.Controllers
             Email email = await _userService.ForgotPassword(userName, rootPath);
             if (email != null)
             {
-                await _emailService.SendEmailAsync(email);
+                _ = _emailService.SendEmailAsync(email);
                 return Ok("Reset password URL has been sent to the email successfully!");
             }
             return BadRequest("Reset password URL has been sent to the email failed!");
@@ -244,7 +270,7 @@ namespace CapstoneBE.Controllers
             Email email = await _userService.ResetPassword(id, token);
             if (email != null)
             {
-                await _emailService.SendEmailAsync(email);
+                _ = _emailService.SendEmailAsync(email);
                 return Ok("Reset password success");
             }
             return BadRequest("Reset password failed");
@@ -292,7 +318,7 @@ namespace CapstoneBE.Controllers
             Email email = await _userService.CreateUser(user);
             if (email == null)
                 return BadRequest("Create user failed");
-            await _emailService.SendEmailAsync(email);
+            _ = _emailService.SendEmailAsync(email);
             return Ok("Create user success");
         }
 

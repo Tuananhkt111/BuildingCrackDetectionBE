@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using CapstoneBE.Models;
-using CapstoneBE.Models.Custom.Locations;
+﻿using CapstoneBE.Models;
 using CapstoneBE.UnitOfWorks;
 using FirebaseAdmin.Messaging;
 using System.Collections.Generic;
@@ -40,7 +38,6 @@ namespace CapstoneBE.Services.PushNotifications
             {
                 case MessageType.AdminUpdateInfo:
                 case MessageType.SystemFinishedDetection:
-                case MessageType.ManagerRequestStaff:
                     return new Message()
                     {
                         Token = receiver.FcmToken,
@@ -80,12 +77,6 @@ namespace CapstoneBE.Services.PushNotifications
                     Title = "System has finished detecting cracks",
                     Body = "Detection results are shown in 'Unconfirmed Cracks' tab."
                 },
-                MessageType.ManagerRequestStaff => new Notification
-                {
-                    Title = "Manager " + sender.Name + " requested you to do periodical check-up",
-                    Body = "Location " + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name
-                        + " needs you, time to work now!"
-                },
                 MessageType.StaffCreateOrder => new Notification
                 {
                     Title = "Staff " + sender.Name + " has created a maintenance order in location "
@@ -112,7 +103,19 @@ namespace CapstoneBE.Services.PushNotifications
         public List<PushNotification> GetPushNotifications()
         {
             return _unitOfWork.NotificationRepository
-                .Get(filter: n => n.ReceiverId.Equals(_userData.UserId)).ToList();
+                .Get(filter: n => n.ReceiverId.Equals(_userData.UserId))
+                .OrderByDescending(n => n.Created)
+                .ToList();
+        }
+
+        public List<PushNotification> GetPushNotifications(bool? isRead)
+        {
+            if (isRead == null)
+                return null;
+            return _unitOfWork.NotificationRepository
+                .Get(filter: n => n.ReceiverId.Equals(_userData.UserId) && n.IsRead.Equals(isRead))
+                .OrderByDescending(n => n.Created)
+                .ToList();
         }
 
         public async Task<bool> SendNotifications(string senderId, string[] receiverIds, string messageType, int? orderId = null)

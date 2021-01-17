@@ -22,6 +22,7 @@ namespace CapstoneBE.Models
 
         public virtual ICollection<Crack> Cracks { get; set; }
         public virtual ICollection<LocationHistory> LocationHistories { get; set; }
+        public virtual MaintenanceOrder MaintenanceOrder { get; set; }
 
         [Required]
         public bool IsDel { get; set; }

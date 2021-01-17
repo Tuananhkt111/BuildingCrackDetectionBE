@@ -1,12 +1,10 @@
 ﻿using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Services.Cracks;
-using CapstoneBE.Services.PushNotifications;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TranslatorAPI.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Controllers
@@ -18,14 +16,10 @@ namespace CapstoneBE.Controllers
     public class CrackController : ControllerBase
     {
         private readonly ICrackService _crackService;
-        private readonly INotificationService _notificationService;
-        private readonly IGetClaimsProvider _userData;
 
-        public CrackController(ICrackService crackService, INotificationService notificationService, IGetClaimsProvider userData)
+        public CrackController(ICrackService crackService)
         {
             _crackService = crackService;
-            _notificationService = notificationService;
-            _userData = userData;
         }
 
         /// <summary>
@@ -102,44 +96,28 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
-        /// Reuest staff do periodical check-up {Auth Roles: Manager}
-        /// </summary>
-        /// <remarks>
-        /// Sample request: POST: api/v1/cracks/checkup/2
-        /// </remarks>
-        /// <param name="id">Staff Id</param>
-        /// <returns>An integer</returns>
-        /// <response code="200">Returns message "Request success"</response>
-        /// <response code="400">
-        /// <para>If update failed, returns message "Request failed"</para>
-        /// </response>
-        [HttpPost("checkup/{id}")]
-        [Authorize(Roles = Roles.ManagerRole)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<int>> RequestCheckup(string id)
-        {
-            string[] receiverIds = { id };
-            bool result = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.ManagerRequestStaff);
-            return result ? Ok("Request success") : BadRequest("Request failed");
-        }
-
-        /// <summary>
         /// Get list of cracks {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>
         /// Sample request: GET: api/v1/cracks
         /// </remarks>
         /// <param name="status">Crack status</param>
+        /// <param name="ignore">Crack status ignored</param>
         /// <returns>List of cracks</returns>
         /// <response code="200">Returns list of cracks</response>
         /// <response code="404">If not found</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<CrackInfo>> GetCracks(string status = "")
+        public ActionResult<IEnumerable<CrackInfo>> GetCracks(string status = "", string ignore = "")
         {
-            List<CrackInfo> crackInfos = _crackService.GetCracks(status);
+            List<CrackInfo> crackInfos = null;
+            if (string.IsNullOrEmpty(status) && string.IsNullOrEmpty(ignore))
+                crackInfos = _crackService.GetCracks();
+            else if (!string.IsNullOrEmpty(status) && string.IsNullOrEmpty(ignore))
+                crackInfos = _crackService.GetCracks(status);
+            else if (string.IsNullOrEmpty(status) && !string.IsNullOrEmpty(ignore))
+                crackInfos = _crackService.GetCracksIgnore(ignore);
             if (crackInfos != null)
                 return Ok(crackInfos);
             return NotFound();

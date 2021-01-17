@@ -69,6 +69,31 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
+        /// Get list of available locations {Auth Roles: Administrator}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/locations/available?role=Staff
+        /// </remarks>
+        /// <param name="role">Employee role</param>
+        /// <param name="empId">Employee Id</param>
+        /// <returns>List of locations</returns>
+        /// <response code="200">Returns list of locations</response>
+        /// <response code="404">If not found</response>
+        [HttpGet("available")]
+        [Authorize(Roles = Roles.AdminRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<LocationInfo>> GetAvailableLocations(string role, string empId = null)
+        {
+            if (string.IsNullOrEmpty(role))
+                return NotFound();
+            List<LocationInfo> locationInfos = _locationService.GetAvailableLocations(role, empId);
+            if (locationInfos != null)
+                return Ok(locationInfos);
+            return NotFound();
+        }
+
+        /// <summary>
         /// Get number of locations {Auth Roles: Administrator, Manager}
         /// </summary>
         /// <remarks>
