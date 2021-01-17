@@ -10,7 +10,7 @@ namespace CapstoneBE.Models.Custom.MaintenanceOrders
         public int? MaintenanceWorkerId { get; set; }
         public string MaintenanceWorkerName { get; set; }
         public int LocationId { get; set; }
-        public int LocationName { get; set; }
+        public string LocationName { get; set; }
         public string AssessorId { get; set; }
         public string AssessorName { get; set; }
         public string Description { get; set; }
