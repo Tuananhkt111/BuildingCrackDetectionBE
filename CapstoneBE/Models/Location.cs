@@ -9,6 +9,7 @@ namespace CapstoneBE.Models
         {
             Cracks = new HashSet<Crack>();
             LocationHistories = new HashSet<LocationHistory>();
+            MaintenanceOrders = new HashSet<MaintenanceOrder>();
         }
 
         public int LocationId { get; set; }
@@ -22,7 +23,7 @@ namespace CapstoneBE.Models
 
         public virtual ICollection<Crack> Cracks { get; set; }
         public virtual ICollection<LocationHistory> LocationHistories { get; set; }
-        public virtual MaintenanceOrder MaintenanceOrder { get; set; }
+        public virtual ICollection<MaintenanceOrder> MaintenanceOrders { get; set; }
 
         [Required]
         public bool IsDel { get; set; }

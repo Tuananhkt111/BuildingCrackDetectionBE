@@ -18,10 +18,10 @@ namespace CapstoneBE
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.GetApplicationDefault()
-            });
+            //FirebaseApp.Create(new AppOptions()
+            //{
+            //    Credential = GoogleCredential.GetApplicationDefault()
+            //});
         }
 
         public IConfiguration Configuration { get; }
