@@ -110,7 +110,7 @@ namespace CapstoneBE.Controllers
             {
                 string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
                 string[] receiverIds = { receiverId };
-                _ = _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffCreateOrder);
+                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffCreateOrder);
             }
             return result > 0 ? Ok("Confirm maintenance order success") : BadRequest("Confirm maintenance order failed");
         }
@@ -142,7 +142,7 @@ namespace CapstoneBE.Controllers
             {
                 string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
                 string[] receiverIds = { receiverId };
-                _ = _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffEvaluateOrder);
+                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffEvaluateOrder);
             }
             return result > 0 ? Ok("Evaluate maintenance order success") : BadRequest("Evaluate maintenance order failed");
         }
@@ -174,7 +174,7 @@ namespace CapstoneBE.Controllers
             {
                 string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
                 string[] receiverIds = { receiverId };
-                _ = _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffUpdateOrder);
+                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageType.StaffUpdateOrder);
             }
             return result > 0 ? Ok("Update maintenance order success") : BadRequest("Update maintenance order failed");
         }

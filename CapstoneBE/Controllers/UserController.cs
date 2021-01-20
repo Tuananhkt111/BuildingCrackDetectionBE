@@ -169,7 +169,7 @@ namespace CapstoneBE.Controllers
             if (result > 0 && (user.Role.Equals(Roles.ManagerRole) || user.Role.Equals(Roles.StaffRole)))
             {
                 string[] receiverIds = { id };
-                _ = _notificationService.SendNotifications(null, receiverIds, MessageType.AdminUpdateInfo);
+                _ = await _notificationService.SendNotifications(null, receiverIds, MessageType.AdminUpdateInfo);
             }
             return Ok(result);
         }
