@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -218,6 +217,11 @@ namespace CapstoneBE.Services.Users
             return _mapper.Map<UserInfo>(user);
         }
 
+        public async Task<CapstoneBEUser> GetOriginalUserById(string userId)
+        {
+            return await _unitOfWork.UserRepository.GetSingle(filter: u => u.Id.Equals(userId) && !u.IsDel);
+        }
+
         public List<UserInfo> GetUsers()
         {
             return _unitOfWork.UserRepository
@@ -278,11 +282,24 @@ namespace CapstoneBE.Services.Users
             return null;
         }
 
-        public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)
+        public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, CapstoneBEUser user)
         {
-            await _unitOfWork.UserRepository.UpdateBasicInfo(userBasicInfo, userId);
-            _unitOfWork.LocationHistoryRepository.Update(userBasicInfo.LocationIds, userId);
-            return await _unitOfWork.Save();
+            CapstoneBEUser updatedUser = _unitOfWork.UserRepository.UpdateBasicInfo(userBasicInfo, user);
+            if (updatedUser.Role.Equals(Roles.StaffRole))
+            {
+                LocationHistory lh = await _unitOfWork.LocationHistoryRepository.GetById(userBasicInfo.LocationIds.First(), user.Id);
+                if (lh == null)
+                    await _unitOfWork.MaintenanceOrderRepository.RemoveQueue(user.Id);
+            }
+            _unitOfWork.LocationHistoryRepository.Update(userBasicInfo.LocationIds, user.Id);
+            int result = await _unitOfWork.Save();
+            if (result > 0)
+            {
+                if (updatedUser.Role.Equals(Roles.StaffRole) || updatedUser.Role.Equals(Roles.ManagerRole))
+                    return 1;
+                else return 0;
+            }
+            else return -1;
         }
     }
 }

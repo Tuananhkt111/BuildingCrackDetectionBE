@@ -36,17 +36,17 @@ namespace CapstoneBE.Services.PushNotifications
         {
             switch (messageType)
             {
-                case MessageType.AdminUpdateInfo:
-                case MessageType.SystemFinishedDetection:
+                case MessageTypes.AdminUpdateInfo:
+                case MessageTypes.SystemFinishedDetection:
                     return new Message()
                     {
                         Token = receiver.FcmToken,
                         Notification = GetNotification(sender, messageType)
                     };
 
-                case MessageType.StaffCreateOrder:
-                case MessageType.StaffUpdateOrder:
-                case MessageType.StaffEvaluateOrder:
+                case MessageTypes.StaffCreateOrder:
+                case MessageTypes.StaffUpdateOrder:
+                case MessageTypes.StaffEvaluateOrder:
                     if (orderId == null || orderId == 0)
                         return null;
                     return new Message()
@@ -67,29 +67,29 @@ namespace CapstoneBE.Services.PushNotifications
         {
             Notification notification = messageType switch
             {
-                MessageType.AdminUpdateInfo => new Notification
+                MessageTypes.AdminUpdateInfo => new Notification
                 {
                     Title = "Administrator has updated your profile",
                     Body = "Review your personal information in Profile tab."
                 },
-                MessageType.SystemFinishedDetection => new Notification
+                MessageTypes.SystemFinishedDetection => new Notification
                 {
                     Title = "System has finished detecting cracks",
                     Body = "Detection results are shown in 'Unconfirmed Cracks' tab."
                 },
-                MessageType.StaffCreateOrder => new Notification
+                MessageTypes.StaffCreateOrder => new Notification
                 {
                     Title = "Staff " + sender.Name + " has created a maintenance order in location "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
                     Body = "Tap to view details."
                 },
-                MessageType.StaffUpdateOrder => new Notification
+                MessageTypes.StaffUpdateOrder => new Notification
                 {
                     Title = "Staff " + sender.Name + " has updated a maintenance order in location "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
                     Body = "Tap to view details."
                 },
-                MessageType.StaffEvaluateOrder => new Notification
+                MessageTypes.StaffEvaluateOrder => new Notification
                 {
                     Title = "Staff " + sender.Name + " has evaluated a maintenance order in location "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,

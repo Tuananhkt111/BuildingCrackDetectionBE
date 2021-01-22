@@ -1,10 +1,7 @@
 ﻿using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace CapstoneBE.Services.Users
@@ -17,13 +14,15 @@ namespace CapstoneBE.Services.Users
 
         Task<UserInfo> GetUserById(string userId);
 
+        Task<CapstoneBEUser> GetOriginalUserById(string userId);
+
         List<UserInfo> GetUsers();
 
         int GetUsersCount();
 
         Task<bool> DeleteUser(string userId);
 
-        Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId);
+        Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, CapstoneBEUser user);
 
         Task<Email> ResetPassword(string userId);
 

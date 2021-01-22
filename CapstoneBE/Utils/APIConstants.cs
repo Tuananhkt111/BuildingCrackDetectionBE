@@ -32,7 +32,7 @@
             public const string Fixed = "Fixed";
         }
 
-        public static class MessageType
+        public static class MessageTypes
         {
             public const string AdminUpdateInfo = "AdminUpdateInfo";
             public const string SystemFinishedDetection = "SystemFinishedDetection";

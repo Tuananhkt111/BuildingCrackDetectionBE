@@ -67,9 +67,8 @@ namespace CapstoneBE.Repositories.Users
             return result;
         }
 
-        public async Task UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId)
+        public CapstoneBEUser UpdateBasicInfo(UserBasicInfo userBasicInfo, CapstoneBEUser user)
         {
-            CapstoneBEUser user = await GetById(userId);
             if (user != null)
             {
                 if (!String.IsNullOrEmpty(userBasicInfo.Name))
@@ -80,7 +79,9 @@ namespace CapstoneBE.Repositories.Users
                     user.Address = userBasicInfo.Address;
                 if (!String.IsNullOrEmpty(userBasicInfo.Email))
                     user.Email = userBasicInfo.Email;
+                return user;
             }
+            return null;
         }
 
         public override async Task<CapstoneBEUser> GetById(object id)

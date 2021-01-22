@@ -1,4 +1,5 @@
-﻿using CapstoneBE.Models;
+﻿using CapstoneBE.Attributes;
+using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.Services.Emails;
 using CapstoneBE.Services.PushNotifications;
@@ -145,11 +146,12 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.AdminRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [PushNotification(MessageTypes.AdminUpdateInfo)]
         public async Task<ActionResult<int>> UpdateBasicInfo(string id, UserBasicInfo userBasicInfo)
         {
             if (userBasicInfo == null)
                 return BadRequest("Invalid request");
-            UserInfo user = await _userService.GetUserById(id);
+            CapstoneBEUser user = await _userService.GetOriginalUserById(id);
             int[] locationIds = userBasicInfo.LocationIds;
             switch (user.Role)
             {
@@ -165,13 +167,16 @@ namespace CapstoneBE.Controllers
 
                 default: return BadRequest("Role value is forbidden");
             }
-            int result = await _userService.UpdateBasicInfo(userBasicInfo, id);
-            if (result > 0 && (user.Role.Equals(Roles.ManagerRole) || user.Role.Equals(Roles.StaffRole)))
-            {
-                string[] receiverIds = { id };
-                _ = await _notificationService.SendNotifications(null, receiverIds, MessageType.AdminUpdateInfo);
-            }
-            return Ok(result);
+            int result = await _userService.UpdateBasicInfo(userBasicInfo, user);
+            //if (result > 0 && (user.Role.Equals(Roles.ManagerRole) || user.Role.Equals(Roles.StaffRole)))
+            //{
+            //    string[] receiverIds = { id };
+            //    _ = await _notificationService.SendNotifications(null, receiverIds, MessageTypes.AdminUpdateInfo);
+            //}
+            if (result >= 0)
+                return Ok(result);
+            else
+                return BadRequest();
         }
 
         /// <summary>

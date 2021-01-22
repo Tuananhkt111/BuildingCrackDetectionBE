@@ -26,6 +26,6 @@ namespace CapstoneBE.Repositories.Users
 
         Task UpdateFcmToken(string registrationToken, string userId);
 
-        Task UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId);
+        CapstoneBEUser UpdateBasicInfo(UserBasicInfo userBasicInfo, CapstoneBEUser user);
     }
 }
