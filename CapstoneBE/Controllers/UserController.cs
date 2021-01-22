@@ -2,7 +2,6 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.Services.Emails;
-using CapstoneBE.Services.PushNotifications;
 using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,13 +20,11 @@ namespace CapstoneBE.Controllers
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
-        private readonly INotificationService _notificationService;
 
-        public UserController(IUserService userService, IEmailService emailService, INotificationService notificationService)
+        public UserController(IUserService userService, IEmailService emailService)
         {
             _userService = userService;
             _emailService = emailService;
-            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -151,7 +148,7 @@ namespace CapstoneBE.Controllers
         {
             if (userBasicInfo == null)
                 return BadRequest("Invalid request");
-            CapstoneBEUser user = await _userService.GetOriginalUserById(id);
+            UserInfo user = await _userService.GetUserById(id);
             int[] locationIds = userBasicInfo.LocationIds;
             switch (user.Role)
             {
@@ -168,11 +165,6 @@ namespace CapstoneBE.Controllers
                 default: return BadRequest("Role value is forbidden");
             }
             int result = await _userService.UpdateBasicInfo(userBasicInfo, user);
-            //if (result > 0 && (user.Role.Equals(Roles.ManagerRole) || user.Role.Equals(Roles.StaffRole)))
-            //{
-            //    string[] receiverIds = { id };
-            //    _ = await _notificationService.SendNotifications(null, receiverIds, MessageTypes.AdminUpdateInfo);
-            //}
             if (result >= 0)
                 return Ok(result);
             else

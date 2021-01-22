@@ -7,6 +7,6 @@ namespace CapstoneBE.Repositories.MaintenanceOrders
     {
         Task<MaintenanceOrder> GetQueue(string userId);
 
-        Task RemoveQueue(string userId);
+        void Delete(MaintenanceOrder maintenanceOrder);
     }
 }

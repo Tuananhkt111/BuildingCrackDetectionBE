@@ -217,11 +217,6 @@ namespace CapstoneBE.Services.Users
             return _mapper.Map<UserInfo>(user);
         }
 
-        public async Task<CapstoneBEUser> GetOriginalUserById(string userId)
-        {
-            return await _unitOfWork.UserRepository.GetSingle(filter: u => u.Id.Equals(userId) && !u.IsDel);
-        }
-
         public List<UserInfo> GetUsers()
         {
             return _unitOfWork.UserRepository
@@ -282,24 +277,39 @@ namespace CapstoneBE.Services.Users
             return null;
         }
 
-        public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, CapstoneBEUser user)
+        public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, UserInfo user)
         {
-            CapstoneBEUser updatedUser = _unitOfWork.UserRepository.UpdateBasicInfo(userBasicInfo, user);
-            if (updatedUser.Role.Equals(Roles.StaffRole))
+            using var tran = _unitOfWork.GetTransaction();
+            try
             {
-                LocationHistory lh = await _unitOfWork.LocationHistoryRepository.GetById(userBasicInfo.LocationIds.First(), user.Id);
-                if (lh == null)
-                    await _unitOfWork.MaintenanceOrderRepository.RemoveQueue(user.Id);
-            }
-            _unitOfWork.LocationHistoryRepository.Update(userBasicInfo.LocationIds, user.Id);
-            int result = await _unitOfWork.Save();
-            if (result > 0)
-            {
-                if (updatedUser.Role.Equals(Roles.StaffRole) || updatedUser.Role.Equals(Roles.ManagerRole))
+                await _unitOfWork.UserRepository.UpdateBasicInfo(userBasicInfo, user.UserId);
+                await _unitOfWork.Save();
+                if (user.Role.Equals(Roles.StaffRole))
+                {
+                    if (!user.LocationIds.Contains(userBasicInfo.LocationIds[0]))
+                    {
+                        MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(user.UserId);
+                        foreach (Crack crack in maintenanceOrder.Cracks)
+                        {
+                            crack.MaintenanceOrderId = null;
+                        }
+                        await _unitOfWork.Save();
+                        _unitOfWork.MaintenanceOrderRepository.Delete(maintenanceOrder);
+                        await _unitOfWork.Save();
+                    }
+                }
+                _unitOfWork.LocationHistoryRepository.Update(userBasicInfo.LocationIds, user.UserId);
+                await _unitOfWork.Save();
+                tran.Commit();
+                if (user.Role.Equals(Roles.StaffRole) || user.Role.Equals(Roles.ManagerRole))
                     return 1;
                 else return 0;
             }
-            else return -1;
+            catch (Exception)
+            {
+                tran.Rollback();
+            }
+            return -1;
         }
     }
 }

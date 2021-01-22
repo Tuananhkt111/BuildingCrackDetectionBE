@@ -14,15 +14,13 @@ namespace CapstoneBE.Services.Users
 
         Task<UserInfo> GetUserById(string userId);
 
-        Task<CapstoneBEUser> GetOriginalUserById(string userId);
-
         List<UserInfo> GetUsers();
 
         int GetUsersCount();
 
         Task<bool> DeleteUser(string userId);
 
-        Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, CapstoneBEUser user);
+        Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, UserInfo user);
 
         Task<Email> ResetPassword(string userId);
 

@@ -1,14 +1,13 @@
-﻿using CapstoneBE.Models.Custom.Cracks;
+﻿using CapstoneBE.Attributes;
+using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Models.Custom.MaintenaceWorkers;
 using CapstoneBE.Models.Custom.MaintenanceOrders;
 using CapstoneBE.Services.MaintenanceOrders;
-using CapstoneBE.Services.PushNotifications;
 using CapstoneBE.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TranslatorAPI.Utils;
 using static CapstoneBE.Utils.APIConstants;
@@ -22,14 +21,12 @@ namespace CapstoneBE.Controllers
     public class MaintenanceOrderController : ControllerBase
     {
         private readonly IMaintenanceOrderService _maintenanceOrderService;
-        private readonly INotificationService _notificationService;
         private readonly IUserService _userService;
         private readonly IGetClaimsProvider _userData;
 
-        public MaintenanceOrderController(IMaintenanceOrderService maintenanceOrderService, INotificationService notificationService, IUserService userService, IGetClaimsProvider userData)
+        public MaintenanceOrderController(IMaintenanceOrderService maintenanceOrderService, IUserService userService, IGetClaimsProvider userData)
         {
             _maintenanceOrderService = maintenanceOrderService;
-            _notificationService = notificationService;
             _userService = userService;
             _userData = userData;
         }
@@ -92,7 +89,7 @@ namespace CapstoneBE.Controllers
         /// </remarks>
         /// <param name="maintenanceOrderBasicInfo">An MaintenanceOrderBasicInfo object</param>
         /// <returns>Result message</returns>
-        /// <response code="200">If success, returns message "Confirm maintenance order success"</response>
+        /// <response code="200">If success, returns maintenance order id</response>
         /// <response code="400">
         /// <para>If failed, returns message "Confirm maintenance order failed"</para>
         /// <para>If bad request, returns message "Invalid request"</para>
@@ -101,18 +98,13 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [PushNotification(MessageTypes.StaffCreateOrder)]
         public async Task<ActionResult<string>> ConfirmMaintenanceOrder([FromBody] MaintenanceOrderBasicInfo maintenanceOrderBasicInfo)
         {
             if (maintenanceOrderBasicInfo == null)
                 return BadRequest("Invalid request");
             int result = await _maintenanceOrderService.ConfirmOrder(maintenanceOrderBasicInfo);
-            if (result > 0)
-            {
-                string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
-                string[] receiverIds = { receiverId };
-                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageTypes.StaffCreateOrder);
-            }
-            return result > 0 ? Ok("Confirm maintenance order success") : BadRequest("Confirm maintenance order failed");
+            return result > 0 ? Ok(result.ToString()) : BadRequest("Confirm maintenance order failed");
         }
 
         /// <summary>
@@ -133,17 +125,12 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [PushNotification(MessageTypes.StaffEvaluateOrder)]
         public async Task<ActionResult<string>> EvaluateMaintenanceOrder(int id, [FromBody] MaintenanceOrderAssessmentInfo maintenanceOrderAssessmentInfo)
         {
             if (maintenanceOrderAssessmentInfo == null || id == 0)
                 return BadRequest("Invalid request");
             int result = await _maintenanceOrderService.EvaluateOrder(maintenanceOrderAssessmentInfo, id);
-            if (result > 0)
-            {
-                string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
-                string[] receiverIds = { receiverId };
-                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageTypes.StaffEvaluateOrder, id);
-            }
             return result > 0 ? Ok("Evaluate maintenance order success") : BadRequest("Evaluate maintenance order failed");
         }
 
@@ -165,17 +152,12 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [PushNotification(MessageTypes.StaffUpdateOrder)]
         public async Task<ActionResult<string>> UpdateMaintenanceOrder(int id, [FromBody] MaintenanceOrderBasicInfo maintenanceOrderBasicInfo)
         {
             if (maintenanceOrderBasicInfo == null || id == 0)
                 return BadRequest("Invalid request");
             int result = await _maintenanceOrderService.UpdateOrder(maintenanceOrderBasicInfo, id);
-            if (result > 0)
-            {
-                string receiverId = _userService.GetManagerIdByLocationId(_userData.LocationIds.Single());
-                string[] receiverIds = { receiverId };
-                _ = await _notificationService.SendNotifications(_userData.UserId, receiverIds, MessageTypes.StaffUpdateOrder, id);
-            }
             return result > 0 ? Ok("Update maintenance order success") : BadRequest("Update maintenance order failed");
         }
 

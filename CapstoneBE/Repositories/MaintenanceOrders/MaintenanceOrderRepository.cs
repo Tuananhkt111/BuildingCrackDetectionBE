@@ -18,10 +18,9 @@ namespace CapstoneBE.Repositories.MaintenanceOrders
                 includeProperties: "Cracks");
         }
 
-        public async Task RemoveQueue(string userId)
+        public void Delete(MaintenanceOrder maintenanceOrder)
         {
-            MaintenanceOrder queue = await GetQueue(userId);
-            _dbSet.Remove(queue);
+            _dbSet.Remove(maintenanceOrder);
         }
     }
 }
