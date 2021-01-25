@@ -289,13 +289,16 @@ namespace CapstoneBE.Services.Users
                     if (!user.LocationIds.Contains(userBasicInfo.LocationIds[0]))
                     {
                         MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(user.UserId);
-                        foreach (Crack crack in maintenanceOrder.Cracks)
+                        if (maintenanceOrder != null)
                         {
-                            crack.MaintenanceOrderId = null;
+                            foreach (Crack crack in maintenanceOrder.Cracks)
+                            {
+                                crack.MaintenanceOrderId = null;
+                            }
+                            await _unitOfWork.Save();
+                            _unitOfWork.MaintenanceOrderRepository.Delete(maintenanceOrder);
+                            await _unitOfWork.Save();
                         }
-                        await _unitOfWork.Save();
-                        _unitOfWork.MaintenanceOrderRepository.Delete(maintenanceOrder);
-                        await _unitOfWork.Save();
                     }
                 }
                 _unitOfWork.LocationHistoryRepository.Update(userBasicInfo.LocationIds, user.UserId);
