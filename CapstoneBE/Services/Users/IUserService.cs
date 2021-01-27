@@ -24,7 +24,7 @@ namespace CapstoneBE.Services.Users
 
         Task<Email> ResetPassword(string userId);
 
-        Task<Email> ResetPassword(string userName, string token);
+        Task<bool> ChangePasswordByToken(string userName, string newPass, string token);
 
         Task<Email> ForgotPassword(string userName, string rootPath);
 

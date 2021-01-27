@@ -122,7 +122,7 @@ namespace CapstoneBE.Services.Users
                 "Dear " + user.Name + ",<br/><br/>You are receiving this email because we received a password reset request for your account <span style=\"color: blue;\">"
                 + user.UserName + "</span><br/>To reset your password <a href='" + url + "'>Click here</a>"
                 + "</span><br/><br/>If you did not request a password reset, no further action is required."
-                + "<br/><br/>Thank you,<br/>Tau Hai Team");
+                + "<br/><br/>Thank you,<br/>BCD Team");
             return email;
         }
 
@@ -257,24 +257,15 @@ namespace CapstoneBE.Services.Users
             return null;
         }
 
-        public async Task<Email> ResetPassword(string userName, string token)
+        public async Task<bool> ChangePasswordByToken(string userName, string newPass, string token)
         {
             byte[] tokenDecodedBytes = WebEncoders.Base64UrlDecode(token);
             string tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
-            string newPass = GenerateRandomPasword();
-            IdentityResult resetResult = await _unitOfWork.UserRepository.ResetPassword(userName, newPass, tokenDecoded);
+            IdentityResult resetResult = await _unitOfWork.UserRepository.ChangePasswordByToken(userName, newPass, tokenDecoded);
             if (resetResult.Succeeded)
                 if (_unitOfWork.Save().Result != 0)
-                {
-                    CapstoneBEUser user = await _unitOfWork.UserRepository.GetByUserName(userName);
-                    Email email = new Email(new string[] { user.Email },
-                        "Reset your Capstone Account Password",
-                        "Dear " + user.Name + ",<br/><br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your new password: <span style=\"color: blue;\">" + newPass
-                        + "</span><br/><br/>You are receiving this email because you have requested to reset your login password."
-                        + "<br/><br/>Thank you,<br/>Tau Hai Team");
-                    return email;
-                }
-            return null;
+                    return true;
+            return false;
         }
 
         public async Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, UserInfo user)

@@ -236,8 +236,7 @@ namespace CapstoneBE.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> ForgotPasswordConfirm(string userName)
         {
-            string rootPath = this.Request.Scheme + "://" + this.Request.Host.Value + this.Request.Path.Value;
-            rootPath = rootPath.Replace("forgotpass-confirm", "");
+            string rootPath = ForgotPassPath;
             Email email = await _userService.ForgotPassword(userName, rootPath);
             if (email != null)
             {
@@ -254,7 +253,7 @@ namespace CapstoneBE.Controllers
         /// <para>Sample request: POST: api/v1/users/3/forgotpass</para>
         /// </remarks>
         /// <param name="id">User Id</param>
-        /// <param name="token">Reset password token</param>
+        /// <param name="userResetPass">UserResetPass object</param>
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Reset password success"</response>
         /// <response code="400">If failed, returns message "Reset password failed"</response>
@@ -262,14 +261,11 @@ namespace CapstoneBE.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> ForgotPassword(string id, string token)
+        public async Task<ActionResult<string>> ForgotPassword(string id, [FromBody] UserResetPass userResetPass)
         {
-            Email email = await _userService.ResetPassword(id, token);
-            if (email != null)
-            {
-                _ = _emailService.SendEmailAsync(email);
+            bool result = await _userService.ChangePasswordByToken(id, userResetPass.NewPass, userResetPass.Token);
+            if (result)
                 return Ok("Reset password success");
-            }
             return BadRequest("Reset password failed");
         }
 

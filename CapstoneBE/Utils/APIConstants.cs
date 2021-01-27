@@ -2,6 +2,8 @@
 {
     public static class APIConstants
     {
+        public const string ForgotPassPath = "http://localhost:8080/users/";
+
         public static class Roles
         {
             public const string AdminRole = "Administrator";

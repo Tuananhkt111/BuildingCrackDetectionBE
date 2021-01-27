@@ -16,7 +16,7 @@ namespace CapstoneBE.Repositories.Users
 
         Task<IdentityResult> ResetPassword(string userId, string newPassword);
 
-        Task<IdentityResult> ResetPassword(string userName, string newPassword, string token);
+        Task<IdentityResult> ChangePasswordByToken(string userName, string newPassword, string token);
 
         Task<IdentityResult> ChangePassword(string oldPass, string newPass, string userId);
 
