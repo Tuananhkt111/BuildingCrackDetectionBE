@@ -21,14 +21,10 @@ namespace CapstoneBE.Controllers
     public class MaintenanceOrderController : ControllerBase
     {
         private readonly IMaintenanceOrderService _maintenanceOrderService;
-        private readonly IUserService _userService;
-        private readonly IGetClaimsProvider _userData;
 
-        public MaintenanceOrderController(IMaintenanceOrderService maintenanceOrderService, IUserService userService, IGetClaimsProvider userData)
+        public MaintenanceOrderController(IMaintenanceOrderService maintenanceOrderService)
         {
             _maintenanceOrderService = maintenanceOrderService;
-            _userService = userService;
-            _userData = userData;
         }
 
         /// <summary>

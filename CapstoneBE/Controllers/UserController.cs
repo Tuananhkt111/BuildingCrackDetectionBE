@@ -257,7 +257,7 @@ namespace CapstoneBE.Controllers
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Reset password success"</response>
         /// <response code="400">If failed, returns message "Reset password failed"</response>
-        [HttpGet("{id}/forgotpass")]
+        [HttpPost("{id}/forgotpass")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
