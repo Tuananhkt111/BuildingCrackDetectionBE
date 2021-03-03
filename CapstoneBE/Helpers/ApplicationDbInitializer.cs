@@ -14,7 +14,7 @@ namespace CapstoneBE.Helpers
         {
             if (userManager.FindByNameAsync("Admin").Result == null)
             {
-                CapstoneBEUser user = new CapstoneBEUser
+                CapstoneBEUser adminUser = new CapstoneBEUser
                 {
                     Address = "FPT HCM University",
                     Email = "kenbiboykute@gmail.com",
@@ -22,12 +22,12 @@ namespace CapstoneBE.Helpers
                     IsDel = false,
                     Name = "Tuan Anh Hoang",
                     PhoneNumber = "0824338079",
-                    Role = "Administrator"
+                    Role = Roles.AdminRole
                 };
-                IdentityResult createResult = userManager.CreateAsync(user, "Administrator0").Result;
+                IdentityResult createResult = userManager.CreateAsync(adminUser, "Administrator0").Result;
                 if (createResult.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, Roles.AdminRole).Wait();
+                    userManager.AddToRoleAsync(adminUser, Roles.AdminRole).Wait();
                 }
             }
         }

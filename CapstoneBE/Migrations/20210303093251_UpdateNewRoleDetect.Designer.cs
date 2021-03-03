@@ -4,14 +4,16 @@ using CapstoneBE.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CapstoneBE.Migrations
 {
     [DbContext(typeof(CapstoneDbContext))]
-    partial class CapstoneDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210303093251_UpdateNewRoleDetect")]
+    partial class UpdateNewRoleDetect
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -394,23 +396,30 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "b87e06e7-c397-47f4-81c4-9cb5d07a6617",
+                            ConcurrencyStamp = "c7f03fdd-fd7d-4f2f-bd7d-34ece024288a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "e5b9de4e-3982-4a66-b0e9-6b6d3504a928",
+                            ConcurrencyStamp = "294da13a-96ad-4994-85dd-dce1cc162728",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "2ffd1fa7-6088-40f2-b91d-07c3227d2b73",
+                            ConcurrencyStamp = "b496c306-08a4-4f4e-a256-6367f74c0229",
                             Name = "Staff",
                             NormalizedName = "STAFF"
+                        },
+                        new
+                        {
+                            Id = "2c3e174e-3b0e-446f-86af-483d56fd7212",
+                            ConcurrencyStamp = "25fc7c4d-141b-49a7-abf7-132595ad1939",
+                            Name = "ServerDetect",
+                            NormalizedName = "SERVERDETECT"
                         });
                 });
 
