@@ -36,7 +36,7 @@ namespace CapstoneBE.Controllers
         /// <para>If bad request, returns message "Invalid request"</para>
         /// </response>
         [HttpPost("multi")]
-        [AllowAnonymous]
+        [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> CreateCracks([FromBody] CrackCreate[] crackCreates)
@@ -58,7 +58,7 @@ namespace CapstoneBE.Controllers
         /// <response code="200">If success, returns crack id</response>
         /// <response code="400">If failed, returns bad request</response>
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<int>> CreateCrack([FromBody] CrackCreate crackCreate)
