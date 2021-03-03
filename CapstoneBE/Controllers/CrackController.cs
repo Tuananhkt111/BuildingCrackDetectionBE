@@ -48,6 +48,31 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
+        /// Create crack {Auth Roles: Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: POST: api/v1/crack
+        /// </remarks>
+        /// <param name="crackCreate">A CrackCreate objects</param>
+        /// <returns>Crack Id</returns>
+        /// <response code="200">If success, returns crack id</response>
+        /// <response code="400">
+        /// <para>If failed, returns bad request</para>
+        /// <para>If bad request, returns message "Invalid request"</para>
+        /// </response>
+        [HttpPost]
+        [Authorize(Roles = Roles.StaffRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> CreateCracks([FromBody] CrackCreate crackCreate)
+        {
+            if (crackCreate == null)
+                return BadRequest("Invalid request");
+            int result = await _crackService.Create(crackCreate);
+            return result > 0 ? Ok(result) : BadRequest(result);
+        }
+
+        /// <summary>
         /// Delete a crack by <paramref name="id"/> {Auth Roles: Staff}
         /// </summary>
         /// <remarks>

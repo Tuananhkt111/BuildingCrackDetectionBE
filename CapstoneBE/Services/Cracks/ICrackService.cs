@@ -6,7 +6,7 @@ namespace CapstoneBE.Services.Cracks
 {
     public interface ICrackService
     {
-        Task<bool> Create(CrackCreate crackCreate);
+        Task<int> Create(CrackCreate crackCreate);
 
         Task<bool> Delete(int id);
 

@@ -23,13 +23,14 @@ namespace CapstoneBE.Services.Cracks
             _mapper = mapper;
         }
 
-        public async Task<bool> Create(CrackCreate crackCreate)
+        public async Task<int> Create(CrackCreate crackCreate)
         {
             Crack crack = _mapper.Map<Crack>(crackCreate);
             crack.ReporterId = _userData.UserId;
             crack.LocationId = _userData.LocationIds.FirstOrDefault();
             _unitOfWork.CrackRepository.Create(crack);
-            return await _unitOfWork.Save() != 0;
+            bool result = await _unitOfWork.Save() != 0;
+            return result ? crack.CrackId : -1;
         }
 
         public async Task<bool> CreateRange(CrackCreate[] crackCreates)
