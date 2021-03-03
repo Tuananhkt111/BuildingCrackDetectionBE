@@ -6,6 +6,5 @@ namespace CapstoneBE.Models.Custom.Cracks
     {
         public string Position { get; set; }
         public string Status { get { return CrackStatus.Unconfirmed; } }
-        public string Image { get; set; }
     }
 }

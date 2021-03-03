@@ -66,6 +66,9 @@ namespace CapstoneBE.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<Crack>()
+            .Property(c => c.Image)
+            .HasComputedColumnSql("CAST([CrackId] AS VARCHAR) + '.png'");
             //Seeding roles to AspNetRoles table
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole
