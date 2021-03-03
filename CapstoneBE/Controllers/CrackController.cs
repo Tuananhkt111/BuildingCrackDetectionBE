@@ -56,18 +56,15 @@ namespace CapstoneBE.Controllers
         /// <param name="crackCreate">A CrackCreate objects</param>
         /// <returns>Crack Id</returns>
         /// <response code="200">If success, returns crack id</response>
-        /// <response code="400">
-        /// <para>If failed, returns bad request</para>
-        /// <para>If bad request, returns message "Invalid request"</para>
-        /// </response>
+        /// <response code="400">If failed, returns bad request</response>
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> CreateCrack([FromBody] CrackCreate crackCreate)
+        public async Task<ActionResult<int>> CreateCrack([FromBody] CrackCreate crackCreate)
         {
             if (crackCreate == null)
-                return BadRequest("Invalid request");
+                return BadRequest(-1);
             int result = await _crackService.Create(crackCreate);
             return result > 0 ? Ok(result) : BadRequest(result);
         }
