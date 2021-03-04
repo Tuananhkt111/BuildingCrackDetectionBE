@@ -68,7 +68,7 @@ namespace CapstoneBE.Data
             base.OnModelCreating(builder);
             builder.Entity<Crack>()
             .Property(c => c.Image)
-            .HasComputedColumnSql("CAST([CrackId] AS VARCHAR) + '.png'");
+            .HasComputedColumnSql("'https://bcdsysstorage.blob.core.windows.net/crack-images/' + CAST([CrackId] AS VARCHAR) + '.png'");
             //Seeding roles to AspNetRoles table
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole
