@@ -56,7 +56,19 @@ namespace CapstoneBE.Attributes
                         }
                     }
                     return false;
-                //case MessageTypes.SystemFinishedDetection:
+                case MessageTypes.SystemFinishedDetection:
+                    if (okOject is string okStr)
+                    {
+                        if (!string.IsNullOrEmpty(okStr))
+                        {
+                            IGetClaimsProvider userData = context.HttpContext.RequestServices.GetRequiredService<IGetClaimsProvider>();
+                            SenderId = null;
+                            OrderId = null;
+                            ReceiverIds = new string[] { userData.UserId };
+                            return true;
+                        }
+                    }
+                    return false;
                 case MessageTypes.StaffCreateOrder:
                 case MessageTypes.StaffUpdateOrder:
                 case MessageTypes.StaffEvaluateOrder:

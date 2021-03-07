@@ -1,4 +1,5 @@
-﻿using CapstoneBE.Models.Custom.Cracks;
+﻿using CapstoneBE.Attributes;
+using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Services.Cracks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -179,6 +180,22 @@ namespace CapstoneBE.Controllers
             if (crack == null)
                 return NotFound();
             return Ok(crack);
+        }
+
+        /// <summary>
+        /// Send notifcation about completed detection {Auth Roles: Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/cracks/detect
+        /// </remarks>
+        /// <returns>Result message</returns>
+        /// <response code="200">Returns "Success" message</response>
+        [HttpGet("detect")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [PushNotification(MessageTypes.SystemFinishedDetection)]
+        public ActionResult<string> SendDetectNotification()
+        {
+            return Ok("Success");
         }
     }
 }
