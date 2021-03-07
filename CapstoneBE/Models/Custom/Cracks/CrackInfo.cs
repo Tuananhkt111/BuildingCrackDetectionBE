@@ -12,6 +12,7 @@ namespace CapstoneBE.Models.Custom.Cracks
         public string ReporterName { get; set; }
         public string Position { get; set; }
         public string Description { get; set; }
+        public float Accuracy { get; set; }
         public string Severity { get; set; }
         public string Status { get; set; }
         public string Image { get; set; }
