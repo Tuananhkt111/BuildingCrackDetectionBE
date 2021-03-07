@@ -19,6 +19,8 @@ namespace CapstoneBE.Models
         [MaxLength(200)]
         public string Description { get; set; }
 
+        public float Accuracy { get; set; }
+
         [MaxLength(10)]
         public string Severity { get; set; }
 
