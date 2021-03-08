@@ -10,6 +10,7 @@ namespace CapstoneBE.Models.Custom.Cracks
         public string Severity { get; set; }
         public string Status { get; set; }
         public string Image { get; set; }
+        public string ImageThumbnails { get; set; }
         public int AssessmentResult { get; set; }
         public string AssessmentDescription { get; set; }
         public DateTime Created { get; set; }
