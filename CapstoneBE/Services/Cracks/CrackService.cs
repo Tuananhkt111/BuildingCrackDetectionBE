@@ -136,8 +136,6 @@ namespace CapstoneBE.Services.Cracks
             {
                 if (!string.IsNullOrEmpty(crackBasicInfo.Description))
                     crack.Description = crackBasicInfo.Description;
-                if (!string.IsNullOrEmpty(crackBasicInfo.Image))
-                    crack.Image = crackBasicInfo.Image;
                 if (!string.IsNullOrEmpty(crackBasicInfo.Position))
                     crack.Position = crackBasicInfo.Position;
                 if (!string.IsNullOrEmpty(crackBasicInfo.Severity))

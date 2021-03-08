@@ -31,6 +31,9 @@ namespace CapstoneBE.Models
         [Required]
         public string Image { get; set; }
 
+        [Required]
+        public string ImageThumbnails { get; set; }
+
         public int AssessmentResult { get; set; }
         public string AssessmentDescription { get; set; }
         public virtual CapstoneBEUser Reporter { get; set; }
