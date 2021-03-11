@@ -170,9 +170,9 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<MaintenanceWorkerInfo>>> GetQueue()
+        public async Task<ActionResult<IEnumerable<CrackSubDetailsInfo>>> GetQueue()
         {
-            List<CrackInfo> cracks = await _maintenanceOrderService.GetQueue();
+            List<CrackSubDetailsInfo> cracks = await _maintenanceOrderService.GetQueue();
             if (cracks != null)
                 return Ok(cracks);
             return NotFound();

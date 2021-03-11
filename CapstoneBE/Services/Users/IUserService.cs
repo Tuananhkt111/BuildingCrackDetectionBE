@@ -8,7 +8,7 @@ namespace CapstoneBE.Services.Users
 {
     public interface IUserService
     {
-        Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "", bool isManager = false);
+        Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "", bool isStaff = false);
 
         string GenerateJWTToken(string userId, string roleName, int[] locationIds);
 

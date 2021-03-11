@@ -128,12 +128,18 @@ namespace CapstoneBE.Migrations
                     b.Property<int>("AssessmentResult")
                         .HasColumnType("int");
 
+                    b.Property<string>("CensorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("FlightId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -150,9 +156,6 @@ namespace CapstoneBE.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MaintenanceOrderId")
                         .HasColumnType("int");
 
@@ -160,9 +163,6 @@ namespace CapstoneBE.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ReporterId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Severity")
                         .HasMaxLength(10)
@@ -173,15 +173,52 @@ namespace CapstoneBE.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("CrackId");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("CensorId");
+
+                    b.HasIndex("FlightId");
 
                     b.HasIndex("MaintenanceOrderId");
 
-                    b.HasIndex("ReporterId");
+                    b.HasIndex("UpdateUserId");
 
                     b.ToTable("Crack");
+                });
+
+            modelBuilder.Entity("CapstoneBE.Models.Flight", b =>
+                {
+                    b.Property<int>("FlightId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DataCollectorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Video")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FlightId");
+
+                    b.HasIndex("DataCollectorId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Flight");
                 });
 
             modelBuilder.Entity("CapstoneBE.Models.Location", b =>
@@ -255,6 +292,9 @@ namespace CapstoneBE.Migrations
                     b.Property<string>("AssessorId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CreateUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -279,13 +319,20 @@ namespace CapstoneBE.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("UpdateUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("MaintenanceOrderId");
 
                     b.HasIndex("AssessorId");
 
+                    b.HasIndex("CreateUserId");
+
                     b.HasIndex("LocationId");
 
                     b.HasIndex("MaintenanceWorkerId");
+
+                    b.HasIndex("UpdateUserId");
 
                     b.ToTable("MaintenanceOrder");
                 });
@@ -403,21 +450,21 @@ namespace CapstoneBE.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "4f2344dd-a04b-40c9-932e-c128a9e71378",
+                            ConcurrencyStamp = "8547e09e-b3a5-4994-b3ef-e930bb9b9601",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "3c5e154e-3b0e-446f-86af-483d54fd7210",
-                            ConcurrencyStamp = "18bac00d-2ba5-4142-b724-0a1964e51f4d",
+                            ConcurrencyStamp = "837ba7fa-4c19-49da-82ae-c9c4825b8316",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "2c3e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "9232a365-70c3-40c9-affc-8f8fec26f02d",
+                            ConcurrencyStamp = "5cd3f207-6315-403b-955b-aa8558981d62",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -529,9 +576,13 @@ namespace CapstoneBE.Migrations
 
             modelBuilder.Entity("CapstoneBE.Models.Crack", b =>
                 {
-                    b.HasOne("CapstoneBE.Models.Location", "Location")
+                    b.HasOne("CapstoneBE.Models.CapstoneBEUser", "Censor")
+                        .WithMany("CracksC")
+                        .HasForeignKey("CensorId");
+
+                    b.HasOne("CapstoneBE.Models.Flight", "Flight")
                         .WithMany("Cracks")
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("FlightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -539,15 +590,34 @@ namespace CapstoneBE.Migrations
                         .WithMany("Cracks")
                         .HasForeignKey("MaintenanceOrderId");
 
-                    b.HasOne("CapstoneBE.Models.CapstoneBEUser", "Reporter")
-                        .WithMany("Cracks")
-                        .HasForeignKey("ReporterId");
+                    b.HasOne("CapstoneBE.Models.CapstoneBEUser", "UpdateUser")
+                        .WithMany("CracksUU")
+                        .HasForeignKey("UpdateUserId");
 
-                    b.Navigation("Location");
+                    b.Navigation("Censor");
+
+                    b.Navigation("Flight");
 
                     b.Navigation("MaintenanceOrder");
 
-                    b.Navigation("Reporter");
+                    b.Navigation("UpdateUser");
+                });
+
+            modelBuilder.Entity("CapstoneBE.Models.Flight", b =>
+                {
+                    b.HasOne("CapstoneBE.Models.CapstoneBEUser", "DataCollector")
+                        .WithMany("Flights")
+                        .HasForeignKey("DataCollectorId");
+
+                    b.HasOne("CapstoneBE.Models.Location", "Location")
+                        .WithMany("Flights")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DataCollector");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("CapstoneBE.Models.LocationHistory", b =>
@@ -570,8 +640,12 @@ namespace CapstoneBE.Migrations
             modelBuilder.Entity("CapstoneBE.Models.MaintenanceOrder", b =>
                 {
                     b.HasOne("CapstoneBE.Models.CapstoneBEUser", "Assessor")
-                        .WithMany("MaintenanceOrders")
+                        .WithMany("MaintenanceOrdersA")
                         .HasForeignKey("AssessorId");
+
+                    b.HasOne("CapstoneBE.Models.CapstoneBEUser", "CreateUser")
+                        .WithMany("MaintenanceOrdersCU")
+                        .HasForeignKey("CreateUserId");
 
                     b.HasOne("CapstoneBE.Models.Location", "Location")
                         .WithMany("MaintenanceOrders")
@@ -583,11 +657,19 @@ namespace CapstoneBE.Migrations
                         .WithMany("MaintenanceOrders")
                         .HasForeignKey("MaintenanceWorkerId");
 
+                    b.HasOne("CapstoneBE.Models.CapstoneBEUser", "UpdateUser")
+                        .WithMany("MaintenanceOrdersUU")
+                        .HasForeignKey("UpdateUserId");
+
                     b.Navigation("Assessor");
+
+                    b.Navigation("CreateUser");
 
                     b.Navigation("Location");
 
                     b.Navigation("MaintenanceWorker");
+
+                    b.Navigation("UpdateUser");
                 });
 
             modelBuilder.Entity("CapstoneBE.Models.PushNotification", b =>
@@ -658,20 +740,33 @@ namespace CapstoneBE.Migrations
 
             modelBuilder.Entity("CapstoneBE.Models.CapstoneBEUser", b =>
                 {
-                    b.Navigation("Cracks");
+                    b.Navigation("CracksC");
+
+                    b.Navigation("CracksUU");
+
+                    b.Navigation("Flights");
 
                     b.Navigation("LocationHistories");
 
-                    b.Navigation("MaintenanceOrders");
+                    b.Navigation("MaintenanceOrdersA");
+
+                    b.Navigation("MaintenanceOrdersCU");
+
+                    b.Navigation("MaintenanceOrdersUU");
 
                     b.Navigation("ReceivedNotifications");
 
                     b.Navigation("SentNotifications");
                 });
 
-            modelBuilder.Entity("CapstoneBE.Models.Location", b =>
+            modelBuilder.Entity("CapstoneBE.Models.Flight", b =>
                 {
                     b.Navigation("Cracks");
+                });
+
+            modelBuilder.Entity("CapstoneBE.Models.Location", b =>
+                {
+                    b.Navigation("Flights");
 
                     b.Navigation("LocationHistories");
 

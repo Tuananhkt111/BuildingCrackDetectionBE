@@ -11,7 +11,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
 
         Task<bool> RemoveFromQueue(int[] crackIds);
 
-        Task<List<CrackInfo>> GetQueue();
+        Task<List<CrackSubDetailsInfo>> GetQueue();
 
         Task<int> ConfirmOrder(MaintenanceOrderBasicInfo maintenanceOrderBasicInfo);
 

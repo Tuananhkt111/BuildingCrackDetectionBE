@@ -2,6 +2,7 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.UnitOfWorks;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,8 +33,7 @@ namespace CapstoneBE.Services.Cracks
                 crack.Severity = CrackSeverity.Medium;
             else
                 crack.Severity = CrackSeverity.High;
-            crack.ReporterId = _userData.UserId;
-            crack.LocationId = _userData.LocationIds.FirstOrDefault();
+            crack.FlightId = crackCreate.FlightId;
             _unitOfWork.CrackRepository.Create(crack);
             bool result = await _unitOfWork.Save() != 0;
             return result ? crack.CrackId : -1;
@@ -50,8 +50,7 @@ namespace CapstoneBE.Services.Cracks
                     crack.Severity = CrackSeverity.Medium;
                 else
                     crack.Severity = CrackSeverity.High;
-                crack.ReporterId = _userData.UserId;
-                crack.LocationId = _userData.LocationIds.FirstOrDefault();
+                crack.FlightId = crack.FlightId;
             }
             _unitOfWork.CrackRepository.CreateRange(cracks);
             return await _unitOfWork.Save() == cracks.Length;
@@ -71,20 +70,27 @@ namespace CapstoneBE.Services.Cracks
 
         public async Task<CrackInfo> GetById(int id)
         {
-            Crack crack = await _unitOfWork.CrackRepository
-                .GetSingle(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
-                    && c.CrackId.Equals(id)
-                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter");
-            return _mapper.Map<CrackInfo>(crack);
+            return (await _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && c.CrackId.Equals(id), includeProperties: "Censor,UpdateUser")
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .OrderByDescending(c => c.Created)
+                .ThenBy(c => c.Status)
+                .ThenBy(c => c.Severity)
+                .ThenBy(c => c.CrackId)
+                .Select(c => _mapper.Map<CrackInfo>(c))
+                .ToListAsync())
+                .FirstOrDefault();
         }
 
         public List<CrackInfo> GetCracks(string status)
         {
             return _unitOfWork.CrackRepository
-                .Get(filter: c => c.Status.Equals(status)
-                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .Get(filter: c => c.Status.Equals(status), includeProperties: "Censor,UpdateUser")
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
                 .OrderByDescending(c => c.Created)
                 .ThenBy(c => c.Status)
                 .ThenBy(c => c.Severity)
@@ -96,9 +102,10 @@ namespace CapstoneBE.Services.Cracks
         public List<CrackInfo> GetCracks()
         {
             return _unitOfWork.CrackRepository
-                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
-                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed), includeProperties: "Censor,UpdateUser")
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
                 .OrderByDescending(c => c.Created)
                 .ThenBy(c => c.Status)
                 .ThenBy(c => c.Severity)
@@ -110,10 +117,10 @@ namespace CapstoneBE.Services.Cracks
         public List<CrackInfo> GetCracksIgnore(string status)
         {
             return _unitOfWork.CrackRepository
-                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
-                    && !c.Status.Equals(status)
-                    && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Location,Reporter")
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && !c.Status.Equals(status), includeProperties: "Censor,UpdateUser")
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
                 .OrderByDescending(c => c.Created)
                 .ThenBy(c => c.Status)
                 .ThenBy(c => c.Severity)
@@ -124,9 +131,11 @@ namespace CapstoneBE.Services.Cracks
 
         public int GetCracksCount()
         {
-            return _unitOfWork.CrackRepository.Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed)
-                && ((_userData.LocationIds.Contains(c.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                || _userData.Role.Equals(Roles.AdminRole))).Count();
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed), includeProperties: "Censor,UpdateUser")
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole))).Count();
         }
 
         public async Task<bool> Update(CrackBasicInfo crackBasicInfo, int id)
@@ -141,8 +150,9 @@ namespace CapstoneBE.Services.Cracks
                 if (!string.IsNullOrEmpty(crackBasicInfo.Severity))
                     crack.Severity = crackBasicInfo.Severity;
                 crack.Status = crackBasicInfo.Status;
-                crack.ReporterId = _userData.UserId;
-                crack.LocationId = _userData.LocationIds.FirstOrDefault();
+                if (string.IsNullOrEmpty(crack.CensorId))
+                    crack.CensorId = _userData.UserId;
+                crack.UpdateUserId = _userData.UserId;
             }
             _unitOfWork.CrackRepository.Update(crack);
             return await _unitOfWork.Save() != 0;

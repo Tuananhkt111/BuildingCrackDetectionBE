@@ -1,4 +1,5 @@
 ﻿using CapstoneBE.Repositories.Cracks;
+using CapstoneBE.Repositories.Flights;
 using CapstoneBE.Repositories.LocationHistories;
 using CapstoneBE.Repositories.Locations;
 using CapstoneBE.Repositories.MaintenanceOrders;
@@ -19,6 +20,7 @@ namespace CapstoneBE.UnitOfWorks
         CrackRepository CrackRepository { get; }
         MaintenanceOrderRepository MaintenanceOrderRepository { get; }
         NotificationRepository NotificationRepository { get; }
+        FlightRepository FlightRepository { get; }
 
         Task<int> Save();
 

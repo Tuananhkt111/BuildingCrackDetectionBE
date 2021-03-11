@@ -7,10 +7,13 @@ namespace CapstoneBE.Models
     {
         public int CrackId { get; set; }
         public int? MaintenanceOrderId { get; set; }
-        public int LocationId { get; set; }
+        public int FlightId { get; set; }
 
-        [ForeignKey(nameof(Reporter)), Column(Order = 0)]
-        public string ReporterId { get; set; }
+        [ForeignKey(nameof(Censor)), Column(Order = 0)]
+        public string CensorId { get; set; }
+
+        [ForeignKey(nameof(UpdateUser)), Column(Order = 1)]
+        public string UpdateUserId { get; set; }
 
         [Required]
         [MaxLength(200)]
@@ -36,8 +39,9 @@ namespace CapstoneBE.Models
 
         public int AssessmentResult { get; set; }
         public string AssessmentDescription { get; set; }
-        public virtual CapstoneBEUser Reporter { get; set; }
+        public virtual CapstoneBEUser Censor { get; set; }
+        public virtual CapstoneBEUser UpdateUser { get; set; }
         public virtual MaintenanceOrder MaintenanceOrder { get; set; }
-        public virtual Location Location { get; set; }
+        public virtual Flight Flight { get; set; }
     }
 }

@@ -19,6 +19,12 @@ namespace CapstoneBE.Models
         [ForeignKey(nameof(Assessor)), Column(Order = 0)]
         public string AssessorId { get; set; }
 
+        [ForeignKey(nameof(CreateUser)), Column(Order = 1)]
+        public string CreateUserId { get; set; }
+
+        [ForeignKey(nameof(UpdateUser)), Column(Order = 2)]
+        public string UpdateUserId { get; set; }
+
         [MaxLength(200)]
         public string Description { get; set; }
 
@@ -34,6 +40,8 @@ namespace CapstoneBE.Models
         public virtual MaintenanceWorker MaintenanceWorker { get; set; }
         public virtual Location Location { get; set; }
         public virtual CapstoneBEUser Assessor { get; set; }
+        public virtual CapstoneBEUser CreateUser { get; set; }
+        public virtual CapstoneBEUser UpdateUser { get; set; }
         public virtual ICollection<Crack> Cracks { get; set; }
     }
 }

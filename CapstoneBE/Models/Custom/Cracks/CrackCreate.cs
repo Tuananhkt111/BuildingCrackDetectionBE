@@ -7,5 +7,6 @@ namespace CapstoneBE.Models.Custom.Cracks
         public string Position { get; set; }
         public float Accuracy { get; set; }
         public string Status { get { return CrackStatus.Unconfirmed; } }
+        public int FlightId { get; set; }
     }
 }

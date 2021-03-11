@@ -47,17 +47,17 @@ namespace CapstoneBE.Controllers
         {
             if (userLogin == null)
                 return BadRequest("Invalid request");
-            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken, false);
+            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken, true);
             if (jwtToken == null)
                 return NotFound("Sign-in Failed");
             return Ok(jwtToken);
         }
 
         /// <summary>
-        /// Authenticate to system by userName and password (Administrator, Manager Role)
+        /// Authenticate to system by userName and password (Administrator, Manager, Staff Role)
         /// </summary>
         /// <remarks>
-        /// Sample request: POST: api/v1/users/authenticate/manager
+        /// Sample request: POST: api/v1/users/authenticate
         /// </remarks>
         /// <param name="userLogin">A UserLogin object</param>
         /// <returns>A UserLoginResponse object</returns>
@@ -65,7 +65,7 @@ namespace CapstoneBE.Controllers
         /// <response code="400">If bad request, returns message "Invalid request"</response>
         /// <response code="404">If sign-in failed, returns message "Sign-in Failed"</response>
         [AllowAnonymous]
-        [HttpPost("authenticate/manager")]
+        [HttpPost("authenticate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,7 +73,7 @@ namespace CapstoneBE.Controllers
         {
             if (userLogin == null)
                 return BadRequest("Invalid request");
-            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken, true);
+            UserLoginResponse jwtToken = await _userService.Authenticate(userLogin.UserName, userLogin.Password, userLogin.FcmToken);
             if (jwtToken == null)
                 return NotFound("Sign-in Failed");
             return Ok(jwtToken);

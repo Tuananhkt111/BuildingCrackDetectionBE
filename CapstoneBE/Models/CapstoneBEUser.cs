@@ -34,10 +34,22 @@ namespace CapstoneBE.Models
         public DateTime LastModified { get; set; }
 
         [InverseProperty(nameof(MaintenanceOrder.Assessor))]
-        public virtual ICollection<MaintenanceOrder> MaintenanceOrders { get; set; }
+        public virtual ICollection<MaintenanceOrder> MaintenanceOrdersA { get; set; }
 
-        [InverseProperty(nameof(Crack.Reporter))]
-        public virtual ICollection<Crack> Cracks { get; set; }
+        [InverseProperty(nameof(MaintenanceOrder.CreateUser))]
+        public virtual ICollection<MaintenanceOrder> MaintenanceOrdersCU { get; set; }
+
+        [InverseProperty(nameof(MaintenanceOrder.UpdateUser))]
+        public virtual ICollection<MaintenanceOrder> MaintenanceOrdersUU { get; set; }
+
+        [InverseProperty(nameof(Crack.Censor))]
+        public virtual ICollection<Crack> CracksC { get; set; }
+
+        [InverseProperty(nameof(Crack.UpdateUser))]
+        public virtual ICollection<Crack> CracksUU { get; set; }
+
+        [InverseProperty(nameof(Flight.DataCollector))]
+        public virtual ICollection<Flight> Flights { get; set; }
 
         [InverseProperty(nameof(LocationHistory.Employee))]
         public virtual ICollection<LocationHistory> LocationHistories { get; set; }

@@ -30,7 +30,7 @@ namespace CapstoneBE.Services.Users
             _mapper = mapper;
         }
 
-        public async Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "", bool isManager = false)
+        public async Task<UserLoginResponse> Authenticate(string userName, string password, string registrationToken = "", bool isStaff = false)
         {
             if (String.IsNullOrEmpty(password) || String.IsNullOrEmpty(userName))
                 return null;
@@ -43,12 +43,7 @@ namespace CapstoneBE.Services.Users
             string role = (await _unitOfWork.UserRepository.UserManager.GetRolesAsync(user)).FirstOrDefault();
             if (user != null && !user.IsDel && role != null)
             {
-                if (isManager)
-                {
-                    if (!role.Equals(Roles.AdminRole) && !role.Equals(Roles.ManagerRole))
-                        return null;
-                }
-                else
+                if (isStaff)
                 {
                     if (!role.Equals(Roles.StaffRole))
                         return null;

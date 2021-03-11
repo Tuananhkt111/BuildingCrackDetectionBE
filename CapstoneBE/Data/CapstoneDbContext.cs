@@ -20,6 +20,7 @@ namespace CapstoneBE.Data
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<LocationHistory> LocationHistory { get; set; }
         public virtual DbSet<Crack> Crack { get; set; }
+        public virtual DbSet<Flight> Flight { get; set; }
 
         public CapstoneDbContext(DbContextOptions options) : base(options)
         {

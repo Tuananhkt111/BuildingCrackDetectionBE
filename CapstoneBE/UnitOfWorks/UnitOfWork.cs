@@ -2,6 +2,7 @@
 using CapstoneBE.Helpers;
 using CapstoneBE.Models;
 using CapstoneBE.Repositories.Cracks;
+using CapstoneBE.Repositories.Flights;
 using CapstoneBE.Repositories.LocationHistories;
 using CapstoneBE.Repositories.Locations;
 using CapstoneBE.Repositories.MaintenanceOrders;
@@ -28,6 +29,7 @@ namespace CapstoneBE.UnitOfWorks
         private CrackRepository _crackRepository;
         private MaintenanceOrderRepository _maintenanceOrderRepository;
         private NotificationRepository _notificationRepository;
+        private FlightRepository _flightRepository;
 
         public UnitOfWork(CapstoneDbContext capstoneDbContext, UserManager<CapstoneBEUser> userManager,
             SignInManager<CapstoneBEUser> signInManager, IOptions<AppSettings> appSettings)
@@ -105,6 +107,16 @@ namespace CapstoneBE.UnitOfWorks
                 if (_notificationRepository == null)
                     _notificationRepository = new NotificationRepository(_capstoneDbContext);
                 return _notificationRepository;
+            }
+        }
+
+        public FlightRepository FlightRepository
+        {
+            get
+            {
+                if (_flightRepository == null)
+                    _flightRepository = new FlightRepository(_capstoneDbContext);
+                return _flightRepository;
             }
         }
 

@@ -48,7 +48,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     else return 0;
                     maintenanceOrder.MaintenanceDate = maintenanceOrderBasicInfo.MaintenanceDate;
                     maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
-                    maintenanceOrder.AssessorId = _userData.UserId;
+                    maintenanceOrder.CreateUserId = _userData.UserId;
                     await _unitOfWork.Save();
                     foreach (Crack crack in maintenanceOrder.Cracks)
                     {
@@ -112,7 +112,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 .GetSingle(filter: mo => mo.MaintenanceOrderId.Equals(id)
                     && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole)),
-                includeProperties: "Assessor,MaintenanceWorker,Cracks,Location");
+                includeProperties: "Assessor,MaintenanceWorker,Cracks,Location,CreateUser,UpdateUser");
             return _mapper.Map<MaintenanceOrderInfo>(maintenanceOrder);
         }
 
@@ -122,7 +122,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 .Get(filter: mo => (_userData.LocationIds.Contains(mo.LocationId)
                     && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole),
-                    includeProperties: "Assessor,MaintenanceWorker,Cracks,Location")
+                    includeProperties: "Assessor,MaintenanceWorker,Cracks,Location,CreateUser,UpdateUser")
                 .OrderByDescending(mo => mo.Created)
                 .Select(mo => _mapper.Map<MaintenanceOrderInfo>(mo)).ToList();
         }
@@ -136,12 +136,12 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 .Count();
         }
 
-        public async Task<List<CrackInfo>> GetQueue()
+        public async Task<List<CrackSubDetailsInfo>> GetQueue()
         {
             MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(_userData.UserId);
             if (maintenanceOrder == null)
                 return null;
-            return maintenanceOrder.Cracks.Select(c => _mapper.Map<CrackInfo>(c)).ToList();
+            return maintenanceOrder.Cracks.Select(c => _mapper.Map<CrackSubDetailsInfo>(c)).ToList();
         }
 
         public async Task<bool> RemoveFromQueue(int[] crackIds)
@@ -169,7 +169,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 else return 0;
                 maintenanceOrder.MaintenanceDate = maintenanceOrderBasicInfo.MaintenanceDate;
                 maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
-                maintenanceOrder.AssessorId = _userData.UserId;
+                maintenanceOrder.UpdateUserId = _userData.UserId;
                 bool result = await _unitOfWork.Save() != 0;
                 return result ? maintenanceOrder.MaintenanceOrderId : 0;
             }
@@ -183,7 +183,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 return false;
             MaintenanceOrder maintenanceOrder = new MaintenanceOrder
             {
-                AssessorId = _userData.UserId,
+                CreateUserId = _userData.UserId,
                 Cracks = cracks,
                 Status = MaintenanceOrderStatus.WaitingForConfirm,
                 LocationId = _userData.LocationIds[0]
@@ -201,7 +201,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
             {
                 maintenanceOrder.Cracks.Add(crack);
             }
-            maintenanceOrder.AssessorId = _userData.UserId;
+            maintenanceOrder.CreateUserId = _userData.UserId;
             return await _unitOfWork.Save() != 0;
         }
     }

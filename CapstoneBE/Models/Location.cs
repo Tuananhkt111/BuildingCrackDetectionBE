@@ -7,7 +7,7 @@ namespace CapstoneBE.Models
     {
         public Location()
         {
-            Cracks = new HashSet<Crack>();
+            Flights = new HashSet<Flight>();
             LocationHistories = new HashSet<LocationHistory>();
             MaintenanceOrders = new HashSet<MaintenanceOrder>();
         }
@@ -21,7 +21,7 @@ namespace CapstoneBE.Models
         [MaxLength(200)]
         public string Description { get; set; }
 
-        public virtual ICollection<Crack> Cracks { get; set; }
+        public virtual ICollection<Flight> Flights { get; set; }
         public virtual ICollection<LocationHistory> LocationHistories { get; set; }
         public virtual ICollection<MaintenanceOrder> MaintenanceOrders { get; set; }
 

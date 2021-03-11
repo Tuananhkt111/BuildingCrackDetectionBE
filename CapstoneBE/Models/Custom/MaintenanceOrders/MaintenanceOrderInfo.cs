@@ -13,6 +13,10 @@ namespace CapstoneBE.Models.Custom.MaintenanceOrders
         public string LocationName { get; set; }
         public string AssessorId { get; set; }
         public string AssessorName { get; set; }
+        public string CreateUserId { get; set; }
+        public string CreateUserName { get; set; }
+        public string UpdateUserId { get; set; }
+        public string UpdateUserName { get; set; }
         public string Description { get; set; }
         public int AssessmentResult { get; set; }
         public string Status { get; set; }
