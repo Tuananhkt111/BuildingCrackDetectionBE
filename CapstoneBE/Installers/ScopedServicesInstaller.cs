@@ -1,5 +1,6 @@
 ﻿using CapstoneBE.Services.Cracks;
 using CapstoneBE.Services.Emails;
+using CapstoneBE.Services.Flights;
 using CapstoneBE.Services.Locations;
 using CapstoneBE.Services.MaintenanceOrders;
 using CapstoneBE.Services.MaintenanceWorkers;
@@ -23,6 +24,7 @@ namespace CapstoneBE.Installers
             services.AddScoped<ICrackService, CrackService>();
             services.AddScoped<IMaintenanceOrderService, MaintenanceOrderService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IFlightService, FlightService>();
         }
     }
 }
