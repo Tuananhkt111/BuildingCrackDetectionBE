@@ -6,7 +6,7 @@ namespace CapstoneBE.Services.Flights
 {
     public interface IFlightService
     {
-        Task<bool> Create(string video);
+        Task<bool> Create();
 
         Task<FlightInfo> GetById(int id);
 

@@ -39,11 +39,9 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> CreateFlight([FromBody] string video)
+        public async Task<ActionResult<string>> CreateFlight()
         {
-            if (string.IsNullOrEmpty(video))
-                return BadRequest("Invalid request");
-            bool result = await _flightService.Create(video);
+            bool result = await _flightService.Create();
             return result ? Ok("Create flight success") : BadRequest("Create flight failed");
         }
 

@@ -3,6 +3,7 @@ using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Flights;
 using CapstoneBE.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,8 +25,10 @@ namespace CapstoneBE.Services.Flights
             _mapper = mapper;
         }
 
-        public async Task<bool> Create(string video)
+        public async Task<bool> Create()
         {
+            DateTime curTime = DateTime.UtcNow;
+            string video = curTime.Day.ToString() + "-" + curTime.Month.ToString() + "-" + curTime.Year.ToString();
             Flight flight = new()
             {
                 Video = video,
