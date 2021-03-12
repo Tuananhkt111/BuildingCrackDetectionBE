@@ -25,10 +25,8 @@ namespace CapstoneBE.Services.Flights
             _mapper = mapper;
         }
 
-        public async Task<FlightBasicInfo> Create()
+        public async Task<FlightBasicInfo> Create(string video)
         {
-            DateTime curTime = DateTime.Now;
-            string video = curTime.Day.ToString() + "-" + curTime.Month + "-" + curTime.Year + " " + curTime.Hour + "_" + curTime.Minute;
             Flight flight = new()
             {
                 Video = video,
