@@ -39,10 +39,10 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.StaffRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> CreateFlight()
+        public async Task<ActionResult<int>> CreateFlight()
         {
-            bool result = await _flightService.Create();
-            return result ? Ok("Create flight success") : BadRequest("Create flight failed");
+            int result = await _flightService.Create();
+            return result > 0 ? Ok(result) : BadRequest(result);
         }
 
         /// <summary>

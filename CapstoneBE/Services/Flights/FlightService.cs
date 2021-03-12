@@ -25,7 +25,7 @@ namespace CapstoneBE.Services.Flights
             _mapper = mapper;
         }
 
-        public async Task<bool> Create()
+        public async Task<int> Create()
         {
             DateTime curTime = DateTime.UtcNow;
             string video = curTime.Day.ToString() + "-" + curTime.Month.ToString() + "-" + curTime.Year.ToString();
@@ -36,7 +36,8 @@ namespace CapstoneBE.Services.Flights
                 LocationId = _userData.LocationIds.FirstOrDefault()
             };
             _unitOfWork.FlightRepository.Create(flight);
-            return await _unitOfWork.Save() != 0;
+            bool result = await _unitOfWork.Save() != 0;
+            return result ? flight.FlightId : -1;
         }
 
         public async Task<FlightInfo> GetById(int id)

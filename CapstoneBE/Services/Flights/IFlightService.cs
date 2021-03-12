@@ -6,7 +6,7 @@ namespace CapstoneBE.Services.Flights
 {
     public interface IFlightService
     {
-        Task<bool> Create();
+        Task<int> Create();
 
         Task<FlightInfo> GetById(int id);
 
