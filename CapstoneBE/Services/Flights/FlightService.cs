@@ -40,8 +40,8 @@ namespace CapstoneBE.Services.Flights
 
         public async Task<FlightInfo> GetById(int id)
         {
-            Flight flight = await _unitOfWork.FlightRepository.GetSingle(filter: f => (_userData.LocationIds.Contains(f.LocationId)
-                && f.FlightId.Equals(id)
+            Flight flight = await _unitOfWork.FlightRepository.GetSingle(filter: f => f.FlightId.Equals(id) 
+                && (_userData.LocationIds.Contains(f.LocationId)
                 && _userData.Role.Equals(Roles.ManagerRole))
                 || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector");
             return _mapper.Map<FlightInfo>(flight);
@@ -49,16 +49,16 @@ namespace CapstoneBE.Services.Flights
 
         public List<FlightInfo> GetFlights()
         {
-            return _unitOfWork.FlightRepository.Get(filter: l => (_userData.LocationIds.Contains(l.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
+            return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
                 || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector")
-                .OrderByDescending(l => l.Created)
-                .Select(l => _mapper.Map<FlightInfo>(l))
+                .OrderByDescending(f => f.Created)
+                .Select(f => _mapper.Map<FlightInfo>(f))
                 .ToList();
         }
 
         public int GetFlightsCount()
         {
-            return _unitOfWork.FlightRepository.Get(filter: l => (_userData.LocationIds.Contains(l.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
+            return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
                 || _userData.Role.Equals(Roles.AdminRole)).Count();
         }
     }
