@@ -45,7 +45,7 @@ namespace CapstoneBE.Services.PushNotifications
                             Token = receiver.FcmTokenM,
                             Notification = GetNotification(sender, messageType)
                         });
-                    if (!string.IsNullOrEmpty(receiver.FcmTokenM))
+                    if (!string.IsNullOrEmpty(receiver.FcmTokenW))
                         messages.Add(new Message()
                         {
                             Token = receiver.FcmTokenW,
