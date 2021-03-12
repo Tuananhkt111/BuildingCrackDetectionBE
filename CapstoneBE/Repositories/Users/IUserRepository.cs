@@ -24,7 +24,8 @@ namespace CapstoneBE.Repositories.Users
 
         Task DeleteUser(string userId);
 
-        Task UpdateFcmToken(string registrationToken, string userId);
+        Task UpdateFcmTokenM(string registrationToken, string userId);
+        Task UpdateFcmTokenW(string registrationToken, string userId);
 
         Task UpdateBasicInfo(UserBasicInfo userBasicInfo, string userId);
     }

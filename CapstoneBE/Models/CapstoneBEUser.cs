@@ -16,7 +16,8 @@ namespace CapstoneBE.Models
         public string Address { get; set; }
 
         //Use for firebase (in need)
-        public string FcmToken { get; set; }
+        public string FcmTokenM { get; set; }
+        public string FcmTokenW { get; set; }
 
         [MaxLength(30)]
         public string Role { get; set; }

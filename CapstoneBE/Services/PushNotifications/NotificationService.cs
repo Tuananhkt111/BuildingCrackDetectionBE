@@ -32,35 +32,44 @@ namespace CapstoneBE.Services.PushNotifications
             return await _unitOfWork.Save() == ids.Length;
         }
 
-        public Message GetMessage(CapstoneBEUser sender, CapstoneBEUser receiver, string messageType, int? orderId = null)
+        public List<Message> GetMessages(CapstoneBEUser sender, CapstoneBEUser receiver, string messageType, int? orderId = null)
         {
+            List<Message> messages = new();
             switch (messageType)
             {
                 case MessageTypes.AdminUpdateInfo:
                 case MessageTypes.SystemFinishedDetection:
-                    return new Message()
-                    {
-                        Token = receiver.FcmToken,
-                        Notification = GetNotification(sender, messageType)
-                    };
+                    if (!string.IsNullOrEmpty(receiver.FcmTokenM))
+                        messages.Add(new Message()
+                        {
+                            Token = receiver.FcmTokenM,
+                            Notification = GetNotification(sender, messageType)
+                        });
+                    if (!string.IsNullOrEmpty(receiver.FcmTokenM))
+                        messages.Add(new Message()
+                        {
+                            Token = receiver.FcmTokenW,
+                            Notification = GetNotification(sender, messageType)
+                        });
+                    break;
 
                 case MessageTypes.StaffCreateOrder:
                 case MessageTypes.StaffUpdateOrder:
                 case MessageTypes.StaffEvaluateOrder:
                     if (orderId == null || orderId == 0)
                         return null;
-                    return new Message()
+                    messages.Add(new Message()
                     {
                         Data = new Dictionary<string, string>()
                         {
                             { "orderId", orderId.ToString() }
                         },
-                        Token = receiver.FcmToken,
+                        Token = receiver.FcmTokenW,
                         Notification = GetNotification(sender, messageType)
-                    };
-
-                default: return null;
+                    });
+                    break;
             }
+            return messages.Count > 0 ? messages : null;
         }
 
         public Notification GetNotification(CapstoneBEUser sender, string messageType)
@@ -128,14 +137,14 @@ namespace CapstoneBE.Services.PushNotifications
                 CapstoneBEUser receiver = await _unitOfWork.UserRepository.GetById(receiverId);
                 if (receiver != null)
                 {
-                    Message message = GetMessage(sender, receiver, messageType, orderId);
-                    messages.Add(message);
+                    List<Message> messageList = GetMessages(sender, receiver, messageType, orderId);
+                    messages.AddRange(messageList);
                     pushNotifications.Add(new PushNotification
                     {
                         SenderId = senderId,
                         ReceiverId = receiverId,
-                        Title = message.Notification.Title,
-                        Body = message.Notification.Body,
+                        Title = messageList[0].Notification.Title,
+                        Body = messageList[0].Notification.Body,
                         MessageType = messageType,
                         IsRead = false
                     });

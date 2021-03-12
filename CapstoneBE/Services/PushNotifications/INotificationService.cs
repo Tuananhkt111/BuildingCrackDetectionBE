@@ -9,7 +9,7 @@ namespace CapstoneBE.Services.PushNotifications
     {
         Task<bool> Delete(int[] ids);
 
-        Message GetMessage(CapstoneBEUser sender, CapstoneBEUser receiver, string messageType, int? orderId = null);
+        List<Message> GetMessages(CapstoneBEUser sender, CapstoneBEUser receiver, string messageType, int? orderId = null);
 
         Notification GetNotification(CapstoneBEUser sender, string messageType);
 

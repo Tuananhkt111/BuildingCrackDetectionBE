@@ -116,11 +116,18 @@ namespace CapstoneBE.Repositories.Users
             return result;
         }
 
-        public async Task UpdateFcmToken(string fcmToken, string userId)
+        public async Task UpdateFcmTokenM(string fcmToken, string userId)
         {
             CapstoneBEUser user = await GetById(userId);
             if (user != null)
-                user.FcmToken = fcmToken;
+                user.FcmTokenM = fcmToken;
+        }
+
+        public async Task UpdateFcmTokenW(string fcmToken, string userId)
+        {
+            CapstoneBEUser user = await GetById(userId);
+            if (user != null)
+                user.FcmTokenW = fcmToken;
         }
     }
 }

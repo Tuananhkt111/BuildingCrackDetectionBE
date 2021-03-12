@@ -47,10 +47,12 @@ namespace CapstoneBE.Services.Users
                 {
                     if (!role.Equals(Roles.StaffRole))
                         return null;
+                    await _unitOfWork.UserRepository.UpdateFcmTokenM(registrationToken, user.Id);
+                    await _unitOfWork.Save();
                 }
-                if (role.Equals(Roles.ManagerRole) || role.Equals(Roles.StaffRole))
+                else if (role.Equals(Roles.ManagerRole) || role.Equals(Roles.StaffRole))
                 {
-                    await _unitOfWork.UserRepository.UpdateFcmToken(registrationToken, user.Id);
+                    await _unitOfWork.UserRepository.UpdateFcmTokenW(registrationToken, user.Id);
                     await _unitOfWork.Save();
                 }
                 //authentication successful so generate jwt token
