@@ -25,10 +25,10 @@ namespace CapstoneBE.Services.Flights
             _mapper = mapper;
         }
 
-        public async Task<int> Create()
+        public async Task<FlightBasicInfo> Create()
         {
-            DateTime curTime = DateTime.UtcNow;
-            string video = curTime.Day.ToString() + "-" + curTime.Month.ToString() + "-" + curTime.Year.ToString();
+            DateTime curTime = DateTime.Now;
+            string video = curTime.Day.ToString() + "-" + curTime.Month + "-" + curTime.Year + " " + curTime.Hour + "_" + curTime.Minute;
             Flight flight = new()
             {
                 Video = video,
@@ -37,7 +37,7 @@ namespace CapstoneBE.Services.Flights
             };
             _unitOfWork.FlightRepository.Create(flight);
             bool result = await _unitOfWork.Save() != 0;
-            return result ? flight.FlightId : -1;
+            return result ? _mapper.Map<FlightBasicInfo>(flight) : null;
         }
 
         public async Task<FlightInfo> GetById(int id)

@@ -78,6 +78,7 @@ namespace CapstoneBE.Profiles
                 .ForMember(dest =>
                     dest.LocationName,
                     opt => opt.MapFrom(src => src.Location.Name));
+            CreateMap<Flight, FlightBasicInfo>();
         }
     }
 }

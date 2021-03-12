@@ -28,7 +28,6 @@ namespace CapstoneBE.Controllers
         /// <remarks>
         /// Sample request: POST: api/v1/flights
         /// </remarks>
-        /// <param name="video">Video file path</param>
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Create flight success"</response>
         /// <response code="400">
@@ -41,8 +40,8 @@ namespace CapstoneBE.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<int>> CreateFlight()
         {
-            int result = await _flightService.Create();
-            return result > 0 ? Ok(result) : BadRequest(result);
+            FlightBasicInfo result = await _flightService.Create();
+            return result != null ? Ok(result) : BadRequest(result);
         }
 
         /// <summary>

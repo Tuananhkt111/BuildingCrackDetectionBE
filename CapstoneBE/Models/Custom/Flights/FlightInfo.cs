@@ -1,5 +1,4 @@
 ﻿using CapstoneBE.Models.Custom.Cracks;
-using System;
 using System.Collections.Generic;
 
 namespace CapstoneBE.Models.Custom.Flights
