@@ -41,9 +41,9 @@ namespace CapstoneBE.Services.Flights
         public async Task<FlightInfo> GetById(int id)
         {
             Flight flight = await _unitOfWork.FlightRepository.GetSingle(filter: f => f.FlightId.Equals(id) 
-                && (_userData.LocationIds.Contains(f.LocationId)
+                && ((_userData.LocationIds.Contains(f.LocationId)
                 && _userData.Role.Equals(Roles.ManagerRole))
-                || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector");
+                || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Cracks,Location,DataCollector");
             return _mapper.Map<FlightInfo>(flight);
         }
 
