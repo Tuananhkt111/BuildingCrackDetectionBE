@@ -13,7 +13,7 @@ namespace CapstoneBE.Repositories.MaintenanceOrders
 
         public async Task<MaintenanceOrder> GetQueue(string userId)
         {
-            return await GetSingle(filter: mo => mo.AssessorId.Equals(userId)
+            return await GetSingle(filter: mo => mo.CreateUserId.Equals(userId)
                 && mo.Status.Equals(MaintenanceOrderStatus.WaitingForConfirm),
                 includeProperties: "Cracks");
         }
