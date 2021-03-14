@@ -123,7 +123,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole),
                     includeProperties: "Assessor,MaintenanceWorker,Cracks,Location,CreateUser,UpdateUser")
-                .OrderByDescending(mo => mo.Created)
+                .OrderByDescending(mo => mo.MaintenanceDate)
                 .Select(mo => _mapper.Map<MaintenanceOrderInfo>(mo)).ToList();
         }
 
@@ -134,7 +134,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole),
                     includeProperties: "Assessor,MaintenanceWorker,Cracks,Location,CreateUser,UpdateUser")
-                .OrderByDescending(mo => mo.Created)
+                .OrderByDescending(mo => mo.MaintenanceDate)
                 .Select(mo => _mapper.Map<MaintenanceOrderInfo>(mo)).ToList();
         }
 

@@ -49,7 +49,7 @@ namespace CapstoneBE.Services.Flights
 
         public List<FlightInfo> GetFlights()
         {
-            return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
+            return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                 || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector")
                 .OrderByDescending(f => f.Created)
                 .Select(f => _mapper.Map<FlightInfo>(f))
@@ -58,7 +58,7 @@ namespace CapstoneBE.Services.Flights
 
         public int GetFlightsCount()
         {
-            return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
+            return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                 || _userData.Role.Equals(Roles.AdminRole)).Count();
         }
     }
