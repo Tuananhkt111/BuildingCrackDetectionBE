@@ -21,6 +21,8 @@ namespace CapstoneBE.Services.MaintenanceOrders
 
         List<MaintenanceOrderInfo> GetMaintenanceOrders();
 
+        List<MaintenanceOrderInfo> GetMaintenanceOrders(string status);
+
         Task<MaintenanceOrderInfo> GetById(int id);
 
         int GetMaintenanceOrdersCount();

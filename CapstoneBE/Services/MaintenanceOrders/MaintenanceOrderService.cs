@@ -127,6 +127,17 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 .Select(mo => _mapper.Map<MaintenanceOrderInfo>(mo)).ToList();
         }
 
+        public List<MaintenanceOrderInfo> GetMaintenanceOrders(string status)
+        {
+            return _unitOfWork.MaintenanceOrderRepository
+                .Get(filter: mo => mo.Status.Equals(status) && (_userData.LocationIds.Contains(mo.LocationId)
+                    && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole),
+                    includeProperties: "Assessor,MaintenanceWorker,Cracks,Location,CreateUser,UpdateUser")
+                .OrderByDescending(mo => mo.Created)
+                .Select(mo => _mapper.Map<MaintenanceOrderInfo>(mo)).ToList();
+        }
+
         public int GetMaintenanceOrdersCount()
         {
             return _unitOfWork.MaintenanceOrderRepository
