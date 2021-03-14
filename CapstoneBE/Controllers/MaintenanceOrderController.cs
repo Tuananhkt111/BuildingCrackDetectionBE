@@ -184,26 +184,6 @@ namespace CapstoneBE.Controllers
         /// <remarks>
         /// Sample request: GET: api/v1/maintenance-orders
         /// </remarks>
-        /// <returns>List of maintenance orders</returns>
-        /// <response code="200">Returns list of maintenance orders</response>
-        /// <response code="404">If not found</response>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<MaintenanceOrderInfo>> GetMaintenanceOrders()
-        {
-            List<MaintenanceOrderInfo> orderInfos = _maintenanceOrderService.GetMaintenanceOrders();
-            if (orderInfos != null)
-                return Ok(orderInfos);
-            return NotFound();
-        }
-
-        /// <summary>
-        /// Get list of maintenance orders {Auth Roles: Administrator, Manager, Staff}
-        /// </summary>
-        /// <remarks>
-        /// Sample request: GET: api/v1/maintenance-orders
-        /// </remarks>
         /// <param name="status">Maintenance order status</param>
         /// <returns>List of maintenance orders</returns>
         /// <response code="200">Returns list of maintenance orders</response>
