@@ -21,6 +21,9 @@ namespace CapstoneBE.Models.Custom.MaintenanceOrders
         public int AssessmentResult { get; set; }
         public string Status { get; set; }
         public DateTime MaintenanceDate { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastModified { get; set; }
+        public DateTime AssessmentDate { get; set; }
         public ICollection<CrackSubInfo> Cracks { get; set; }
     }
 }

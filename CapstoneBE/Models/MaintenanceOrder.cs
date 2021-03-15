@@ -36,6 +36,7 @@ namespace CapstoneBE.Models
         public string Status { get; set; }
 
         public DateTime MaintenanceDate { get; set; }
+        public DateTime AssessmentDate { get; set; }
 
         public virtual MaintenanceWorker MaintenanceWorker { get; set; }
         public virtual Location Location { get; set; }

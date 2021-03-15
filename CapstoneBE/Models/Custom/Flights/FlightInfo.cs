@@ -1,4 +1,5 @@
 ﻿using CapstoneBE.Models.Custom.Cracks;
+using System;
 using System.Collections.Generic;
 
 namespace CapstoneBE.Models.Custom.Flights
@@ -12,5 +13,7 @@ namespace CapstoneBE.Models.Custom.Flights
         public string DataCollectorName { get; set; }
         public string Video { get; set; }
         public ICollection<CrackSubDetailsInfo> Cracks { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

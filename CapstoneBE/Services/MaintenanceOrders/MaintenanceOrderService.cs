@@ -86,6 +86,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                         maintenanceOrder.Description = maintenanceOrderAssessmentInfo.Description;
                     maintenanceOrder.Status = maintenanceOrderAssessmentInfo.Status;
                     maintenanceOrder.AssessorId = _userData.UserId;
+                    maintenanceOrder.AssessmentDate = DateTime.UtcNow;
                     await _unitOfWork.Save();
                     foreach (CrackAssessmentInfo crackAssessment in maintenanceOrderAssessmentInfo.CrackAssessments)
                     {
