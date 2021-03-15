@@ -5,6 +5,7 @@ namespace CapstoneBE.Models.Custom.Cracks
     public class CrackSubDetailsInfo
     {
         public int CrackId { get; set; }
+        public int MaintenanceOrderId { get; set; }
         public string Position { get; set; }
         public string Description { get; set; }
         public float Accuracy { get; set; }
