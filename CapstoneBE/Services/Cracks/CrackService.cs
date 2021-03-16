@@ -27,9 +27,9 @@ namespace CapstoneBE.Services.Cracks
         public async Task<int> Create(CrackCreate crackCreate)
         {
             Crack crack = _mapper.Map<Crack>(crackCreate);
-            if (crack.Accuracy < 40)
+            if (crack.Accuracy < 0.4)
                 crack.Severity = CrackSeverity.Low;
-            else if (crack.Accuracy < 70)
+            else if (crack.Accuracy < 0.7)
                 crack.Severity = CrackSeverity.Medium;
             else
                 crack.Severity = CrackSeverity.High;
