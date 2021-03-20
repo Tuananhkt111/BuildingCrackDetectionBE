@@ -226,7 +226,9 @@ namespace CapstoneBE.Services.Users
             return _unitOfWork.UserRepository
                 .Get(filter: u => !u.Role.Equals(Roles.AdminRole)
                     && !u.IsDel && ((u.Role.Equals(Roles.StaffRole)
-                    && _userData.LocationIds.Contains(u.LocationHistories.First().LocationId)
+                    && (u.LocationHistories == null 
+                    || u.LocationHistories.Count == 0
+                    ||_userData.LocationIds.Contains(u.LocationHistories.First().LocationId))
                     && _userData.Role.Equals(Roles.ManagerRole))
                     || _userData.Role.Equals(Roles.AdminRole)))
                 .Include(u => u.LocationHistories).ThenInclude(lh => lh.Location)
