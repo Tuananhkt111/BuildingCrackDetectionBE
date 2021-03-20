@@ -40,6 +40,8 @@ namespace CapstoneBE.Services.Users
             CapstoneBEUser user = await _unitOfWork.UserRepository
                 .GetSingle(filter: u => u.UserName.Equals(userName), includeProperties: "LocationHistories");
             int[] locationIds = user.LocationHistories.Select(lh => lh.LocationId).ToArray();
+            if (locationIds == null || locationIds.Length <= 0)
+                return null;
             string role = (await _unitOfWork.UserRepository.UserManager.GetRolesAsync(user)).FirstOrDefault();
             if (user != null && !user.IsDel && role != null)
             {
