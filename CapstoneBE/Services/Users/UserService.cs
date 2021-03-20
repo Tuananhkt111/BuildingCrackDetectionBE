@@ -285,7 +285,9 @@ namespace CapstoneBE.Services.Users
                 if (user.Role.Equals(Roles.StaffRole))
                 {
                     LocationSubInfo locationTemp = user.Locations.FirstOrDefault();
-                    if (locationTemp != null && !locationTemp.LocationId.Equals(userBasicInfo.LocationIds[0]))
+                    if (locationTemp != null && userBasicInfo.LocationIds != null
+                        && userBasicInfo.LocationIds.Length > 0
+                        && !locationTemp.LocationId.Equals(userBasicInfo.LocationIds[0]))
                     {
                         MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(user.UserId);
                         if (maintenanceOrder != null)
