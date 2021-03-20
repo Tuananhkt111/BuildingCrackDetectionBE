@@ -45,13 +45,13 @@ namespace CapstoneBE.Repositories.LocationHistories
 
         public void Update(int[] locationIds, string userId)
         {
-            if(locationIds != null && locationIds.Length > 0)
+            List<LocationHistory> locationHistories = Get(filter: lh => lh.EmpId.Equals(userId)).ToList();
+            foreach (LocationHistory locationHistory in locationHistories)
             {
-                List<LocationHistory> locationHistories = Get(filter: lh => lh.EmpId.Equals(userId)).ToList();
-                foreach (LocationHistory locationHistory in locationHistories)
-                {
-                    Delete(locationHistory);
-                }
+                Delete(locationHistory);
+            }
+            if (locationIds != null && locationIds.Length > 0)
+            {
                 Create(locationIds, userId);
             }
         }
