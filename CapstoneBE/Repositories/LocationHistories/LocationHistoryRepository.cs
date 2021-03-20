@@ -16,7 +16,7 @@ namespace CapstoneBE.Repositories.LocationHistories
         {
             foreach (int locationId in locationIds)
             {
-                LocationHistory locationHistory = new LocationHistory
+                LocationHistory locationHistory = new()
                 {
                     EmpId = userId,
                     LocationId = locationId

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Services.MaintenanceWorkers
 {
@@ -29,6 +30,10 @@ namespace CapstoneBE.Services.MaintenanceWorkers
 
         public async Task<bool> Delete(int id)
         {
+            bool isRemovable = !_unitOfWork.MaintenanceOrderRepository.Get(filter: mo => mo.Status.Equals(MaintenanceOrderStatus.WaitingForMaintenance)
+                && mo.MaintenanceWorkerId.Equals(id)).Any();
+            if (!isRemovable)
+                return false;
             _unitOfWork.MaintenanceWorkerRepository.Delete(id).Wait();
             return await _unitOfWork.Save() != 0;
         }

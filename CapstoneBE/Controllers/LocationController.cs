@@ -118,7 +118,7 @@ namespace CapstoneBE.Controllers
         /// <param name="id">Location Id</param>
         /// <returns>Message result</returns>
         /// <response code="200">If success, returns message "Delete location success"</response>
-        /// <response code="404">If failed, returns message "Location doesn't exist"</response>
+        /// <response code="404">If failed, returns message "Delete location success"</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = Roles.AdminRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -128,7 +128,7 @@ namespace CapstoneBE.Controllers
             bool delResult = await _locationService.Delete(id);
             if (delResult)
                 return Ok("Delete location success");
-            return NotFound("Location doesn't exist");
+            return NotFound("Delete location failed");
         }
 
         /// <summary>

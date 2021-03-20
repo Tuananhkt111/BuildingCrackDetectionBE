@@ -2,6 +2,7 @@
 using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Locations;
 using CapstoneBE.UnitOfWorks;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,6 +33,20 @@ namespace CapstoneBE.Services.Locations
 
         public async Task<bool> Delete(int id)
         {
+            List<string> unacceptableCrackStatus = new()
+            {
+                CrackStatus.ScheduledForMaintenace,
+                CrackStatus.Unconfirmed,
+                CrackStatus.UnscheduledForMaintenace
+            };
+            //Check active user exists or not
+            bool isRemovable = !_unitOfWork.UserRepository.Get(filter: u => !u.IsDel
+                && u.LocationHistories.Any(lh => lh.LocationId.Equals(id)), includeProperties: "LocationHistories").Any();
+            //Check unacceptable crack exist or not
+            isRemovable = isRemovable && !(_unitOfWork.CrackRepository.Get(filter: c => unacceptableCrackStatus.Contains(c.Status)
+                && c.Flight.LocationId.Equals(id), includeProperties: "Flight").Any());
+            if (!isRemovable)
+                return false;
             _unitOfWork.LocationRepository.Delete(id).Wait();
             return await _unitOfWork.Save() != 0;
         }
