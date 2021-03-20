@@ -31,6 +31,8 @@ namespace CapstoneBE.Models
         [Range(minimum: 0, maximum: 100)]
         public int AssessmentResult { get; set; }
 
+        public float MaintenanceExpense { get; set; }
+
         [Required]
         [MaxLength(30)]
         public string Status { get; set; }

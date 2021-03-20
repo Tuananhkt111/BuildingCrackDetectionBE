@@ -19,6 +19,7 @@ namespace CapstoneBE.Models.Custom.MaintenanceOrders
         public string UpdateUserName { get; set; }
         public string Description { get; set; }
         public int AssessmentResult { get; set; }
+        public float MaintenanceExpense { get; set; }
         public string Status { get; set; }
         public DateTime MaintenanceDate { get; set; }
         public DateTime Created { get; set; }

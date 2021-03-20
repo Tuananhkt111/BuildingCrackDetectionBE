@@ -8,6 +8,8 @@ namespace CapstoneBE.Services.Flights
     {
         Task<FlightBasicInfo> Create(string video);
 
+        Task<bool> RemoveVideo(int id);
+
         Task<FlightInfo> GetById(int id);
 
         List<FlightInfo> GetFlights();

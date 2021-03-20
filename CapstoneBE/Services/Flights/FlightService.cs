@@ -61,5 +61,11 @@ namespace CapstoneBE.Services.Flights
             return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                 || _userData.Role.Equals(Roles.AdminRole)).Count();
         }
+
+        public async Task<bool> RemoveVideo(int id)
+        {
+            await _unitOfWork.FlightRepository.RemoveVideo(id);
+            return await _unitOfWork.Save() != 0;
+        }
     }
 }

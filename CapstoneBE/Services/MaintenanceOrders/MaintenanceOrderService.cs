@@ -47,6 +47,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                         maintenanceOrder.MaintenanceWorkerId = maintenanceOrderBasicInfo.MaintenanceWorkerId;
                     else return 0;
                     maintenanceOrder.MaintenanceDate = maintenanceOrderBasicInfo.MaintenanceDate;
+                    maintenanceOrder.MaintenanceExpense = maintenanceOrderBasicInfo.MaintenanceExpense;
                     maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
                     maintenanceOrder.CreateUserId = _userData.UserId;
                     await _unitOfWork.Save();

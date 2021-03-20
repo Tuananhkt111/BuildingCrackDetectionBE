@@ -100,5 +100,24 @@ namespace CapstoneBE.Controllers
                 return NotFound();
             return Ok(flight);
         }
+
+        /// <summary>
+        /// Remove video of object <paramref name="id"/> {Auth Roles: Administrator}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: DELETE: api/v1/flights/5/video
+        /// </remarks>
+        /// <param name="id">Flight Id</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">Returns message "Remove video success"</response>
+        /// <response code="400">Returns message "Remove video failed"</response>
+        [HttpDelete("{id}/video")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<string>> RemoveVideo(int id)
+        {
+            bool result = await _flightService.RemoveVideo(id);
+            return result ? Ok("Remove video success") : BadRequest("Remove video failed");
+        }
     }
 }
