@@ -153,12 +153,12 @@ namespace CapstoneBE.Controllers
             switch (user.Role)
             {
                 case Roles.ManagerRole:
-                    if (locationIds == null || locationIds.Length <= 0)
+                    if (locationIds != null && locationIds.Length <= 0)
                         return BadRequest("Manager belongs to some locations");
                     break;
 
                 case Roles.StaffRole:
-                    if (locationIds == null || locationIds.Length != 1)
+                    if (locationIds != null && locationIds.Length != 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
 
