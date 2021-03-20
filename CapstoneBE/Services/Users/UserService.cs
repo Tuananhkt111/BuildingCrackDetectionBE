@@ -215,12 +215,7 @@ namespace CapstoneBE.Services.Users
         public async Task<UserInfo> GetUserById(string userId)
         {
             UserInfo user = await _unitOfWork.UserRepository
-                .Get(filter: u => !u.Role.Equals(Roles.AdminRole)
-                    && !u.IsDel && ((u.Role.Equals(Roles.StaffRole)
-                    && u.Id.Equals(userId)
-                    && _userData.LocationIds.Contains(u.LocationHistories.First().LocationId)
-                    && _userData.Role.Equals(Roles.ManagerRole))
-                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Get(filter: u => !u.IsDel && u.Id.Equals(userId))
                 .Include(u => u.LocationHistories).ThenInclude(lh => lh.Location)
                 .Select(u => _mapper.Map<UserInfo>(u)).SingleOrDefaultAsync();
             return user;
@@ -317,14 +312,16 @@ namespace CapstoneBE.Services.Users
             return -1;
         }
 
-        Task<bool> IUserService.RemoveLocationsFromUser(string userId)
+        public async Task<bool> RemoveLocationsFromUser(string userId)
         {
-            throw new NotImplementedException();
+            _unitOfWork.LocationHistoryRepository.DeleteRange(userId);
+            return (await _unitOfWork.Save()) != 0;
         }
 
-        Task<bool> IUserService.UpdateLocationsFromUser(int[] locationIds, string userId)
+        public async Task<bool> UpdateLocationsFromUser(int[] locationIds, string userId)
         {
-            throw new NotImplementedException();
+            _unitOfWork.LocationHistoryRepository.Update(locationIds, userId);
+            return await _unitOfWork.Save() != 0;
         }
     }
 }

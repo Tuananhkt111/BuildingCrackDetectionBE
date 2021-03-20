@@ -172,6 +172,37 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
+        /// Update locations of a user by <paramref name="id"/> {Auth Roles: Administrator, Manager}
+        /// </summary>
+        /// <remarks>
+        /// <para>Sample request: POST: api/v1/users/1/locations</para>
+        /// </remarks>
+        /// <param name="id">User Id</param>
+        /// <param name="locationIds">An array of location ids</param>
+        /// <returns>An integer</returns>
+        /// <response code="200">Returns result message</response>
+        /// <response code="400">
+        /// <para>If bad request, returns message "Invalid request"</para>
+        /// <para>Success: Returns message "Update locations success"</para>
+        /// <para>Failed: Returns message "Update locations failed"</para>
+        /// </response>
+        [HttpPost("{id}/locations")]
+        [Authorize(Roles = Roles.AdminRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [PushNotification(MessageTypes.AdminUpdateInfo)]
+        public async Task<ActionResult<int>> UpdateLocations(string id, int[] locationIds)
+        {
+            if (locationIds == null || locationIds.Length <= 0)
+                return BadRequest("Invalid request");
+            bool result = await _userService.UpdateLocationsFromUser(locationIds, id);
+            if (result)
+                return Ok("Update locations success");
+            else
+                return BadRequest("Update locations failed");
+        }
+
+        /// <summary>
         /// Change password of account {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>

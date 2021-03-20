@@ -55,5 +55,15 @@ namespace CapstoneBE.Repositories.LocationHistories
                 Create(locationIds, userId);
             }
         }
+
+        public void DeleteRange(string userId)
+        {
+
+            List<LocationHistory> locationHistories = Get(filter: lh => lh.EmpId.Equals(userId)).ToList();
+            foreach (LocationHistory locationHistory in locationHistories)
+            {
+                Delete(locationHistory);
+            }
+        }
     }
 }

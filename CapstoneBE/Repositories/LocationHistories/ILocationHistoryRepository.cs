@@ -13,6 +13,8 @@ namespace CapstoneBE.Repositories.LocationHistories
 
         void Update(int[] locationIds, string userId);
 
+        void DeleteRange(string userId);
+
         void Create(int[] locationIds, string userId);
     }
 }
