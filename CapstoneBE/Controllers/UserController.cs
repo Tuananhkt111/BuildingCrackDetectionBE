@@ -179,7 +179,7 @@ namespace CapstoneBE.Controllers
         /// </remarks>
         /// <param name="id">User Id</param>
         /// <param name="locationIds">An array of location ids</param>
-        /// <returns>An integer</returns>
+        /// <returns>Message</returns>
         /// <response code="200">Returns result message</response>
         /// <response code="400">
         /// <para>If bad request, returns message "Invalid request"</para>
@@ -200,6 +200,33 @@ namespace CapstoneBE.Controllers
                 return Ok("Update locations success");
             else
                 return BadRequest("Update locations failed");
+        }
+
+        /// <summary>
+        /// Remove locations of a user by <paramref name="id"/> {Auth Roles: Administrator, Manager}
+        /// </summary>
+        /// <remarks>
+        /// <para>Sample request: DELETE: api/v1/users/1/locations</para>
+        /// </remarks>
+        /// <param name="id">User Id</param>
+        /// <returns>Message</returns>
+        /// <response code="200">Returns result message</response>
+        /// <response code="400">
+        /// <para>Success: Returns message "Remove locations success"</para>
+        /// <para>Failed: Returns message "Remove locations failed"</para>
+        /// </response>
+        [HttpDelete("{id}/locations")]
+        [Authorize(Roles = Roles.AdminRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [PushNotification(MessageTypes.AdminUpdateInfo)]
+        public async Task<ActionResult<int>> RemoveLocations(string id)
+        {
+            bool result = await _userService.RemoveLocationsFromUser(id);
+            if (result)
+                return Ok("Remove locations success");
+            else
+                return BadRequest("Remove locations failed");
         }
 
         /// <summary>
