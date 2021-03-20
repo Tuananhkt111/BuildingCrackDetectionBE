@@ -20,6 +20,10 @@ namespace CapstoneBE.Services.Users
 
         Task<bool> DeleteUser(string userId);
 
+        Task<bool> RemoveLocationsFromUser(string userId);
+
+        Task<bool> UpdateLocationsFromUser(int[] locationIds, string userId);
+
         Task<int> UpdateBasicInfo(UserBasicInfo userBasicInfo, UserInfo user);
 
         Task<Email> ResetPassword(string userId);
