@@ -152,11 +152,6 @@ namespace CapstoneBE.Controllers
             int[] locationIds = userBasicInfo.LocationIds;
             switch (user.Role)
             {
-                case Roles.ManagerRole:
-                    if (locationIds != null && locationIds.Length <= 0)
-                        return BadRequest("Manager belongs to some locations");
-                    break;
-
                 case Roles.StaffRole:
                     if (locationIds != null && locationIds.Length != 1)
                         return BadRequest("Staff belongs only to one location");
@@ -195,6 +190,16 @@ namespace CapstoneBE.Controllers
         {
             if (locationIds == null || locationIds.Length <= 0)
                 return BadRequest("Invalid request");
+            UserInfo user = await _userService.GetUserById(id);
+            switch (user.Role)
+            {
+                case Roles.StaffRole:
+                    if (locationIds != null && locationIds.Length != 1)
+                        return BadRequest("Staff belongs only to one location");
+                    break;
+
+                default: return BadRequest("Role value is forbidden");
+            }
             bool result = await _userService.UpdateLocationsFromUser(locationIds, id);
             if (result)
                 return Ok("Update locations success");
@@ -354,11 +359,6 @@ namespace CapstoneBE.Controllers
             int[] locationIds = user.LocationIds;
             switch (user.Role)
             {
-                case Roles.ManagerRole:
-                    if (locationIds != null && locationIds.Length <= 0)
-                        return BadRequest("Manager belongs to some locations");
-                    break;
-
                 case Roles.StaffRole:
                     if (locationIds != null && locationIds.Length != 1)
                         return BadRequest("Staff belongs only to one location");
