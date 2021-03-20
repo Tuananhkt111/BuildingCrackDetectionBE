@@ -42,11 +42,11 @@ namespace CapstoneBE.Services.Users
             CapstoneBEUser user = await _unitOfWork.UserRepository
                 .GetSingle(filter: u => u.UserName.Equals(userName), includeProperties: "LocationHistories");
             int[] locationIds = user.LocationHistories.Select(lh => lh.LocationId).ToArray();
-            if (locationIds == null || locationIds.Length <= 0)
-                return null;
             string role = (await _unitOfWork.UserRepository.UserManager.GetRolesAsync(user)).FirstOrDefault();
             if (user != null && !user.IsDel && role != null)
             {
+                if ((locationIds == null || locationIds.Length <= 0) && !role.Equals(Roles.AdminRole))
+                    return null;
                 if (isStaff)
                 {
                     if (!role.Equals(Roles.StaffRole))
@@ -87,7 +87,8 @@ namespace CapstoneBE.Services.Users
             IdentityResult result = await _unitOfWork.UserRepository.CreateUser(user, password);
             if (result.Succeeded)
             {
-                _unitOfWork.LocationHistoryRepository.Create(newUser.LocationIds, user.Id);
+                if(newUser.LocationIds != null && newUser.LocationIds.Length > 0)
+                    _unitOfWork.LocationHistoryRepository.Create(newUser.LocationIds, user.Id);
                 bool saveResult = await _unitOfWork.Save() != 0;
                 if (saveResult)
                 {
