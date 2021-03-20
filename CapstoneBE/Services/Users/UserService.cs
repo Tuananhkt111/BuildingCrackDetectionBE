@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CapstoneBE.Models;
+using CapstoneBE.Models.Custom.Locations;
 using CapstoneBE.Models.Custom.Users;
 using CapstoneBE.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -211,9 +213,15 @@ namespace CapstoneBE.Services.Users
 
         public async Task<UserInfo> GetUserById(string userId)
         {
-            CapstoneBEUser user = await _unitOfWork.UserRepository
-                .GetSingle(filter: u => u.Id.Equals(userId) && !u.IsDel, includeProperties: "LocationHistories");
-            return _mapper.Map<UserInfo>(user);
+            UserInfo user = await _unitOfWork.UserRepository
+                .Get(filter: u => !u.Role.Equals(Roles.AdminRole)
+                    && !u.IsDel && ((u.Role.Equals(Roles.StaffRole)
+                    && _userData.LocationIds.Contains(u.LocationHistories.First().LocationId)
+                    && _userData.Role.Equals(Roles.ManagerRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Include(u => u.LocationHistories).ThenInclude(lh => lh.Location)
+                .Select(u => _mapper.Map<UserInfo>(u)).SingleOrDefaultAsync();
+            return user;
         }
 
         public List<UserInfo> GetUsers()
@@ -223,7 +231,8 @@ namespace CapstoneBE.Services.Users
                     && !u.IsDel && ((u.Role.Equals(Roles.StaffRole)
                     && _userData.LocationIds.Contains(u.LocationHistories.First().LocationId)
                     && _userData.Role.Equals(Roles.ManagerRole))
-                    || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "LocationHistories")
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Include(u => u.LocationHistories).ThenInclude(lh => lh.Location)
                 .Select(u => _mapper.Map<UserInfo>(u)).ToList();
         }
 
@@ -276,7 +285,8 @@ namespace CapstoneBE.Services.Users
                 await _unitOfWork.Save();
                 if (user.Role.Equals(Roles.StaffRole))
                 {
-                    if (!user.LocationIds.Contains(userBasicInfo.LocationIds[0]))
+                    LocationSubInfo locationTemp = user.Locations.FirstOrDefault();
+                    if (locationTemp != null && !locationTemp.LocationId.Equals(userBasicInfo.LocationIds[0]))
                     {
                         MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(user.UserId);
                         if (maintenanceOrder != null)

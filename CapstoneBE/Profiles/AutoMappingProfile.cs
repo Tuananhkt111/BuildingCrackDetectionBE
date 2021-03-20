@@ -16,21 +16,29 @@ namespace CapstoneBE.Profiles
             //User entity mapper
             CreateMap<CapstoneBEUser, UserInfo>()
                 .ForMember(dest =>
-                    dest.LocationIds,
+                    dest.Locations,
                     opt => opt.MapFrom(src => src.LocationHistories))
                 .ForMember(dest =>
                     dest.UserId,
                     opt => opt.MapFrom(src => src.Id));
             CreateMap<UserCreate, CapstoneBEUser>();
             //LocationHistory entity mapper
-            CreateMap<LocationHistory, int>()
-                .ConstructUsing(src => src.LocationId);
+            //CreateMap<LocationHistory, int>()
+            //    .ConstructUsing(src => src.LocationId);
+            CreateMap<LocationHistory, LocationSubInfo>()
+                .ForMember(dest =>
+                    dest.LocationId,
+                    opt => opt.MapFrom(src => src.LocationId))
+                .ForMember(dest =>
+                    dest.Name,
+                    opt => opt.MapFrom(src => src.Location.Name));
             //MaintenanceWorker entity mapper
             CreateMap<MaintenanceWorkerBasicInfo, MaintenanceWorker>();
             CreateMap<MaintenanceWorker, MaintenanceWorkerInfo>();
             //Location entity mapper
             CreateMap<LocationBasicInfo, Location>();
             CreateMap<Location, LocationInfo>();
+            CreateMap<Location, LocationSubInfo>();
             //Crack entity mapper
             CreateMap<CrackCreate, Crack>();
             CreateMap<CrackBasicInfo, Crack>();
