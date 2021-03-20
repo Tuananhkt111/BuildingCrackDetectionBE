@@ -27,12 +27,6 @@ namespace CapstoneBE.Services.Cracks
         public async Task<int> Create(CrackCreate crackCreate)
         {
             Crack crack = _mapper.Map<Crack>(crackCreate);
-            if (crack.Accuracy < 0.4)
-                crack.Severity = CrackSeverity.Low;
-            else if (crack.Accuracy < 0.7)
-                crack.Severity = CrackSeverity.Medium;
-            else
-                crack.Severity = CrackSeverity.High;
             crack.FlightId = crackCreate.FlightId;
             _unitOfWork.CrackRepository.Create(crack);
             bool result = await _unitOfWork.Save() != 0;
@@ -44,12 +38,6 @@ namespace CapstoneBE.Services.Cracks
             Crack[] cracks = crackCreates.Select(c => _mapper.Map<Crack>(c)).ToArray();
             foreach (Crack crack in cracks)
             {
-                if (crack.Accuracy < 40)
-                    crack.Severity = CrackSeverity.Low;
-                else if (crack.Accuracy < 70)
-                    crack.Severity = CrackSeverity.Medium;
-                else
-                    crack.Severity = CrackSeverity.High;
                 crack.FlightId = crack.FlightId;
             }
             _unitOfWork.CrackRepository.CreateRange(cracks);
