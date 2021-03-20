@@ -153,7 +153,7 @@ namespace CapstoneBE.Controllers
             switch (user.Role)
             {
                 case Roles.StaffRole:
-                    if (locationIds != null && locationIds.Length != 1)
+                    if (locationIds != null && locationIds.Length > 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
 
@@ -194,7 +194,7 @@ namespace CapstoneBE.Controllers
             switch (user.Role)
             {
                 case Roles.StaffRole:
-                    if (locationIds != null && locationIds.Length != 1)
+                    if (locationIds != null && locationIds.Length > 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
 
@@ -360,7 +360,7 @@ namespace CapstoneBE.Controllers
             switch (user.Role)
             {
                 case Roles.StaffRole:
-                    if (locationIds != null && locationIds.Length != 1)
+                    if (locationIds != null && locationIds.Length > 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
 
