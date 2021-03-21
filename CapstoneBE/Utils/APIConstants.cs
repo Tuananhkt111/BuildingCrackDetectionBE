@@ -4,7 +4,7 @@
     {
         public const string ForgotPassPathWeb = "http://localhost:8080/users/";
 
-        public const string ForgotPassPathMobile = "https://bcdsys.azurewebsites.net/api/v1/users";
+        public const string ForgotPassPathMobile = "https://bcdsys.azurewebsites.net/api/v1/users/";
 
         public static class Roles
         {
