@@ -72,11 +72,20 @@ namespace CapstoneBE.Services.Locations
 
         public List<LocationInfo> GetAvailableLocations(string role, string empId = null)
         {
+            if (_userData.Role.Equals(Roles.ManagerRole) && !role.Equals(Roles.StaffRole))
+                return null;
             List<int> unavailableLocationIds = _unitOfWork.LocationHistoryRepository
                 .Get(filter: lh => lh.Employee.Role.Equals(role) && !lh.EmpId.Equals(empId),
                     includeProperties: "Employee")
                 .Select(lh => lh.LocationId)
                 .ToList();
+            if(_userData.Role.Equals(Roles.ManagerRole))
+                return _unitOfWork.LocationRepository.Get(filter: l => !l.IsDel
+                    && !unavailableLocationIds.Contains(l.LocationId)
+                    && _userData.LocationIds.Contains(l.LocationId))
+                    .OrderBy(l => l.Name)
+                    .Select(l => _mapper.Map<LocationInfo>(l))
+                    .ToList();
             return _unitOfWork.LocationRepository.Get(filter: l => !l.IsDel
                 && !unavailableLocationIds.Contains(l.LocationId))
                 .OrderBy(l => l.Name)
