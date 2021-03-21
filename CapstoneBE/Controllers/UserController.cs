@@ -284,23 +284,49 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
-        /// Forgot password of account confirm
+        /// Forgot password of account confirm website
         /// </summary>
         /// <remarks>
-        /// <para>Sample request: POST: api/v1/users/3/forgotpass-confirm</para>
+        /// <para>Sample request: POST: api/v1/users/3/forgotpass-confirm-w</para>
         /// </remarks>
         /// <param name="userName">UserName</param>
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Reset password URL has been sent to the email successfully!"</response>
         /// <response code="400">If failed, returns message "Reset password URL has been sent to the email failed!"</response>
-        [HttpPost("forgotpass-confirm")]
+        [HttpPost("forgotpass-confirm-w")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> ForgotPasswordConfirm(string userName)
+        public async Task<ActionResult<string>> ForgotPasswordConfirmW(string userName)
         {
-            string rootPath = ForgotPassPath;
-            Email email = await _userService.ForgotPassword(userName, rootPath);
+            string rootPath = ForgotPassPathWeb;
+            Email email = await _userService.ForgotPassword(userName, rootPath, "w");
+            if (email != null)
+            {
+                _ = _emailService.SendEmailAsync(email);
+                return Ok("Reset password URL has been sent to the email successfully!");
+            }
+            return BadRequest("Reset password URL has been sent to the email failed!");
+        }
+
+        /// <summary>
+        /// Forgot password of account confirm mobile
+        /// </summary>
+        /// <remarks>
+        /// <para>Sample request: POST: api/v1/users/3/forgotpass-confirm-m</para>
+        /// </remarks>
+        /// <param name="userName">UserName</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">If success, returns message "Reset password URL has been sent to the email successfully!"</response>
+        /// <response code="400">If failed, returns message "Reset password URL has been sent to the email failed!"</response>
+        [HttpPost("forgotpass-confirm-m")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> ForgotPasswordConfirmM(string userName)
+        {
+            string rootPath = ForgotPassPathMobile;
+            Email email = await _userService.ForgotPassword(userName, rootPath, "m");
             if (email != null)
             {
                 _ = _emailService.SendEmailAsync(email);
@@ -313,14 +339,14 @@ namespace CapstoneBE.Controllers
         /// Forgot password of account
         /// </summary>
         /// <remarks>
-        /// <para>Sample request: POST: api/v1/users/3/forgotpass</para>
+        /// <para>Sample request: POST: api/v1/users/3/forgotpass-w</para>
         /// </remarks>
         /// <param name="id">User Id</param>
         /// <param name="userResetPass">UserResetPass object</param>
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Reset password success"</response>
         /// <response code="400">If failed, returns message "Reset password failed"</response>
-        [HttpPost("{id}/forgotpass")]
+        [HttpPost("{id}/forgotpass-w")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -329,6 +355,32 @@ namespace CapstoneBE.Controllers
             bool result = await _userService.ChangePasswordByToken(id, userResetPass.NewPass, userResetPass.Token);
             if (result)
                 return Ok("Reset password success");
+            return BadRequest("Reset password failed");
+        }
+
+        /// <summary>
+        /// Forgot password of account
+        /// </summary>
+        /// <remarks>
+        /// <para>Sample request: POST: api/v1/users/3/forgotpass-m</para>
+        /// </remarks>
+        /// <param name="id">User Id</param>
+        /// <param name="token">Password reset token</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">If success, returns message "Reset password success"</response>
+        /// <response code="400">If failed, returns message "Reset password failed"</response>
+        [HttpPost("{id}/forgotpass-m")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> ResetPasswordByToken(string id, string token)
+        {
+            Email email = await _userService.ResetPasswordByToken(id, token);
+            if (email != null)
+            {
+                _ = _emailService.SendEmailAsync(email);
+                return Ok("Reset password success");
+            }
             return BadRequest("Reset password failed");
         }
 

@@ -2,7 +2,9 @@
 {
     public static class APIConstants
     {
-        public const string ForgotPassPath = "http://localhost:8080/users/";
+        public const string ForgotPassPathWeb = "http://localhost:8080/users/";
+
+        public const string ForgotPassPathMobile = "https://bcds.azurewebsites.net/api/v1/users";
 
         public static class Roles
         {

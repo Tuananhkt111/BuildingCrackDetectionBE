@@ -181,6 +181,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     maintenanceOrder.MaintenanceWorkerId = maintenanceOrderBasicInfo.MaintenanceWorkerId;
                 else return 0;
                 maintenanceOrder.MaintenanceDate = maintenanceOrderBasicInfo.MaintenanceDate;
+                maintenanceOrder.MaintenanceExpense = maintenanceOrderBasicInfo.MaintenanceExpense;
                 maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
                 maintenanceOrder.UpdateUserId = _userData.UserId;
                 bool result = await _unitOfWork.Save() != 0;

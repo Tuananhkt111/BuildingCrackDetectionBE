@@ -30,7 +30,9 @@ namespace CapstoneBE.Services.Users
 
         Task<bool> ChangePasswordByToken(string userName, string newPass, string token);
 
-        Task<Email> ForgotPassword(string userName, string rootPath);
+        Task<Email> ResetPasswordByToken(string userName, string token);
+
+        Task<Email> ForgotPassword(string userName, string rootPath, string platform);
 
         Task<bool> ChangePassword(string oldPass, string newPass, string userId);
 
