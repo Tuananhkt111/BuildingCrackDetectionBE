@@ -364,18 +364,18 @@ namespace CapstoneBE.Controllers
         /// <remarks>
         /// <para>Sample request: POST: api/v1/users/3/forgotpass-m</para>
         /// </remarks>
-        /// <param name="id">User Id</param>
+        /// <param name="userName">User Id</param>
         /// <param name="token">Password reset token</param>
         /// <returns>Result message</returns>
         /// <response code="200">If success, returns message "Reset password success"</response>
         /// <response code="400">If failed, returns message "Reset password failed"</response>
-        [HttpGet("{id}/forgotpass-m")]
+        [HttpGet("forgotpass-m")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> ResetPasswordByToken(string id, string token)
+        public async Task<ActionResult<string>> ResetPasswordByToken(string userName, string token)
         {
-            Email email = await _userService.ResetPasswordByToken(id, token);
+            Email email = await _userService.ResetPasswordByToken(userName, token);
             if (email != null)
             {
                 _ = _emailService.SendEmailAsync(email);

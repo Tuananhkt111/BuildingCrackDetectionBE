@@ -118,7 +118,7 @@ namespace CapstoneBE.Services.Users
             string token = await _unitOfWork.UserRepository.UserManager.GeneratePasswordResetTokenAsync(user);
             byte[] encodedToken = Encoding.UTF8.GetBytes(token);
             string validToken = WebEncoders.Base64UrlEncode(encodedToken);
-            string url = platform.Equals("w") ? $"{rootPath}{userName}/forgotpass-w?token={validToken}" : $"{rootPath}{userName}/forgotpass-m?token={validToken}";
+            string url = platform.Equals("w") ? $"{rootPath}{userName}/forgotpass-w?token={validToken}" : $"{rootPath}/forgotpass-m?userName={userName}&token={validToken}";
             Email email = new Email(new string[] { user.Email },
                 "Reset your Capstone Account Password Confirm",
                 "Dear " + user.Name + ",<br/><br/>You are receiving this email because we received a password reset request for your account <span style=\"color: blue;\">"
@@ -338,7 +338,7 @@ namespace CapstoneBE.Services.Users
                 if (_unitOfWork.Save().Result != 0)
                 {
                     CapstoneBEUser user = await _unitOfWork.UserRepository.GetByUserName(userName);
-                    Email email = new Email(new string[] { user.Email },
+                    Email email = new(new string[] { user.Email },
                         "Reset your Capstone Account Password",
                         "Dear " + user.Name + ",<br/><br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your new password: <span style=\"color: blue;\">" + newPass
                         + "</span><br/><br/>You are receiving this email because you have requested to reset your login password."
