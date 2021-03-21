@@ -15,7 +15,6 @@ namespace CapstoneBE
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -52,12 +51,15 @@ namespace CapstoneBE
             app.UseHttpsRedirection();
             app.UseRouting();
             // Global cors policy
-            app.UseCors();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             //Authentication & authorization
             app.UseAuthentication();
             app.UseAuthorization();
             //Endpoints
-            app.UseEndpoints(endpoints => endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins));
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
