@@ -52,12 +52,12 @@ namespace CapstoneBE
             app.UseHttpsRedirection();
             app.UseRouting();
             // Global cors policy
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
             //Authentication & authorization
             app.UseAuthentication();
             app.UseAuthorization();
             //Endpoints
-            app.UseEndpoints(endpoints => endpoints.MapControllers().RequireCors(MyAllowSpecificOrigins));
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

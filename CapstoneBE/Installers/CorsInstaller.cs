@@ -13,9 +13,7 @@ namespace CapstoneBE.Installers
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:8080")
-                                        .AllowAnyHeader()
-                                        .AllowAnyMethod();
+                                      builder.WithOrigins("http://localhost:8080");
                                   });
             });
         }
