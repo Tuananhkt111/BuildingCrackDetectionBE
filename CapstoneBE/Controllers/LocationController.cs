@@ -80,7 +80,7 @@ namespace CapstoneBE.Controllers
         /// <response code="200">Returns list of locations</response>
         /// <response code="404">If not found</response>
         [HttpGet("available")]
-        [Authorize(Roles = Roles.AdminRole)]
+        [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<LocationInfo>> GetAvailableLocations(string role, string empId = null)
