@@ -51,10 +51,7 @@ namespace CapstoneBE
             app.UseHttpsRedirection();
             app.UseRouting();
             // Global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors();
             //Authentication & authorization
             app.UseAuthentication();
             app.UseAuthorization();
