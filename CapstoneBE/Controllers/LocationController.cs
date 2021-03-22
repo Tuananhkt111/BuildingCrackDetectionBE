@@ -69,7 +69,7 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
-        /// Get list of available locations {Auth Roles: Administrator}
+        /// Get list of available locations {Auth Roles: Administrator, Manager}
         /// </summary>
         /// <remarks>
         /// Sample request: GET: api/v1/locations/available?role=Staff
