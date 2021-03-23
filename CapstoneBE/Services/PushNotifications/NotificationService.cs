@@ -79,30 +79,30 @@ namespace CapstoneBE.Services.PushNotifications
                 MessageTypes.AdminUpdateInfo => new Notification
                 {
                     Title = "Administrator has updated your profile",
-                    Body = "Review your personal information in Profile tab."
+                    Body = "Review your personal information in Profile tab"
                 },
                 MessageTypes.SystemFinishedDetection => new Notification
                 {
                     Title = "System has finished detecting cracks",
-                    Body = "Detection results are shown in 'Unconfirmed Cracks' tab."
+                    Body = "Detection results are shown in 'Unconfirmed Cracks' tab"
                 },
                 MessageTypes.StaffCreateOrder => new Notification
                 {
-                    Title = "Staff " + sender.Name + " has created a maintenance order in location "
+                    Title = "Staff " + sender.Name + " has created a repair record in area "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
-                    Body = "Tap to view details."
+                    Body = "Tap to view details"
                 },
                 MessageTypes.StaffUpdateOrder => new Notification
                 {
-                    Title = "Staff " + sender.Name + " has updated a maintenance order in location "
+                    Title = "Staff " + sender.Name + " has updated a repair record in area "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
-                    Body = "Tap to view details."
+                    Body = "Tap to view details"
                 },
                 MessageTypes.StaffEvaluateOrder => new Notification
                 {
-                    Title = "Staff " + sender.Name + " has evaluated a maintenance order in location "
+                    Title = "Staff " + sender.Name + " has evaluated a repair record in area "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
-                    Body = "Tap to view details."
+                    Body = "Tap to view details"
                 },
                 _ => null
             };

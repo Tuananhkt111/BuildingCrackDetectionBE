@@ -22,17 +22,17 @@
 
         public static class CrackSeverity
         {
-            public const string Low = "Low";
-            public const string Medium = "Medium";
-            public const string High = "High";
+            public const string Low = "Low"; // Nhung vet nut chua can thiet phai sua, dua vao danh sach theo doi
+            public const string Medium = "Medium"; // Nhung vet nut o muc do co the bo qua trong lan sua toi
+            public const string High = "High"; //Nhung vet nut bat buoc phai sua trong lan sua toi
         }
 
         public static class CrackStatus
         {
             public const string DetectedFailed = "DetectedFailed";
             public const string Unconfirmed = "Unconfirmed";
-            public const string UnscheduledForMaintenace = "Unscheduled for maintenance";
-            public const string ScheduledForMaintenace = "Scheduled for maintenance";
+            public const string UnscheduledForMaintenace = "UnrecordedRepair";
+            public const string ScheduledForMaintenace = "RecordedRepair";
             public const string Fixed = "Fixed";
         }
 
