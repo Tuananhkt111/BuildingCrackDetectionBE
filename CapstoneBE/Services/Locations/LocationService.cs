@@ -75,7 +75,7 @@ namespace CapstoneBE.Services.Locations
             if (_userData.Role.Equals(Roles.ManagerRole) && !role.Equals(Roles.StaffRole))
                 return null;
             List<int> unavailableLocationIds = _unitOfWork.LocationHistoryRepository
-                .Get(filter: lh => lh.Employee.Role.Equals(role) && !lh.EmpId.Equals(empId),
+                .Get(filter: lh => lh.Employee.Role.Equals(role) && !lh.EmpId.Equals(empId) && !lh.Employee.IsDel,
                     includeProperties: "Employee")
                 .Select(lh => lh.LocationId)
                 .ToList();
