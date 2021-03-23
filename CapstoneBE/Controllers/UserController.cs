@@ -415,7 +415,8 @@ namespace CapstoneBE.Controllers
                     if (locationIds != null && locationIds.Length > 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
-
+                case Roles.ManagerRole:
+                    break;
                 default: return BadRequest("Role value is forbidden");
             }
             Email email = await _userService.CreateUser(user);
