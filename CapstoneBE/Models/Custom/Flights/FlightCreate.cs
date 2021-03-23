@@ -2,9 +2,8 @@
 
 namespace CapstoneBE.Models.Custom.Flights
 {
-    public class FlightBasicInfo
+    public class FlightCreate
     {
-        public int FlightId { get; set; }
         public string Video { get; set; }
         public DateTime RecordDate { get; set; }
     }

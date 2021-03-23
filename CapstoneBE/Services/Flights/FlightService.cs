@@ -25,11 +25,12 @@ namespace CapstoneBE.Services.Flights
             _mapper = mapper;
         }
 
-        public async Task<FlightBasicInfo> Create(string video)
+        public async Task<FlightBasicInfo> Create(FlightCreate flightCreate)
         {
             Flight flight = new()
             {
-                Video = video,
+                Video = flightCreate.Video,
+                RecordDate = flightCreate.RecordDate,
                 DataCollectorId = _userData.UserId,
                 LocationId = _userData.LocationIds.FirstOrDefault()
             };

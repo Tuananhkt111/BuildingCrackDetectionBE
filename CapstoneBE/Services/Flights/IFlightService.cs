@@ -6,7 +6,7 @@ namespace CapstoneBE.Services.Flights
 {
     public interface IFlightService
     {
-        Task<FlightBasicInfo> Create(string video);
+        Task<FlightBasicInfo> Create(FlightCreate flightCreate);
 
         Task<bool> RemoveVideo(int id);
 

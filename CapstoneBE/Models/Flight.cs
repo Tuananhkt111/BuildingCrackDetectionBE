@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,7 @@ namespace CapstoneBE.Models
 
         [Required]
         public string Video { get; set; }
+        public DateTime RecordDate { get; set; }
 
         public virtual Location Location { get; set; }
         public virtual CapstoneBEUser DataCollector { get; set; }

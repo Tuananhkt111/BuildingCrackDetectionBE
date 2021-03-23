@@ -12,6 +12,7 @@ namespace CapstoneBE.Models.Custom.Flights
         public string DataCollectorId { get; set; }
         public string DataCollectorName { get; set; }
         public string Video { get; set; }
+        public DateTime RecordDate { get; set; }
         public ICollection<CrackSubDetailsInfo> Cracks { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastModified { get; set; }
