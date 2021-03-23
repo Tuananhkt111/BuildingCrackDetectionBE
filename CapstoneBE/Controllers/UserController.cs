@@ -182,7 +182,7 @@ namespace CapstoneBE.Controllers
         /// <para>Failed: Returns message "Update locations failed"</para>
         /// </response>
         [HttpPost("{id}/locations")]
-        [Authorize(Roles = Roles.AdminRole)]
+        [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [PushNotification(MessageTypes.AdminUpdateInfo)]
@@ -221,7 +221,7 @@ namespace CapstoneBE.Controllers
         /// <para>Failed: Returns message "Remove locations failed"</para>
         /// </response>
         [HttpDelete("{id}/locations")]
-        [Authorize(Roles = Roles.AdminRole)]
+        [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [PushNotification(MessageTypes.AdminUpdateInfo)]
