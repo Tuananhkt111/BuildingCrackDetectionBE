@@ -156,7 +156,8 @@ namespace CapstoneBE.Controllers
                     if (locationIds != null && locationIds.Length > 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
-
+                case Roles.ManagerRole:
+                    break;
                 default: return BadRequest("Role value is forbidden");
             }
             int result = await _userService.UpdateBasicInfo(userBasicInfo, user);
@@ -197,7 +198,6 @@ namespace CapstoneBE.Controllers
                     if (locationIds != null && locationIds.Length > 1)
                         return BadRequest("Staff belongs only to one location");
                     break;
-
                 default: return BadRequest("Role value is forbidden");
             }
             bool result = await _userService.UpdateLocationsFromUser(locationIds, id);
