@@ -15,8 +15,8 @@
 
         public static class MaintenanceOrderStatus
         {
-            public const string WaitingForConfirm = "Waiting for confirm";
-            public const string WaitingForMaintenance = "Waiting for maintenance";
+            public const string WaitingForConfirm = "WaitingForConfirm";
+            public const string WaitingForMaintenance = "WaitingForRepair";
             public const string Completed = "Completed";
         }
 
