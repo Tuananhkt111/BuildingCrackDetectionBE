@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace TranslatorAPI.Utils
+namespace CapstoneBE.Utils
 {
     public class GetClaimsFromUser : IGetClaimsProvider
     {

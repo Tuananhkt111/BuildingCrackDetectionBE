@@ -17,8 +17,6 @@ namespace CapstoneBE.Models
 
         [ForeignKey(nameof(DataCollector)), Column(Order = 0)]
         public string DataCollectorId { get; set; }
-
-        [Required]
         public string Video { get; set; }
         public DateTime RecordDate { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace TranslatorAPI.Utils
+﻿namespace CapstoneBE.Utils
 {
     public interface IGetClaimsProvider
     {

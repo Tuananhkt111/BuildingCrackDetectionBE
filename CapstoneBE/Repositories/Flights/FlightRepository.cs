@@ -10,10 +10,8 @@ namespace CapstoneBE.Repositories.Flights
         {
         }
 
-        public async Task RemoveVideo(int id)
+        public void RemoveVideo(Flight flight)
         {
-            Flight flight = await GetById(id);
-            if (flight != null)
                 flight.Video = null;
         }
     }

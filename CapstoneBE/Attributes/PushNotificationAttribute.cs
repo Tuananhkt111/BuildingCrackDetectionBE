@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using TranslatorAPI.Utils;
+using CapstoneBE.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Attributes

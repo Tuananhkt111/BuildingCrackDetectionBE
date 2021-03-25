@@ -14,7 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TranslatorAPI.Utils;
+using CapstoneBE.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Services.Users

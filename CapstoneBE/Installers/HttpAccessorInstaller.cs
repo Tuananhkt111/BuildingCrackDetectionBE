@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using TranslatorAPI.Utils;
+using CapstoneBE.Utils;
 
 namespace CapstoneBE.Installers
 {

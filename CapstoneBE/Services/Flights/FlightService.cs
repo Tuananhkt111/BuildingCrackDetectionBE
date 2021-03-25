@@ -7,8 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TranslatorAPI.Utils;
 using static CapstoneBE.Utils.APIConstants;
+using CapstoneBE.Utils;
+using Azure.Storage.Blobs;
 
 namespace CapstoneBE.Services.Flights
 {
@@ -65,8 +66,20 @@ namespace CapstoneBE.Services.Flights
 
         public async Task<bool> RemoveVideo(int id)
         {
-            await _unitOfWork.FlightRepository.RemoveVideo(id);
-            return await _unitOfWork.Save() != 0;
+            Flight flight = await _unitOfWork.FlightRepository.GetById(id);
+            string video = flight.Video;
+            _unitOfWork.FlightRepository.RemoveVideo(flight);
+            bool result = await _unitOfWork.Save() != 0;
+            if(result)
+            {
+                AzureStorageHelper helper = new();
+                BlobClient blobClient = helper.GetBlobClient("videos", video + ".mp4");
+                if (helper.DeleteBlob(blobClient))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

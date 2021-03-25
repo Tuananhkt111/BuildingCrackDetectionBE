@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TranslatorAPI.Utils;
+using CapstoneBE.Utils;
 using static CapstoneBE.Utils.APIConstants;
 
 namespace CapstoneBE.Controllers
