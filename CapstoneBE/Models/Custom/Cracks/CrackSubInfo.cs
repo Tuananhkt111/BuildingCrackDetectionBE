@@ -13,6 +13,7 @@ namespace CapstoneBE.Models.Custom.Cracks
         public string ImageThumbnails { get; set; }
         public int AssessmentResult { get; set; }
         public string AssessmentDescription { get; set; }
+        public int? FlightId { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastModified { get; set; }
     }
