@@ -63,8 +63,8 @@ namespace CapstoneBE.Services.Locations
         public List<LocationInfo> GetLocations()
         {
             return _unitOfWork.LocationRepository.Get(filter: l => !l.IsDel
-                && (_userData.LocationIds.Contains(l.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
-                || _userData.Role.Equals(Roles.AdminRole))
+                && ((_userData.LocationIds.Contains(l.LocationId) && _userData.Role.Equals(Roles.ManagerRole))
+                || _userData.Role.Equals(Roles.AdminRole)))
                 .OrderBy(l => l.Name)
                 .Select(l => _mapper.Map<LocationInfo>(l))
                 .ToList();
