@@ -26,8 +26,7 @@ namespace CapstoneBE.Repositories.Locations
             {
                 if (!String.IsNullOrEmpty(locationBasicInfo.Name))
                     location.Name = locationBasicInfo.Name;
-                if (!String.IsNullOrEmpty(locationBasicInfo.Description))
-                    location.Description = locationBasicInfo.Description;
+                location.Description = locationBasicInfo.Description;
             }
         }
     }

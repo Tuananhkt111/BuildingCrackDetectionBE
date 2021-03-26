@@ -131,8 +131,7 @@ namespace CapstoneBE.Services.Cracks
             Crack crack = await _unitOfWork.CrackRepository.GetSingle(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && c.CrackId.Equals(id));
             if (crackBasicInfo != null && crack != null)
             {
-                if (!string.IsNullOrEmpty(crackBasicInfo.Description))
-                    crack.Description = crackBasicInfo.Description;
+                crack.Description = crackBasicInfo.Description;
                 if (!string.IsNullOrEmpty(crackBasicInfo.Position))
                     crack.Position = crackBasicInfo.Position;
                 if (!string.IsNullOrEmpty(crackBasicInfo.Severity))

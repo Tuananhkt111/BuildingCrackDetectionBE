@@ -83,8 +83,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     if (maintenanceOrderAssessmentInfo.AssessmentResult > 0)
                         maintenanceOrder.AssessmentResult = maintenanceOrderAssessmentInfo.AssessmentResult;
                     else return 0;
-                    if (!string.IsNullOrEmpty(maintenanceOrderAssessmentInfo.Description))
-                        maintenanceOrder.Description = maintenanceOrderAssessmentInfo.Description;
+                    maintenanceOrder.Description = maintenanceOrderAssessmentInfo.Description;
                     maintenanceOrder.Status = maintenanceOrderAssessmentInfo.Status;
                     maintenanceOrder.AssessorId = _userData.UserId;
                     maintenanceOrder.AssessmentDate = DateTime.UtcNow;
