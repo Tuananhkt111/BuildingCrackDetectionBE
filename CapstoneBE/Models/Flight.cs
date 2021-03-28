@@ -19,7 +19,7 @@ namespace CapstoneBE.Models
         public string DataCollectorId { get; set; }
         public string Video { get; set; }
         public DateTime RecordDate { get; set; }
-
+        public string Description { get; set; }
         public virtual Location Location { get; set; }
         public virtual CapstoneBEUser DataCollector { get; set; }
         public virtual ICollection<Crack> Cracks { get; set; }

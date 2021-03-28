@@ -32,6 +32,7 @@ namespace CapstoneBE.Services.Flights
             {
                 Video = flightCreate.Video,
                 RecordDate = flightCreate.RecordDate,
+                Description = flightCreate.Description,
                 DataCollectorId = _userData.UserId,
                 LocationId = _userData.LocationIds.FirstOrDefault()
             };
