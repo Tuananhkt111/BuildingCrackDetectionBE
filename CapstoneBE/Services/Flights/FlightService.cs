@@ -54,7 +54,7 @@ namespace CapstoneBE.Services.Flights
         {
             return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                 || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector")
-                .OrderByDescending(f => f.Created)
+                .OrderByDescending(f => f.RecordDate)
                 .Select(f => _mapper.Map<FlightInfo>(f))
                 .ToList();
         }
