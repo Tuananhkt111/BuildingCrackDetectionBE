@@ -1,4 +1,5 @@
-﻿using CapstoneBE.Models.Custom.Cracks;
+﻿using CapstoneBE.Models;
+using CapstoneBE.Models.Custom.Cracks;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,5 +26,8 @@ namespace CapstoneBE.Services.Cracks
         List<CrackInfo> GetCracks();
 
         int GetCracksCount();
+
+        List<ChartValue> GetCracksCountBySeverity(int period, int year);
+        List<ChartValue> GetCracksAssessmentCount(int period, int year);
     }
 }

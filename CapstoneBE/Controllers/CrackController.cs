@@ -1,4 +1,5 @@
 ﻿using CapstoneBE.Attributes;
+using CapstoneBE.Models;
 using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Services.Cracks;
 using Microsoft.AspNetCore.Authorization;
@@ -144,6 +145,58 @@ namespace CapstoneBE.Controllers
             if (crackInfos != null)
                 return Ok(crackInfos);
             return NotFound();
+        }
+
+        /// <summary>
+        /// Get number of cracks by severity {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/cracks/count/severity
+        /// </remarks>
+        /// <param name="period">Period of Checkup</param>
+        /// <param name="year">Year of Checkup</param>
+        /// <returns>Number of cracks</returns>
+        /// <response code="200">Returns list of chart value</response>
+        /// <response code="404">Returns Not Found</response>
+        /// <response code="400">Returns Bad request</response>
+        [HttpGet("count/severity")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<ChartValue>> GetCracksCountBySeverity(int period, int year)
+        {
+            if (period > 3 || period < 1 || year <= 0)
+                return BadRequest();
+            List<ChartValue> chartValues = _crackService.GetCracksCountBySeverity(period, year);
+            if (chartValues != null && chartValues.Count > 0)
+                return Ok(chartValues);
+            else
+                return NotFound();
+        }
+
+        /// <summary>
+        /// Get number of cracks assessment {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/cracks/count/assessment
+        /// </remarks>
+        /// <param name="period">Period of Checkup</param>
+        /// <param name="year">Year of Checkup</param>
+        /// <returns>Number of cracks</returns>
+        /// <response code="200">Returns list of chart value</response>
+        /// <response code="404">Returns Not Found</response>
+        /// <response code="400">Returns Bad request</response>
+        [HttpGet("count/assessment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<ChartValue>> GetCracksAssessmentCount(int period, int year)
+        {
+            if (period > 3 || period < 1 || year <= 0)
+                return BadRequest();
+            List<ChartValue> chartValues = _crackService.GetCracksAssessmentCount(period, year);
+            if (chartValues != null && chartValues.Count > 0)
+                return Ok(chartValues);
+            else
+                return NotFound();
         }
 
         /// <summary>

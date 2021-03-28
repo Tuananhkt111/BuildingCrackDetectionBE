@@ -11,5 +11,16 @@ namespace CapstoneBE.Utils
         {
             return int.TryParse(s, out _);
         }
+
+        public static ValueTuple<int, int> GetMonthValue(int period)
+        {
+            return period switch
+            {
+                1 => (1, 4),
+                2 => (5, 8),
+                3 => (9, 12),
+                _ => (0, 0),
+            };
+        }
     }
 }

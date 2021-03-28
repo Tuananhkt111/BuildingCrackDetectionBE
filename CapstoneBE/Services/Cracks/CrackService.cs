@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CapstoneBE.Utils;
 using static CapstoneBE.Utils.APIConstants;
+using System;
 
 namespace CapstoneBE.Services.Cracks
 {
@@ -143,6 +144,50 @@ namespace CapstoneBE.Services.Cracks
             }
             _unitOfWork.CrackRepository.Update(crack);
             return await _unitOfWork.Save() != 0;
+        }
+
+        public List<ChartValue> GetCracksCountBySeverity(int period, int year)
+        {
+            ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed))
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => c.Flight.RecordDate.Year.Equals(year) 
+                    && c.Flight.RecordDate.Month >= periodTuple.Item1
+                    && c.Flight.RecordDate.Month <= periodTuple.Item2
+                    && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .GroupBy(c => c.Severity)
+                .Where(c => c.Key != null)
+                .Select(c => new ChartValue { 
+                    Value = c.Count(),
+                    Key = c.Key
+                }).ToList();
+        }
+
+        public List<ChartValue> GetCracksAssessmentCount(int period, int year)
+        {
+            ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
+            List<ChartValue> result = new();
+            foreach (ValueTuple<int, int> rank in APIConstants.CrackAssessmentRank)
+            {
+                int value = _unitOfWork.CrackRepository
+                .Get(filter: c => c.AssessmentResult > 0)
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => c.Flight.RecordDate.Year.Equals(year)
+                    && c.Flight.RecordDate.Month >= periodTuple.Item1
+                    && c.Flight.RecordDate.Month <= periodTuple.Item2
+                    && c.AssessmentResult > rank.Item1
+                    && c.AssessmentResult <= rank.Item2
+                    && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Count();
+                result.Add( new() {
+                    Key = rank.Item1.ToString() + "-" + rank.Item2.ToString(),
+                    Value = value
+                });
+            }
+            return result;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace CapstoneBE.Utils
+﻿using System;
+using System.Collections.Generic;
+
+namespace CapstoneBE.Utils
 {
     public static class APIConstants
     {
@@ -35,6 +38,8 @@
             public const string ScheduledForMaintenace = "RecordedRepair";
             public const string Fixed = "Fixed";
         }
+
+        public static readonly List<ValueTuple<int, int>> CrackAssessmentRank = new() { (0, 40), (40, 70), (70, 100) };
 
         public static class MessageTypes
         {
