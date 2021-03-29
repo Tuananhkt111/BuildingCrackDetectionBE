@@ -29,5 +29,10 @@ namespace CapstoneBE.Utils
             BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
             return blobContainerClient;
         }
+
+        public bool CheckBlobExists(BlobClient blobClient)
+        {
+            return blobClient.Exists();
+        }
     }
 }

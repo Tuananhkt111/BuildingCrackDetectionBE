@@ -112,12 +112,53 @@ namespace CapstoneBE.Controllers
         /// <response code="200">Returns message "Remove video success"</response>
         /// <response code="400">Returns message "Remove video failed"</response>
         [HttpDelete("{id}/video")]
+        [Authorize(Roles = Roles.AdminRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<string>> RemoveVideo(int id)
         {
             bool result = await _flightService.RemoveVideo(id);
             return result ? Ok("Remove video success") : BadRequest("Remove video failed");
+        }
+
+        /// <summary>
+        /// Check video exists or not {Auth Roles: Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/flights/exists-db
+        /// </remarks>
+        /// <param name="video">Video</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">Returns message "Video exists"</response>
+        /// <response code="404">Returns message "Video not found"</response>
+        [HttpGet("exists-db")]
+        [Authorize(Roles = Roles.StaffRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<string> CheckVideoExistsInDatabase(string video)
+        {
+            bool result = _flightService.CheckExistsInDatabase(video);
+            return result ? Ok("Video exists") : NotFound("Video not found");
+        }
+
+        /// <summary>
+        /// Check video exists or not {Auth Roles: Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/flights/exists-db
+        /// </remarks>
+        /// <param name="video">Video</param>
+        /// <returns>Result message</returns>
+        /// <response code="200">Returns message "Video exists"</response>
+        /// <response code="404">Returns message "Video not found"</response>
+        [HttpGet("exists")]
+        [Authorize(Roles = Roles.StaffRole)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<string> CheckVideoExistsInStorage(string video)
+        {
+            bool result = _flightService.CheckExistsInStorage(video);
+            return result ? Ok("Video exists") : NotFound("Video not found");
         }
     }
 }

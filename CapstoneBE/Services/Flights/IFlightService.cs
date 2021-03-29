@@ -15,5 +15,8 @@ namespace CapstoneBE.Services.Flights
         List<FlightInfo> GetFlights();
 
         int GetFlightsCount();
+
+        bool CheckExistsInDatabase(string video);
+        bool CheckExistsInStorage(string video);
     }
 }

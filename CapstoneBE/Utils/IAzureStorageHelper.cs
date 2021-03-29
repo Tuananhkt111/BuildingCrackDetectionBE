@@ -7,5 +7,6 @@ namespace CapstoneBE.Utils
         BlobClient GetBlobClient(string containerName, string blobName);
         BlobContainerClient GetContainerClient(string containerName);
         bool DeleteBlob(BlobClient blobClient);
+        bool CheckBlobExists(BlobClient blobClient);
     }
 }

@@ -82,5 +82,20 @@ namespace CapstoneBE.Services.Flights
             }
             return false;
         }
+
+        public bool CheckExistsInDatabase(string video)
+        {
+            return _unitOfWork.FlightRepository.Get(filter: f => f.Video.Equals(video)).Any();
+        }
+
+        public bool CheckExistsInStorage(string video)
+        {
+            Flight flight = _unitOfWork.FlightRepository.Get(filter: f => f.Video.Equals(video)).FirstOrDefault();
+            if (flight == null)
+                return false;
+            AzureStorageHelper helper = new();
+            BlobClient blobClient = helper.GetBlobClient("videos", flight.Video + ".mp4");
+            return helper.CheckBlobExists(blobClient);
+        }
     }
 }
