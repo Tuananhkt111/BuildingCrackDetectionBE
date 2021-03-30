@@ -50,6 +50,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     maintenanceOrder.MaintenanceExpense = maintenanceOrderBasicInfo.MaintenanceExpense;
                     maintenanceOrder.Status = maintenanceOrderBasicInfo.Status;
                     maintenanceOrder.CreateUserId = _userData.UserId;
+                    maintenanceOrder.UpdateUserId = _userData.UserId;
                     await _unitOfWork.Save();
                     foreach (Crack crack in maintenanceOrder.Cracks)
                     {
