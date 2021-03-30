@@ -153,7 +153,7 @@ namespace CapstoneBE.Controllers
         /// <remarks>
         /// Sample request: GET: api/v1/cracks/count/severity
         /// </remarks>
-        /// <param name="locationId">Location Id</param>
+        /// <param name="locationIds">Location Ids</param>
         /// <param name="period">Period of Checkup</param>
         /// <param name="year">Year of Checkup</param>
         /// <returns>Number of cracks</returns>
@@ -163,11 +163,11 @@ namespace CapstoneBE.Controllers
         [HttpGet("count/severity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<ChartValue>> GetCracksCountBySeverity(int locationId, int period, int year)
+        public ActionResult<List<ChartValue>> GetCracksCountBySeverity(int[] locationIds, int period, int year)
         {
             if (period > 3 || period < 1 || year <= 0)
                 return BadRequest();
-            List<ChartValue> chartValues = _crackService.GetCracksCountBySeverity(locationId, period, year);
+            List<ChartValue> chartValues = _crackService.GetCracksCountBySeverity(period, year, locationIds);
             if (chartValues != null && chartValues.Count > 0)
                 return Ok(chartValues);
             else
@@ -181,7 +181,7 @@ namespace CapstoneBE.Controllers
         /// Sample request: GET: api/v1/cracks/count/assessment
         /// </remarks>
         /// <param name="period">Period of Checkup</param>
-        /// <param name="locationId">Location Id</param>
+        /// <param name="locationIds">Location Ids</param>
         /// <param name="year">Year of Checkup</param>
         /// <returns>Number of cracks</returns>
         /// <response code="200">Returns list of chart value</response>
@@ -190,11 +190,11 @@ namespace CapstoneBE.Controllers
         [HttpGet("count/assessment")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<ChartValue>> GetCracksAssessmentCount(int locationId, int period, int year)
+        public ActionResult<List<ChartValue>> GetCracksAssessmentCount(int period, int year, int[] locationIds)
         {
             if (period > 3 || period < 1 || year <= 0)
                 return BadRequest();
-            List<ChartValue> chartValues = _crackService.GetCracksAssessmentCount(locationId, period, year);
+            List<ChartValue> chartValues = _crackService.GetCracksAssessmentCount(period, year, locationIds);
             if (chartValues != null && chartValues.Count > 0)
                 return Ok(chartValues);
             else
@@ -208,7 +208,7 @@ namespace CapstoneBE.Controllers
         /// Sample request: GET: api/v1/cracks/count/status
         /// </remarks>
         /// <param name="period">Period of Checkup</param>
-        /// <param name="locationId">Location Id</param>
+        /// <param name="locationIds">Location Ids</param>
         /// <param name="status">Status of crack</param>
         /// <param name="year">Year of Checkup</param>
         /// <returns>Number of cracks</returns>
@@ -218,11 +218,11 @@ namespace CapstoneBE.Controllers
         [HttpGet("count/status")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<int> GetCracksCountByStatus(int locationId, string status, int period, int year)
+        public ActionResult<int> GetCracksCountByStatus(string status, int period, int year, int[] locationIds)
         {
             if (period > 3 || period < 1 || year <= 0)
                 return BadRequest();
-            int result = _crackService.GetCracksCountByStatus(locationId, status, period, year);
+            int result = _crackService.GetCracksCountByStatus(status, period, year, locationIds);
             if (result > 0)
                 return Ok(result);
             else
