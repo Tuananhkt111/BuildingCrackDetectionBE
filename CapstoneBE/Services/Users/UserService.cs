@@ -324,8 +324,40 @@ namespace CapstoneBE.Services.Users
 
         public async Task<bool> UpdateLocationsFromUser(int[] locationIds, string userId)
         {
-            _unitOfWork.LocationHistoryRepository.Update(locationIds, userId);
-            return await _unitOfWork.Save() != 0;
+            using var tran = _unitOfWork.GetTransaction();
+            try
+            {
+                UserInfo user = await GetUserById(userId);
+                if (user.Role.Equals(Roles.StaffRole))
+                {
+                    LocationSubInfo locationTemp = user.Locations.FirstOrDefault();
+                    if (locationTemp != null && locationIds != null
+                        && locationIds.Length > 0
+                        && !locationTemp.LocationId.Equals(locationIds[0]))
+                    {
+                        MaintenanceOrder maintenanceOrder = await _unitOfWork.MaintenanceOrderRepository.GetQueue(user.UserId);
+                        if (maintenanceOrder != null)
+                        {
+                            foreach (Crack crack in maintenanceOrder.Cracks)
+                            {
+                                crack.MaintenanceOrderId = null;
+                            }
+                            await _unitOfWork.Save();
+                            _unitOfWork.MaintenanceOrderRepository.Delete(maintenanceOrder);
+                            await _unitOfWork.Save();
+                        }
+                    }
+                }
+                _unitOfWork.LocationHistoryRepository.Update(locationIds, userId);
+                await _unitOfWork.Save();
+                tran.Commit();
+                return true;
+            }
+            catch (Exception)
+            {
+                tran.Rollback();
+            }
+            return false;
         }
 
         public async Task<Email> ResetPasswordByToken(string userName, string token)
