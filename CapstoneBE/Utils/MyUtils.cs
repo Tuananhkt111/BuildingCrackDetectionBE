@@ -22,5 +22,17 @@ namespace CapstoneBE.Utils
                 _ => (0, 0),
             };
         }
+
+        public static int[] ConvertStringToIntArray(string arr)
+        {
+            int[] result = null;
+            if (!string.IsNullOrEmpty(arr))
+            {
+                string[] locationIdsTemp = arr.Split(",");
+                if (locationIdsTemp != null && locationIdsTemp.Length > 0)
+                    result = Array.ConvertAll(locationIdsTemp, s => int.Parse(s));
+            }
+            return result;
+        }
     }
 }
