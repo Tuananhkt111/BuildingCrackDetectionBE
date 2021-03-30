@@ -146,19 +146,20 @@ namespace CapstoneBE.Services.Cracks
             return await _unitOfWork.Save() != 0;
         }
 
-        public List<ChartValue> GetCracksCountBySeverity(int locationId, int period, int year)
+        public List<ChartValue> GetCracksCountBySeverity(int period, int year, int[] locationIds)
         {
             ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
-            return _unitOfWork.CrackRepository
+            var query = _unitOfWork.CrackRepository
                 .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed))
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
-                .Where(c => c.Flight.RecordDate.Year.Equals(year) 
+                .Where(c => c.Flight.RecordDate.Year.Equals(year)
                     && c.Flight.RecordDate.Month >= periodTuple.Item1
                     && c.Flight.RecordDate.Month <= periodTuple.Item2
-                    && c.Flight.LocationId.Equals(locationId)
                     && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)))
-                .GroupBy(c => c.Severity)
+                    || _userData.Role.Equals(Roles.AdminRole)));
+            if (locationIds != null && locationIds.Length > 0)
+                query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
+            return query.GroupBy(c => c.Severity)
                 .Where(c => c.Key != null)
                 .Select(c => new ChartValue { 
                     Value = c.Count(),
@@ -166,13 +167,13 @@ namespace CapstoneBE.Services.Cracks
                 }).ToList();
         }
 
-        public List<ChartValue> GetCracksAssessmentCount(int locationId, int period, int year)
+        public List<ChartValue> GetCracksAssessmentCount(int period, int year, int[] locationIds)
         {
             ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
             List<ChartValue> result = new();
             foreach (ValueTuple<int, int> rank in APIConstants.CrackAssessmentRank)
             {
-                int value = _unitOfWork.CrackRepository
+                var query = _unitOfWork.CrackRepository
                 .Get(filter: c => c.AssessmentResult > 0)
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
                 .Where(c => c.Flight.RecordDate.Year.Equals(year)
@@ -180,10 +181,11 @@ namespace CapstoneBE.Services.Cracks
                     && c.Flight.RecordDate.Month <= periodTuple.Item2
                     && c.AssessmentResult > rank.Item1
                     && c.AssessmentResult <= rank.Item2
-                    && c.Flight.LocationId.Equals(locationId)
                     && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)))
-                .Count();
+                    || _userData.Role.Equals(Roles.AdminRole)));
+                if (locationIds != null && locationIds.Length > 0)
+                    query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
+                int value = query.Count();
                 result.Add( new() {
                     Key = rank.Item1.ToString() + "-" + rank.Item2.ToString(),
                     Value = value
@@ -192,19 +194,20 @@ namespace CapstoneBE.Services.Cracks
             return result;
         }
 
-        public int GetCracksCountByStatus(int locationId, string status, int period, int year)
+        public int GetCracksCountByStatus(string status, int period, int year, int[] locationIds)
         {
             ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
-            return _unitOfWork.CrackRepository
+            var query = _unitOfWork.CrackRepository
                 .Get(filter: c => c.Status.Equals(status))
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
                 .Where(c => c.Flight.RecordDate.Year.Equals(year)
                     && c.Flight.RecordDate.Month >= periodTuple.Item1
                     && c.Flight.RecordDate.Month <= periodTuple.Item2
-                    && c.Flight.LocationId.Equals(locationId)
                     && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                    || _userData.Role.Equals(Roles.AdminRole)))
-                .Count();
+                    || _userData.Role.Equals(Roles.AdminRole)));
+            if (locationIds != null && locationIds.Length > 0)
+                query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
+            return query.Count();
         }
 
         public string GetMostCracksLocation(int period, int year)

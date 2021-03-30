@@ -145,7 +145,7 @@ namespace CapstoneBE.Controllers
         /// Check video exists or not {Auth Roles: Staff}
         /// </summary>
         /// <remarks>
-        /// Sample request: GET: api/v1/flights/exists-db
+        /// Sample request: GET: api/v1/flights/exists
         /// </remarks>
         /// <param name="video">Video</param>
         /// <returns>Result message</returns>
