@@ -31,6 +31,7 @@ namespace CapstoneBE.Services.Cracks
         string GetMostCracksLocation(int period, int year);
 
         List<ChartValue> GetCracksCountBySeverity(int period, int year, int[] locationIds);
+        List<ChartValue> GetCracksCountByStatus(int period, int year, int[] locationIds);
         List<ChartValue> GetCracksAssessmentCount(int period, int year, int[] locationIds);
     }
 }

@@ -235,6 +235,34 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
+        /// Get number of cracks by status list {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/cracks/count/status
+        /// </remarks>
+        /// <param name="period">Period of Checkup</param>
+        /// <param name="locationIdsStr">Location Ids</param>
+        /// <param name="year">Year of Checkup</param>
+        /// <returns>Number of cracks</returns>
+        /// <response code="200">Returns list of chart value</response>
+        /// <response code="404">Returns Not Found</response>
+        /// <response code="400">Returns Bad request</response>
+        [HttpGet("count/status-list")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<ChartValue>> GetCracksCountByStatusList(int period, int year, string locationIdsStr)
+        {
+            int[] locationIds = MyUtils.ConvertStringToIntArray(locationIdsStr);
+            if (period > 3 || period < 1 || year <= 0)
+                return BadRequest();
+            List<ChartValue> result = _crackService.GetCracksCountByStatus(period, year, locationIds);
+            if (result != null && result.Count > 0)
+                return Ok(result);
+            else
+                return NotFound();
+        }
+
+        /// <summary>
         /// Get number of cracks by status {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>

@@ -229,5 +229,25 @@ namespace CapstoneBE.Services.Cracks
             return query.Where(c => !query.Any(c2 => c2.Count() > c.Count()))
                 .Select(c => c.Key.Name).FirstOrDefault();
         }
+
+        public List<ChartValue> GetCracksCountByStatus(int period, int year, int[] locationIds)
+        {
+            ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
+            var query = _unitOfWork.CrackRepository
+                .Get()
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => c.Flight.RecordDate.Year.Equals(year)
+                    && c.Flight.RecordDate.Month >= periodTuple.Item1
+                    && c.Flight.RecordDate.Month <= periodTuple.Item2
+                    && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)));
+            if (locationIds != null && locationIds.Length > 0)
+                query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
+            return query.GroupBy(c => c.Status)
+                .Select(c => new ChartValue { 
+                    Key = c.Key,
+                    Value = c.Count()
+                }).ToList();
+        }
     }
 }
