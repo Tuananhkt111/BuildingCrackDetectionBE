@@ -234,7 +234,7 @@ namespace CapstoneBE.Services.Cracks
         {
             ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
             var query = _unitOfWork.CrackRepository
-                .Get()
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed))
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
                 .Where(c => c.Flight.RecordDate.Year.Equals(year)
                     && c.Flight.RecordDate.Month >= periodTuple.Item1
