@@ -206,6 +206,26 @@ namespace CapstoneBE.Services.MaintenanceOrders
             return await _unitOfWork.Save() != 0;
         }
 
+        public List<ChartValue> GetMaintenanceOrdersCountByStatus(int period, int year, int[] locationIds)
+        {
+            ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
+            var query = _unitOfWork.MaintenanceOrderRepository
+                .Get(filter: mo => !mo.Status.Equals(MaintenanceOrderStatus.WaitingForConfirm))
+                .Where(mo => mo.MaintenanceDate.Year.Equals(year)
+                    && mo.MaintenanceDate.Month >= periodTuple.Item1
+                    && mo.MaintenanceDate.Month <= periodTuple.Item2
+                    && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)));
+            if (locationIds != null && locationIds.Length > 0)
+                query = query.Where(mo => locationIds.Contains(mo.LocationId));
+            return query.GroupBy(mo => mo.Status)
+                .Select(c => new ChartValue
+                {
+                    Key = c.Key,
+                    Value = c.Count()
+                }).ToList();
+        }
+
         private async Task<bool> UpdateQueue(int[] crackIds, MaintenanceOrder maintenanceOrder)
         {
             List<Crack> cracks = _unitOfWork.CrackRepository.Get(filter: c => crackIds.Contains(c.CrackId) && c.Status.Equals(CrackStatus.UnscheduledForMaintenace)).ToList();

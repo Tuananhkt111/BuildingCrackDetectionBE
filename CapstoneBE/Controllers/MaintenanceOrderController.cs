@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CapstoneBE.Utils;
 using static CapstoneBE.Utils.APIConstants;
+using CapstoneBE.Models;
 
 namespace CapstoneBE.Controllers
 {
@@ -216,6 +217,31 @@ namespace CapstoneBE.Controllers
         public ActionResult<int> GetMaintenanceOrdersCount()
         {
             return _maintenanceOrderService.GetMaintenanceOrdersCount();
+        }
+
+        /// <summary>
+        /// Get number of maintenance orders count by status {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/maintenance-orders/count/status
+        /// </remarks>
+        /// <param name="period">Period of Checkup</param>
+        /// <param name="locationIdsStr">Location Ids</param>
+        /// <param name="year">Year of Checkup</param>
+        /// <returns>Number of maintenance orders</returns>
+        /// <response code="200">Returns list of maintenance orders</response>
+        [HttpGet("count/status")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<ChartValue>> GetMaintenanceOrdersCountByStatus(int period, int year, string locationIdsStr)
+        {
+            int[] locationIds = MyUtils.ConvertStringToIntArray(locationIdsStr);
+            if (period > 3 || period < 1 || year <= 0)
+                return BadRequest();
+            List<ChartValue> result = _maintenanceOrderService.GetMaintenanceOrdersCountByStatus(period, year, locationIds);
+            if (result != null && result.Count > 0)
+                return Ok(result);
+            else
+                return NotFound();
         }
 
         /// <summary>

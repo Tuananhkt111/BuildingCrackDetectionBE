@@ -1,4 +1,5 @@
-﻿using CapstoneBE.Models.Custom.Cracks;
+﻿using CapstoneBE.Models;
+using CapstoneBE.Models.Custom.Cracks;
 using CapstoneBE.Models.Custom.MaintenanceOrders;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,5 +27,6 @@ namespace CapstoneBE.Services.MaintenanceOrders
         Task<MaintenanceOrderInfo> GetById(int id);
 
         int GetMaintenanceOrdersCount();
+        List<ChartValue> GetMaintenanceOrdersCountByStatus(int period, int year, int[] locationIds);
     }
 }
