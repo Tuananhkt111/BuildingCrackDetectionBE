@@ -250,33 +250,29 @@ namespace CapstoneBE.Services.Cracks
                 }).ToList();
         }
 
-        public List<ChartValueArray> GetCracksByLocationAndSeverity(int period, int year, int[] locationIds)
+        public List<ChartValueArray> GetCracksByLocationAndSeverity(int year, int locationId)
         {
             string[] customOrders = new string[] {"Low", "Medium", "High"};
-            ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
             var query = _unitOfWork.CrackRepository
-                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && !c.Status.Equals(CrackStatus.Unconfirmed))
+                .Get(filter: c => c.Status.Equals(CrackStatus.Fixed))
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
-                .Where(c => c.Flight.RecordDate.Year <= year
-                    && c.Flight.RecordDate.Month >= periodTuple.Item1
-                    && c.Flight.RecordDate.Month <= periodTuple.Item2
+                .Where(c => c.Flight.RecordDate.Year.Equals(year)
+                    && locationId.Equals(c.Flight.LocationId)
                     && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole)));
-            if (locationIds != null && locationIds.Length > 0)
-                query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
-            return query.GroupBy(c => new { c.Severity, c.Flight.Location.Name })
+            return query.GroupBy(c => new { Severity = c.Severity, Period = c.Created.Month/4 + 1 })
                 .Select(c => new
                 {
-                    LocationName = c.Key.Name,
                     Severity = c.Key.Severity,
+                    Period = c.Key.Period,
                     Count = c.Count()
                 })
                 .ToList()
                 .OrderBy(ch => Array.IndexOf(customOrders, ch.Severity))
-                .GroupBy(c => c.LocationName)
+                .GroupBy(c => c.Period)
                 .Select(c => new ChartValueArray
                 {
-                    Key = c.Key,
+                    Key = (((c.Key-1)*4) + 1) + "-" + c.Key*4,
                     Values = c.Select(c => c.Count).ToArray()
                 })
                 .ToList();
