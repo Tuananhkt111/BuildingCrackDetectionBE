@@ -28,5 +28,6 @@ namespace CapstoneBE.Services.MaintenanceOrders
 
         int GetMaintenanceOrdersCount();
         List<ChartValue> GetMaintenanceOrdersCountByStatus(int period, int year, int[] locationIds);
+        List<ChartValue> GetMaintenanceOrdersExpense(int year, int locationId);
     }
 }

@@ -245,6 +245,29 @@ namespace CapstoneBE.Controllers
         }
 
         /// <summary>
+        /// Get number of maintenance orders expenses {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// Sample request: GET: api/v1/maintenance-orders/count/expense
+        /// </remarks>
+        /// <param name="locationId">Location Id</param>
+        /// <param name="year">Year of Checkup</param>
+        /// <returns>Number of maintenance orders</returns>
+        /// <response code="200">Returns list of maintenance orders</response>
+        [HttpGet("count/expense")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<ChartValue>> GetMaintenanceOrdersExpense(int year, int locationId)
+        {
+            if (locationId <= 0 || year <= 0)
+                return BadRequest();
+            List<ChartValue> result = _maintenanceOrderService.GetMaintenanceOrdersExpense(year, locationId);
+            if (result != null && result.Count > 0)
+                return Ok(result);
+            else
+                return NotFound();
+        }
+
+        /// <summary>
         /// Get a MaintenanceOrderInfo object by <paramref name="id"/> {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>

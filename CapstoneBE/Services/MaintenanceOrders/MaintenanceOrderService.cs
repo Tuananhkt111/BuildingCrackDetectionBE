@@ -238,5 +238,21 @@ namespace CapstoneBE.Services.MaintenanceOrders
             maintenanceOrder.CreateUserId = _userData.UserId;
             return await _unitOfWork.Save() != 0;
         }
+
+        public List<ChartValue> GetMaintenanceOrdersExpense(int year, int locationId)
+        {
+            var query = _unitOfWork.MaintenanceOrderRepository
+                .Get(filter: mo => mo.Status.Equals(MaintenanceOrderStatus.Completed))
+                .Where(mo => mo.MaintenanceDate.Year.Equals(year)
+                    && locationId.Equals(mo.LocationId)
+                    && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)));
+            return query.GroupBy(mo => mo.MaintenanceDate.Month / 4 + 1)
+                .Select(mo => new ChartValue
+                {
+                    Key = new DateTime(2010, (((mo.Key - 1) * 4) + 1), 1).ToString("MMM") + "-" + new DateTime(2010, mo.Key * 4, 1).ToString("MMM"),
+                    Value = mo.Sum(mo => (int) mo.MaintenanceExpense)
+                }).ToList();
+        }
     }
 }
