@@ -249,5 +249,37 @@ namespace CapstoneBE.Services.Cracks
                     Value = c.Count()
                 }).ToList();
         }
+
+        public List<ChartValueArray> GetCracksByLocationAndSeverity(int period, int year, int[] locationIds)
+        {
+            string[] customOrders = new string[] {"Low", "Medium", "High"};
+            ValueTuple<int, int> periodTuple = MyUtils.GetMonthValue(period);
+            var query = _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && !c.Status.Equals(CrackStatus.Unconfirmed))
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => c.Flight.RecordDate.Year <= year
+                    && c.Flight.RecordDate.Month >= periodTuple.Item1
+                    && c.Flight.RecordDate.Month <= periodTuple.Item2
+                    && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)));
+            if (locationIds != null && locationIds.Length > 0)
+                query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
+            return query.GroupBy(c => new { c.Severity, c.Flight.Location.Name })
+                .Select(c => new
+                {
+                    LocationName = c.Key.Name,
+                    Severity = c.Key.Severity,
+                    Count = c.Count()
+                })
+                .ToList()
+                .OrderBy(ch => Array.IndexOf(customOrders, ch.Severity))
+                .GroupBy(c => c.LocationName)
+                .Select(c => new ChartValueArray
+                {
+                    Key = c.Key,
+                    Values = c.Select(c => c.Count).ToArray()
+                })
+                .ToList();
+        }
     }
 }
