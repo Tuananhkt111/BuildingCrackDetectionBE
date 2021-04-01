@@ -272,7 +272,7 @@ namespace CapstoneBE.Services.Cracks
                 .GroupBy(c => c.Period)
                 .Select(c => new ChartValueArray
                 {
-                    Key = (((c.Key-1)*4) + 1) + "-" + c.Key*4,
+                    Key = new DateTime(2010, (((c.Key - 1) * 4) + 1), 1).ToString("MMM") + "-" + new DateTime(2010, c.Key * 4, 1).ToString("MMM"),
                     Values = c.Select(c => c.Count).ToArray()
                 })
                 .ToList();
