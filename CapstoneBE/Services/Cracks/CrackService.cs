@@ -254,7 +254,7 @@ namespace CapstoneBE.Services.Cracks
         {
             string[] customOrders = new string[] {"Low", "Medium", "High"};
             var query = _unitOfWork.CrackRepository
-                .Get(filter: c => c.Status.Equals(CrackStatus.Fixed))
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && !c.Status.Equals(CrackStatus.Unconfirmed))
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
                 .Where(c => c.Flight.RecordDate.Year.Equals(year)
                     && locationId.Equals(c.Flight.LocationId)

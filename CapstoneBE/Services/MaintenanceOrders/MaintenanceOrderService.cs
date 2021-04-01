@@ -242,7 +242,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
         public List<ChartValue> GetMaintenanceOrdersExpense(int year, int locationId)
         {
             var query = _unitOfWork.MaintenanceOrderRepository
-                .Get(filter: mo => mo.Status.Equals(MaintenanceOrderStatus.Completed))
+                .Get(filter: mo => !mo.Status.Equals(MaintenanceOrderStatus.WaitingForConfirm))
                 .Where(mo => mo.MaintenanceDate.Year.Equals(year)
                     && locationId.Equals(mo.LocationId)
                     && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
