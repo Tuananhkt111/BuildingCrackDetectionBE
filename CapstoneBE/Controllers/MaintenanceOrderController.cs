@@ -266,7 +266,7 @@ namespace CapstoneBE.Controllers
         {
             if (year <= 0 || locationId <= 0)
                 return BadRequest();
-            float result = _maintenanceOrderService.GetMaintenanceOrdersExpenseTotal(year, locationId);
+            float result = _maintenanceOrderService.GetMaintenanceOrdersAssessmentAverage(year, locationId);
             if (result > 0)
                 return Ok(result);
             else
