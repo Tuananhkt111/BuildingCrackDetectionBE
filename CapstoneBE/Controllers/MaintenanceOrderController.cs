@@ -256,11 +256,11 @@ namespace CapstoneBE.Controllers
         /// <response code="200">Returns list of maintenance orders</response>
         [HttpGet("count/expense")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<List<ChartValue>> GetMaintenanceOrdersExpense(int year, int locationId)
+        public ActionResult<List<ChartValueFloat>> GetMaintenanceOrdersExpense(int year, int locationId)
         {
             if (locationId <= 0 || year <= 0)
                 return BadRequest();
-            List<ChartValue> result = _maintenanceOrderService.GetMaintenanceOrdersExpense(year, locationId);
+            List<ChartValueFloat> result = _maintenanceOrderService.GetMaintenanceOrdersExpense(year, locationId);
             if (result != null && result.Count > 0)
                 return Ok(result);
             else
