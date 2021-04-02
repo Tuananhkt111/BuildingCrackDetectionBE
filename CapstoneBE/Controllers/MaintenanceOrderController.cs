@@ -208,15 +208,69 @@ namespace CapstoneBE.Controllers
         /// Get number of maintenance orders {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>
+        /// <param name="locationId">Location Id</param>
+        /// <param name="year">Year of Checkup</param>
         /// Sample request: GET: api/v1/maintenance-orders/count
         /// </remarks>
         /// <returns>Number of maintenance orders</returns>
         /// <response code="200">Returns list of maintenance orders</response>
         [HttpGet("count")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<int> GetMaintenanceOrdersCount()
+        public ActionResult<int> GetMaintenanceOrdersCount(int year, int locationId)
         {
-            return _maintenanceOrderService.GetMaintenanceOrdersCount();
+            if (year <= 0 || locationId <= 0)
+                return BadRequest();
+            int result = _maintenanceOrderService.GetMaintenanceOrdersCount(year, locationId);
+            if (result > 0)
+                return Ok(result);
+            else
+                return NotFound();
+        }
+
+        /// <summary>
+        /// Get total expense of maintenance orders {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// <param name="locationId">Location Id</param>
+        /// <param name="year">Year of Checkup</param>
+        /// Sample request: GET: api/v1/maintenance-orders/count/expense-total
+        /// </remarks>
+        /// <returns>Number of maintenance orders</returns>
+        /// <response code="200">Returns list of maintenance orders</response>
+        [HttpGet("count/expense-total")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<float> GetMaintenanceOrdersExpenseTotal(int year, int locationId)
+        {
+            if (year <= 0 || locationId <= 0)
+                return BadRequest();
+            float result = _maintenanceOrderService.GetMaintenanceOrdersExpenseTotal(year, locationId);
+            if (result > 0)
+                return Ok(result);
+            else
+                return NotFound();
+        }
+
+        /// <summary>
+        /// Get average assessment of maintenance orders {Auth Roles: Administrator, Manager, Staff}
+        /// </summary>
+        /// <remarks>
+        /// <param name="locationId">Location Id</param>
+        /// <param name="year">Year of Checkup</param>
+        /// Sample request: GET: api/v1/maintenance-orders/count/assessment-average
+        /// </remarks>
+        /// <returns>Number of maintenance orders</returns>
+        /// <response code="200">Returns list of maintenance orders</response>
+        [HttpGet("count/assessment-average")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<float> GetMaintenanceOrdersAssessmentAverage(int year, int locationId)
+        {
+            if (year <= 0 || locationId <= 0)
+                return BadRequest();
+            float result = _maintenanceOrderService.GetMaintenanceOrdersExpenseTotal(year, locationId);
+            if (result > 0)
+                return Ok(result);
+            else
+                return NotFound();
         }
 
         /// <summary>

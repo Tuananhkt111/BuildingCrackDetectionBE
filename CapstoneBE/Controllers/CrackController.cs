@@ -318,15 +318,23 @@ namespace CapstoneBE.Controllers
         /// Get number of cracks {Auth Roles: Administrator, Manager, Staff}
         /// </summary>
         /// <remarks>
+        /// <param name="locationId">Location Id</param>
+        /// <param name="year">Year of Checkup</param>
         /// Sample request: GET: api/v1/cracks/count
         /// </remarks>
         /// <returns>Number of cracks</returns>
         /// <response code="200">Returns list of cracks</response>
         [HttpGet("count")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<int> GetCracksCount()
+        public ActionResult<int> GetCracksCount(int year, int locationId)
         {
-            return _crackService.GetCracksCount();
+            if (year <= 0 || locationId <= 0)
+                return BadRequest();
+            int result = _crackService.GetCracksCount(year, locationId);
+            if (result > 0)
+                return Ok(result);
+            else
+                return NotFound();
         }
 
         /// <summary>

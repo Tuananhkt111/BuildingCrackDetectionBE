@@ -26,6 +26,7 @@ namespace CapstoneBE.Services.Cracks
         List<CrackInfo> GetCracks();
 
         int GetCracksCount();
+        int GetCracksCount(int year, int locationId);
         int GetCracksCountByStatus(string status, int period, int year, int[] locationIds);
 
         string GetMostCracksLocation(int period, int year);

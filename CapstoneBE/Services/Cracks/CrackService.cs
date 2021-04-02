@@ -277,5 +277,17 @@ namespace CapstoneBE.Services.Cracks
                 })
                 .ToList();
         }
+
+        public int GetCracksCount(int year, int locationId)
+        {
+            return _unitOfWork.CrackRepository
+                .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && !c.Status.Equals(CrackStatus.Unconfirmed))
+                .Include(c => c.Flight).ThenInclude(f => f.Location)
+                .Where(c => c.Flight.RecordDate.Year.Equals(year)
+                    && locationId.Equals(c.Flight.LocationId)
+                    && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Count();
+        }
     }
 }

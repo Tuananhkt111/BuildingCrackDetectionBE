@@ -263,7 +263,29 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     && locationId.Equals(mo.LocationId)
                     && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole)))
-                .Sum(mo => mo.MaintenanceExpense);;
+                .Sum(mo => mo.MaintenanceExpense);
+        }
+
+        public int GetMaintenanceOrdersCount(int year, int locationId)
+        {
+            return _unitOfWork.MaintenanceOrderRepository
+                .Get(filter: mo => !mo.Status.Equals(MaintenanceOrderStatus.WaitingForConfirm))
+                .Where(mo => mo.MaintenanceDate.Year.Equals(year)
+                    && locationId.Equals(mo.LocationId)
+                    && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Count();
+        }
+
+        public float GetMaintenanceOrdersAssessmentAverage(int year, int locationId)
+        {
+            return _unitOfWork.MaintenanceOrderRepository
+                .Get(filter: mo => !mo.Status.Equals(MaintenanceOrderStatus.WaitingForConfirm))
+                .Where(mo => mo.MaintenanceDate.Year.Equals(year)
+                    && locationId.Equals(mo.LocationId)
+                    && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
+                    || _userData.Role.Equals(Roles.AdminRole)))
+                .Average(mo => mo.MaintenanceExpense);
         }
     }
 }
