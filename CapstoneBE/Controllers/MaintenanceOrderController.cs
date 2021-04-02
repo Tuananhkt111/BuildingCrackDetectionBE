@@ -262,11 +262,11 @@ namespace CapstoneBE.Controllers
         /// <response code="200">Returns list of maintenance orders</response>
         [HttpGet("count/assessment-average")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<float> GetMaintenanceOrdersAssessmentAverage(int year, int locationId)
+        public ActionResult<double> GetMaintenanceOrdersAssessmentAverage(int year, int locationId)
         {
             if (year <= 0 || locationId <= 0)
                 return BadRequest();
-            float result = _maintenanceOrderService.GetMaintenanceOrdersAssessmentAverage(year, locationId);
+            double result = _maintenanceOrderService.GetMaintenanceOrdersAssessmentAverage(year, locationId);
             if (result > 0)
                 return Ok(result);
             else

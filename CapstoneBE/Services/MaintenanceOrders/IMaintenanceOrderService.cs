@@ -28,7 +28,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
 
         int GetMaintenanceOrdersCount();
         int GetMaintenanceOrdersCount(int year, int locationId);
-        float GetMaintenanceOrdersAssessmentAverage(int year, int locationId);
+        double GetMaintenanceOrdersAssessmentAverage(int year, int locationId);
         List<ChartValue> GetMaintenanceOrdersCountByStatus(int period, int year, int[] locationIds);
         List<ChartValueFloat> GetMaintenanceOrdersExpense(int year, int locationId);
         float GetMaintenanceOrdersExpenseTotal(int year, int locationId);

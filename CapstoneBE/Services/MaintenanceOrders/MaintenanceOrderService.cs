@@ -277,15 +277,15 @@ namespace CapstoneBE.Services.MaintenanceOrders
                 .Count();
         }
 
-        public float GetMaintenanceOrdersAssessmentAverage(int year, int locationId)
+        public double GetMaintenanceOrdersAssessmentAverage(int year, int locationId)
         {
             return _unitOfWork.MaintenanceOrderRepository
-                .Get(filter: mo => !mo.Status.Equals(MaintenanceOrderStatus.WaitingForConfirm))
+                .Get(filter: mo => mo.Status.Equals(MaintenanceOrderStatus.Completed))
                 .Where(mo => mo.MaintenanceDate.Year.Equals(year)
                     && locationId.Equals(mo.LocationId)
                     && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole)))
-                .Average(mo => mo.MaintenanceExpense);
+                .Average(mo => mo.AssessmentResult);
         }
     }
 }
