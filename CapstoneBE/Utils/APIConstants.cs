@@ -36,6 +36,7 @@ namespace CapstoneBE.Utils
             public const string Unconfirmed = "Unconfirmed";
             public const string UnscheduledForMaintenace = "UnrecordedRepair";
             public const string ScheduledForMaintenace = "RecordedRepair";
+            public const string UnqualifiedRepair = "UnqualifiedRepair";
             public const string Fixed = "Fixed";
         }
 
