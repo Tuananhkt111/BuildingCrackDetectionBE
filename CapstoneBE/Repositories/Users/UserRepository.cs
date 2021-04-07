@@ -50,7 +50,7 @@ namespace CapstoneBE.Repositories.Users
                 throw new Exception("Reset password token is invalid");
             IdentityResult result = await UserManager.ResetPasswordAsync(user, token, newPassword);
             if (result.Succeeded)
-                user.IsNewUser = true;
+                user.IsNewUser = false;
             return result;
         }
 
