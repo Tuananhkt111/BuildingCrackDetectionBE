@@ -84,7 +84,7 @@ namespace CapstoneBE.Services.PushNotifications
                 MessageTypes.SystemFinishedDetection => new Notification
                 {
                     Title = "System has finished detecting cracks",
-                    Body = "Detection results are shown in 'Unconfirmed Cracks' tab"
+                    Body = "Detection results are shown in 'Not Verify' tab"
                 },
                 MessageTypes.StaffCreateOrder => new Notification
                 {

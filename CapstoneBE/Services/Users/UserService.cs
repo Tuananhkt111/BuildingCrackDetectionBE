@@ -93,11 +93,11 @@ namespace CapstoneBE.Services.Users
                 if (saveResult)
                 {
                     Email email = new Email(new string[] { user.Email },
-                        "Your Capstone Account has been created",
-                        "Dear " + user.Name + ",<br/><br/>Administrator has created your Capstone account, welcome to Capstone."
+                        "Your BCD Account has been created",
+                        "Dear " + user.Name + ",<br/><br/>Administrator has created your BCD account, welcome to Capstone."
                         + "<br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your password: <span style=\"color: blue;\">" + password
                         + "</span><br/><br/>Please do not share these information for our safety."
-                        + "<br/><br/>Thank you,<br/>Tau Hai Team");
+                        + "<br/><br/>Thank you,<br/>BCD Team");
                     return email;
                 }
             }
@@ -120,7 +120,7 @@ namespace CapstoneBE.Services.Users
             string validToken = WebEncoders.Base64UrlEncode(encodedToken);
             string url = platform.Equals("w") ? $"{rootPath}{userName}/forgotpass-w?token={validToken}" : $"{rootPath}/forgotpass-m?userName={userName}&token={validToken}";
             Email email = new Email(new string[] { user.Email },
-                "Reset your Capstone Account Password Confirm",
+                "Reset your BCD Account Password Confirm",
                 "Dear " + user.Name + ",<br/><br/>You are receiving this email because we received a password reset request for your account <span style=\"color: blue;\">"
                 + user.UserName + "</span><br/>To reset your password <a href='" + url + "'>Click here</a>"
                 + "</span><br/><br/>If you did not request a password reset, no further action is required."
@@ -255,10 +255,10 @@ namespace CapstoneBE.Services.Users
                 {
                     CapstoneBEUser user = await _unitOfWork.UserRepository.GetById(userId);
                     Email email = new Email(new string[] { user.Email },
-                        "Reset your Capstone Account Password",
+                        "Reset your BCD Account Password",
                         "Dear " + user.Name + ",<br/><br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your new password: <span style=\"color: blue;\">" + newPass
                         + "</span><br/><br/>You are receiving this email because you have requested to reset your login password."
-                        + "<br/><br/>Thank you,<br/>Tau Hai Team");
+                        + "<br/><br/>Thank you,<br/>BCD Team");
                     return email;
                 }
             return null;
@@ -371,10 +371,10 @@ namespace CapstoneBE.Services.Users
                 {
                     CapstoneBEUser user = await _unitOfWork.UserRepository.GetByUserName(userName);
                     Email email = new(new string[] { user.Email },
-                        "Reset your Capstone Account Password",
+                        "Reset your BCD Account Password",
                         "Dear " + user.Name + ",<br/><br/>Your account: <span style=\"color: blue;\">" + user.UserName + "</span><br/>Your new password: <span style=\"color: blue;\">" + newPass
                         + "</span><br/><br/>You are receiving this email because you have requested to reset your login password."
-                        + "<br/><br/>Thank you,<br/>Tau Hai Team");
+                        + "<br/><br/>Thank you,<br/>BCD Team");
                     return email;
                 }
             return null;
