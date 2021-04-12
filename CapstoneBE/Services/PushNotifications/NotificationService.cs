@@ -90,19 +90,19 @@ namespace CapstoneBE.Services.PushNotifications
                 {
                     Title = "Staff " + sender.Name + " has created a repair record in area "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
-                    Body = "Tap to view details"
+                    Body = "Review repair record information in 'Repair Records' tab"
                 },
                 MessageTypes.StaffUpdateOrder => new Notification
                 {
                     Title = "Staff " + sender.Name + " has updated a repair record in area "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
-                    Body = "Tap to view details"
+                    Body = "Review repair record information in 'Repair Records' tab"
                 },
                 MessageTypes.StaffEvaluateOrder => new Notification
                 {
                     Title = "Staff " + sender.Name + " has evaluated a repair record in area "
                         + _unitOfWork.LocationHistoryRepository.GetLocationOfStaffById(sender.Id).Result?.Name,
-                    Body = "Tap to view details"
+                    Body = "Review repair record information in 'Repair Records' tab"
                 },
                 _ => null
             };
