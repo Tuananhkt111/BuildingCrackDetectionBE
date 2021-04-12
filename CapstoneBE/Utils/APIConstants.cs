@@ -45,6 +45,7 @@ namespace CapstoneBE.Utils
         public static class MessageTypes
         {
             public const string AdminUpdateInfo = "AdminUpdateInfo";
+            public const string ManagerAssignLocation = "ManagerAssignLocation";
             public const string SystemFinishedDetection = "SystemFinishedDetection";
             public const string StaffCreateOrder = "StaffCreateOrder";
             public const string StaffUpdateOrder = "StaffUpdateOrder";

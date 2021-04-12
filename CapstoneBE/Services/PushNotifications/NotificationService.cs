@@ -38,6 +38,7 @@ namespace CapstoneBE.Services.PushNotifications
             switch (messageType)
             {
                 case MessageTypes.AdminUpdateInfo:
+                case MessageTypes.ManagerAssignLocation:
                 case MessageTypes.SystemFinishedDetection:
                     if (!string.IsNullOrEmpty(receiver.FcmTokenM))
                         messages.Add(new Message()
@@ -79,6 +80,11 @@ namespace CapstoneBE.Services.PushNotifications
                 MessageTypes.AdminUpdateInfo => new Notification
                 {
                     Title = "Administrator has updated your profile",
+                    Body = "Review your personal information in Profile tab"
+                },
+                MessageTypes.ManagerAssignLocation => new Notification
+                {
+                    Title = "Manager " + sender.Name + " has updated your area",
                     Body = "Review your personal information in Profile tab"
                 },
                 MessageTypes.SystemFinishedDetection => new Notification
@@ -138,6 +144,8 @@ namespace CapstoneBE.Services.PushNotifications
                 if (receiver != null)
                 {
                     List<Message> messageList = GetMessages(sender, receiver, messageType, orderId);
+                    if (messageList == null || messageList.Count == 0)
+                        continue;
                     messages.AddRange(messageList);
                     pushNotifications.Add(new PushNotification
                     {
@@ -150,6 +158,8 @@ namespace CapstoneBE.Services.PushNotifications
                     });
                 }
             }
+            if (pushNotifications.Count == 0)
+                return false;
             bool createResult = await CreateRange(pushNotifications);
             return (await FirebaseMessaging.DefaultInstance.SendAllAsync(messages)).FailureCount == 0 && createResult;
         }

@@ -56,6 +56,22 @@ namespace CapstoneBE.Attributes
                         }
                     }
                     return false;
+                case MessageTypes.ManagerAssignLocation:
+                    if (okOject is string okString)
+                    {
+                        if (!string.IsNullOrEmpty(okString))
+                        {
+                            IGetClaimsProvider userData = context.HttpContext.RequestServices.GetRequiredService<IGetClaimsProvider>();
+                            string path = context.HttpContext.Request.Path.ToString();
+                            int startIndex = path.LastIndexOf('/');
+                            string userId = path[(startIndex + 1)..];
+                            SenderId = userData.UserId;
+                            OrderId = null;
+                            ReceiverIds = new string[] { userId };
+                            return true;
+                        }
+                    }
+                    return false;
                 case MessageTypes.SystemFinishedDetection:
                     if (okOject is string okStr)
                     {

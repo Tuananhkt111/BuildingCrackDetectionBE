@@ -186,8 +186,8 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [PushNotification(MessageTypes.AdminUpdateInfo)]
-        public async Task<ActionResult<int>> UpdateLocations(string id, int[] locationIds)
+        [PushNotification(MessageTypes.ManagerAssignLocation)]
+        public async Task<ActionResult<string>> UpdateLocations(string id, int[] locationIds)
         {
             if (locationIds == null || locationIds.Length <= 0)
                 return BadRequest("Invalid request");
@@ -224,8 +224,7 @@ namespace CapstoneBE.Controllers
         [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [PushNotification(MessageTypes.AdminUpdateInfo)]
-        public async Task<ActionResult<int>> RemoveLocations(string id)
+        public async Task<ActionResult<string>> RemoveLocations(string id)
         {
             bool result = await _userService.RemoveLocationsFromUser(id);
             if (result)
