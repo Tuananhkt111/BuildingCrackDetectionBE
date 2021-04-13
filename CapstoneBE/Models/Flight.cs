@@ -22,7 +22,7 @@ namespace CapstoneBE.Models
         public string DeleteVideoUserId { get; set; }
         public string Video { get; set; }
         public DateTime RecordDate { get; set; }
-        public DateTime DeleteVideoDate { get; set; }
+        public DateTime? DeleteVideoDate { get; set; }
         public string Description { get; set; }
         public virtual Location Location { get; set; }
         public virtual CapstoneBEUser DataCollector { get; set; }

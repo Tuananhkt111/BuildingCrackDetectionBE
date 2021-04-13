@@ -15,7 +15,7 @@ namespace CapstoneBE.Models.Custom.Flights
         public string DeleteVideoUserName { get; set; }
         public string Video { get; set; }
         public DateTime RecordDate { get; set; }
-        public DateTime DeleteVideoDate { get; set; }
+        public DateTime? DeleteVideoDate { get; set; }
         public string Description { get; set; }
         public ICollection<CrackSubDetailsInfo> Cracks { get; set; }
         public DateTime Created { get; set; }
