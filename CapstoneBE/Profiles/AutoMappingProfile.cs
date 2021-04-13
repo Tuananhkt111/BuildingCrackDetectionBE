@@ -81,6 +81,9 @@ namespace CapstoneBE.Profiles
                     dest.DataCollectorName,
                     opt => opt.MapFrom(src => src.DataCollector.Name))
                 .ForMember(dest =>
+                    dest.DeleteVideoUserName,
+                    opt => opt.MapFrom(src => src.DeleteVideoUser.Name))
+                .ForMember(dest =>
                     dest.Cracks,
                     opt => opt.MapFrom(src => src.Cracks))
                 .ForMember(dest =>

@@ -46,14 +46,14 @@ namespace CapstoneBE.Services.Flights
             Flight flight = await _unitOfWork.FlightRepository.GetSingle(filter: f => f.FlightId.Equals(id) 
                 && ((_userData.LocationIds.Contains(f.LocationId)
                 && !_userData.Role.Equals(Roles.AdminRole))
-                || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Cracks,Location,DataCollector");
+                || _userData.Role.Equals(Roles.AdminRole)), includeProperties: "Cracks,Location,DataCollector,DeleteVideoUser");
             return _mapper.Map<FlightInfo>(flight);
         }
 
         public List<FlightInfo> GetFlights()
         {
             return _unitOfWork.FlightRepository.Get(filter: f => (_userData.LocationIds.Contains(f.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
-                || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector")
+                || _userData.Role.Equals(Roles.AdminRole), includeProperties: "Cracks,Location,DataCollector,DeleteVideoUser")
                 .OrderByDescending(f => f.RecordDate)
                 .Select(f => _mapper.Map<FlightInfo>(f))
                 .ToList();
