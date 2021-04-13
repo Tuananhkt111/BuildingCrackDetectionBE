@@ -67,9 +67,21 @@ namespace CapstoneBE.Services.Flights
 
         public async Task<bool> RemoveVideo(int id)
         {
+            List<string> unacceptableCrackStatus = new()
+            {
+                CrackStatus.ScheduledForMaintenace,
+                CrackStatus.Unconfirmed,
+                CrackStatus.UnscheduledForMaintenace
+            };
+            //Check unacceptable crack exist or not
+            bool isRemovable = !(_unitOfWork.CrackRepository.Get(filter: c => unacceptableCrackStatus.Contains(c.Status)
+                && c.FlightId.Equals(id)).Any());
+            if (!isRemovable)
+                return false;
             Flight flight = await _unitOfWork.FlightRepository.GetById(id);
             string video = flight.Video;
             _unitOfWork.FlightRepository.RemoveVideo(flight);
+            flight.DeleteVideoUserId = _userData.UserId;
             bool result = await _unitOfWork.Save() != 0;
             if(result)
             {

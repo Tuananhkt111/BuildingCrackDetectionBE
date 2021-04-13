@@ -1,5 +1,6 @@
 ﻿using CapstoneBE.Data;
 using CapstoneBE.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace CapstoneBE.Repositories.Flights
@@ -12,7 +13,8 @@ namespace CapstoneBE.Repositories.Flights
 
         public void RemoveVideo(Flight flight)
         {
-                flight.Video = null;
+            flight.Video = null;
+            flight.DeleteVideoDate = DateTime.UtcNow;
         }
     }
 }

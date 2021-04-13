@@ -112,7 +112,7 @@ namespace CapstoneBE.Controllers
         /// <response code="200">Returns message "Remove video success"</response>
         /// <response code="400">Returns message "Remove video failed"</response>
         [HttpDelete("{id}/video")]
-        [Authorize(Roles = Roles.AdminRole)]
+        [Authorize(Roles = Roles.AdminRole + ", " + Roles.ManagerRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<string>> RemoveVideo(int id)

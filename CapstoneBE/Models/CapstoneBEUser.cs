@@ -52,6 +52,9 @@ namespace CapstoneBE.Models
         [InverseProperty(nameof(Flight.DataCollector))]
         public virtual ICollection<Flight> Flights { get; set; }
 
+        [InverseProperty(nameof(Flight.DeleteVideoUser))]
+        public virtual ICollection<Flight> FlightsDV { get; set; }
+
         [InverseProperty(nameof(LocationHistory.Employee))]
         public virtual ICollection<LocationHistory> LocationHistories { get; set; }
 
