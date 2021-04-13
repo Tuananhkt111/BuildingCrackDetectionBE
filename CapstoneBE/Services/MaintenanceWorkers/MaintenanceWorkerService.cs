@@ -46,12 +46,18 @@ namespace CapstoneBE.Services.MaintenanceWorkers
 
         public List<MaintenanceWorkerInfo> GetMaintenanceWorkers()
         {
-            return _unitOfWork.MaintenanceWorkerRepository.Get(filter: mw => !mw.IsDel).Select(mw => _mapper.Map<MaintenanceWorkerInfo>(mw)).ToList();
+            return _unitOfWork.MaintenanceWorkerRepository
+                .Get(filter: mw => !mw.IsDel)
+                .OrderBy(mw => mw.Name)
+                .Select(mw => _mapper.Map<MaintenanceWorkerInfo>(mw))
+                .ToList();
         }
 
         public int GetMaintenanceWorkersCount()
         {
-            return _unitOfWork.MaintenanceWorkerRepository.Get(filter: mw => !mw.IsDel).Select(mw => _mapper.Map<MaintenanceWorkerInfo>(mw)).Count();
+            return _unitOfWork.MaintenanceWorkerRepository
+                .Get(filter: mw => !mw.IsDel)
+                .Count();
         }
 
         public async Task<int> Update(MaintenanceWorkerBasicInfo maintenanceWorkerBasicInfo, int id)
