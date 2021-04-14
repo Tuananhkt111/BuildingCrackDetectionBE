@@ -125,7 +125,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole),
                     includeProperties: "Assessor,MaintenanceWorker,Cracks,Location,CreateUser,UpdateUser")
-                .OrderByDescending(mo => mo.MaintenanceDate)
+                .OrderByDescending(mo => mo.Created)
                 .Select(mo => _mapper.Map<MaintenanceOrderInfo>(mo)).ToList();
         }
 
