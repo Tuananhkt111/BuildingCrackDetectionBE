@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CapstoneBE.Models
 {
-    public class LocationHistory : BaseEntity
+    public class LocationHistory
     {
         public int LocationHistoryId { get; set; }
         public int LocationId { get; set; }
