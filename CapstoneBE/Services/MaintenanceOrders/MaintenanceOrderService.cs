@@ -247,7 +247,7 @@ namespace CapstoneBE.Services.MaintenanceOrders
                     && locationId.Equals(mo.LocationId)
                     && ((_userData.LocationIds.Contains(mo.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole)));
-            return query.GroupBy(mo => mo.MaintenanceDate.Month / 4 + 1)
+            return query.GroupBy(mo => (mo.MaintenanceDate.Month - 1) / 4 + 1)
                 .Select(mo => new ChartValueFloat
                 {
                     Key = new DateTime(2010, (((mo.Key - 1) * 4) + 1), 1).ToString("MMM") + "-" + new DateTime(2010, mo.Key * 4, 1).ToString("MMM"),
