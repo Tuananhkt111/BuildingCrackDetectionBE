@@ -161,7 +161,8 @@ namespace CapstoneBE.Services.Cracks
                 query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
             return query.GroupBy(c => c.Severity)
                 .Where(c => c.Key != null)
-                .Select(c => new ChartValue { 
+                .Select(c => new ChartValue
+                {
                     Value = c.Count(),
                     Key = c.Key
                 }).ToList();
@@ -186,7 +187,8 @@ namespace CapstoneBE.Services.Cracks
                 if (locationIds != null && locationIds.Length > 0)
                     query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
                 int value = query.Count();
-                result.Add( new() {
+                result.Add(new()
+                {
                     Key = rank.Item1.ToString() + "-" + rank.Item2.ToString(),
                     Value = value
                 });
@@ -244,7 +246,8 @@ namespace CapstoneBE.Services.Cracks
             if (locationIds != null && locationIds.Length > 0)
                 query = query.Where(c => locationIds.Contains(c.Flight.LocationId));
             return query.GroupBy(c => c.Status)
-                .Select(c => new ChartValue { 
+                .Select(c => new ChartValue
+                {
                     Key = c.Key,
                     Value = c.Count()
                 }).ToList();
@@ -252,7 +255,7 @@ namespace CapstoneBE.Services.Cracks
 
         public List<ChartValueArray> GetCracksByLocationAndSeverity(int year, int locationId)
         {
-            string[] customOrders = new string[] {"Low", "Medium", "High"};
+            string[] customOrders = new string[] { "Low", "Medium", "High" };
             var query = _unitOfWork.CrackRepository
                 .Get(filter: c => !c.Status.Equals(CrackStatus.DetectedFailed) && !c.Status.Equals(CrackStatus.Unconfirmed))
                 .Include(c => c.Flight).ThenInclude(f => f.Location)
@@ -260,7 +263,7 @@ namespace CapstoneBE.Services.Cracks
                     && locationId.Equals(c.Flight.LocationId)
                     && ((_userData.LocationIds.Contains(c.Flight.LocationId) && !_userData.Role.Equals(Roles.AdminRole))
                     || _userData.Role.Equals(Roles.AdminRole)));
-            return query.GroupBy(c => new { Severity = c.Severity, Period = c.Created.Month/4 + 1 })
+            return query.GroupBy(c => new { Severity = c.Severity, Period = (c.Created.Month - 1) / 4 + 1 })
                 .Select(c => new
                 {
                     Severity = c.Key.Severity,
